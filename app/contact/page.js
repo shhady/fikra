@@ -1,7 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
 import { FiMail, FiPhone, FiMapPin, FiClock, FiMessageCircle, FiCheckCircle, FiLinkedin, FiFacebook, FiInstagram } from 'react-icons/fi'
 
 const contactInfo = [
@@ -58,25 +57,29 @@ const serviceOptions = [
 ]
 
 export default function ContactPage() {
-  const searchParams = useSearchParams()
-  const serviceFromUrl = searchParams.get('service') ? decodeURIComponent(searchParams.get('service')) : ''
-  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: serviceFromUrl,
+    service: '',
     message: ''
   })
 
-  // For debugging
-  useEffect(() => {
-    console.log('URL Service:', serviceFromUrl)
-    console.log('Form Service:', formData.service)
-    console.log('Available Services:', serviceOptions)
-  }, [serviceFromUrl, formData.service])
-
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  // Handle service selection from URL on client side
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const serviceFromUrl = params.get('service')
+      if (serviceFromUrl) {
+        setFormData(prev => ({
+          ...prev,
+          service: decodeURIComponent(serviceFromUrl)
+        }))
+      }
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
