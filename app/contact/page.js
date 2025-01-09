@@ -122,10 +122,8 @@ export default function ContactPage() {
       newErrors.service = 'يرجى اختيار نوع الخدمة'
     }
 
-    // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message = 'الرسالة مطلوبة'
-    } else if (formData.message.length < 10) {
+    // Message validation (optional but must be at least 10 chars if provided)
+    if (formData.message.trim() && formData.message.length < 10) {
       newErrors.message = 'الرسالة يجب أن تكون أكثر من 10 أحرف'
     }
 
@@ -359,7 +357,10 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 mb-2">الرسالة</label>
+                  <label className="block text-gray-400 mb-2">
+                    الرسالة
+                    <span className="text-gray-500 text-sm mr-2">(اختياري)</span>
+                  </label>
                   <textarea
                     value={formData.message}
                     onChange={(e) => {
@@ -372,7 +373,7 @@ export default function ContactPage() {
                     className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
                       errors.message ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
                     } transition-all duration-300`}
-                    required
+                    placeholder="اكتب رسالتك هنا..."
                   ></textarea>
                   {errors.message && (
                     <p className="mt-1 text-sm text-red-500">{errors.message}</p>
