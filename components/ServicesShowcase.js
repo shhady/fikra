@@ -30,7 +30,7 @@ const ServicesShowcase = () => {
         { id: 'tech-1', name: 'Next.js' },
         { id: 'tech-2', name: 'React' },
         { id: 'tech-3', name: 'TensorFlow.js' },
-        { id: 'tech-4', name: 'Python' },
+        { id: 'tech-4', name: 'JavaScript' },
         { id: 'tech-5', name: 'Node.js' },
       ],
     },

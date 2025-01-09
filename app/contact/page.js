@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiMail, FiPhone, FiMapPin, FiClock, FiMessageCircle, FiCheckCircle, FiLinkedin, FiFacebook, FiInstagram } from 'react-icons/fi'
 
@@ -7,19 +7,19 @@ const contactInfo = [
   {
     icon: <FiMail className="w-6 h-6" />,
     title: 'البريد الإلكتروني',
-    details: 'info@company.com',
-    link: 'mailto:info@company.com'
+    details: 'shhadyse@gmail.com',
+    link: 'mailto:shhadyse@gmail.com'
   },
   {
     icon: <FiPhone className="w-6 h-6" />,
     title: 'رقم الهاتف',
-    details: '+972 4 000 0000',
-    link: 'tel:+97240000000'
+    details: '0543113297',
+    link: 'tel:+972543113297'
   },
   {
     icon: <FiMapPin className="w-6 h-6" />,
     title: 'العنوان',
-    details: 'الناصرة، شارع 6000',
+    details: 'الناصرة',
     link: 'https://maps.google.com/?q=Nazareth'
   },
   {
@@ -34,17 +34,17 @@ const socialLinks = [
   {
     icon: <FiLinkedin className="w-6 h-6" />,
     name: 'LinkedIn',
-    url: 'https://linkedin.com/company/yourcompany'
+    url: 'https://www.linkedin.com/in/shhady-serhan-a11403124'
   },
-  {
-    icon: <FiFacebook className="w-6 h-6" />,
-    name: 'Facebook',
-    url: 'https://facebook.com/yourcompany'
-  },
+//   {
+//     icon: <FiFacebook className="w-6 h-6" />,
+//     name: 'Facebook',
+//     url: 'https://facebook.com/yourcompany'
+//   },
   {
     icon: <FiInstagram className="w-6 h-6" />,
     name: 'Instagram',
-    url: 'https://instagram.com/yourcompany'
+    url: 'https://www.instagram.com/fikra__ai/'
   }
 ]
 
@@ -66,9 +66,12 @@ export default function ContactPage() {
   })
 
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [errors, setErrors] = useState({})
 
   // Handle service selection from URL on client side
-  useState(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       const serviceFromUrl = params.get('service')
@@ -81,11 +84,101 @@ export default function ContactPage() {
     }
   }, [])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitted(true)
-    setTimeout(() => setIsSubmitted(false), 3000)
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false)
+        setIsSubmitted(false)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [showSuccess])
+
+  const validateForm = () => {
+    const newErrors = {}
+    
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'الاسم مطلوب'
+    } else if (formData.name.length < 2) {
+      newErrors.name = 'الاسم يجب أن يكون أكثر من حرفين'
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!formData.email) {
+      newErrors.email = 'البريد الإلكتروني مطلوب'
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'البريد الإلكتروني غير صالح'
+    }
+
+    // Phone validation (optional but must be valid if provided)
+    if (formData.phone && !/^[0-9+\-\s()]{8,}$/.test(formData.phone)) {
+      newErrors.phone = 'رقم الهاتف غير صالح'
+    }
+
+    // Service validation
+    if (!formData.service) {
+      newErrors.service = 'يرجى اختيار نوع الخدمة'
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = 'الرسالة مطلوبة'
+    } else if (formData.message.length < 10) {
+      newErrors.message = 'الرسالة يجب أن تكون أكثر من 10 أحرف'
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setShowSuccess(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        });
+        setErrors({});
+      } else {
+        setErrors(prev => ({
+          ...prev,
+          submit: data.error || 'حدث خطأ أثناء إرسال النموذج'
+        }));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setErrors(prev => ({
+        ...prev,
+        submit: 'حدث خطأ في الاتصال بالخادم'
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-black">
@@ -102,10 +195,10 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-wide">
               تواصل معنا
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
               نحن هنا لمساعدتك. فريقنا جاهز للإجابة على جميع استفساراتك وتقديم الدعم اللازم.
             </p>
           </motion.div>
@@ -171,24 +264,44 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-gray-400 mb-2">الاسم</label>
+                    <label className="block text-gray-400 mb-2 font-medium">الاسم</label>
                     <input
                       type="text"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value })
+                        if (errors.name) {
+                          setErrors({ ...errors, name: '' })
+                        }
+                      }}
+                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.name ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
+                      } transition-all duration-300`}
                       required
                     />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-2">البريد الإلكتروني</label>
                     <input
                       type="email"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value })
+                        if (errors.email) {
+                          setErrors({ ...errors, email: '' })
+                        }
+                      }}
+                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.email ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
+                      } transition-all duration-300`}
                       required
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -198,17 +311,34 @@ export default function ContactPage() {
                     <input
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                      onChange={(e) => {
+                        setFormData({ ...formData, phone: e.target.value })
+                        if (errors.phone) {
+                          setErrors({ ...errors, phone: '' })
+                        }
+                      }}
+                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.phone ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
+                      } transition-all duration-300`}
                       dir="ltr"
                     />
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-2">نوع الخدمة</label>
                     <select
                       value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                      onChange={(e) => {
+                        setFormData({ ...formData, service: e.target.value })
+                        if (errors.service) {
+                          setErrors({ ...errors, service: '' })
+                        }
+                      }}
+                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.service ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
+                      } transition-all duration-300`}
                       required
                     >
                       <option value="" className="bg-gray-900">اختر نوع الخدمة</option>
@@ -222,6 +352,9 @@ export default function ContactPage() {
                         </option>
                       ))}
                     </select>
+                    {errors.service && (
+                      <p className="mt-1 text-sm text-red-500">{errors.service}</p>
+                    )}
                   </div>
                 </div>
 
@@ -229,18 +362,42 @@ export default function ContactPage() {
                   <label className="block text-gray-400 mb-2">الرسالة</label>
                   <textarea
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, message: e.target.value })
+                      if (errors.message) {
+                        setErrors({ ...errors, message: '' })
+                      }
+                    }}
                     rows="4"
-                    className="w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                    className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                      errors.message ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
+                    } transition-all duration-300`}
                     required
                   ></textarea>
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+                  )}
                 </div>
+
+                {errors.submit && (
+                  <div className="text-red-500 text-center mb-4">
+                    {errors.submit}
+                  </div>
+                )}
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className={`w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium tracking-wide
+                    ${!isSubmitting ? 'hover:from-blue-600 hover:to-purple-600' : 'opacity-75 cursor-not-allowed'}
+                    transition-all duration-300 flex items-center justify-center gap-2`}
                 >
-                  {isSubmitted ? (
+                  {isSubmitting ? (
+                    <>
+                      <FiMessageCircle className="w-5 h-5 animate-spin" />
+                      يتم الارسال...
+                    </>
+                  ) : showSuccess ? (
                     <>
                       <FiCheckCircle className="w-5 h-5" />
                       تم الإرسال بنجاح

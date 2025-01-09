@@ -75,7 +75,7 @@ const Hero = () => {
             <div className="text-xl md:text-2xl text-gray-400 mb-8 h-20">
               <TypeAnimation
                 sequence={[
-                  'تطوير مواقع ذكية',
+                  'تطوير مواقع',
                   2000,
                   'تحليل البيانات',
                   2000,

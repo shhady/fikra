@@ -1,39 +1,26 @@
 import { NextResponse } from 'next/server'
-import { connectDB } from '@/lib/db'
+import {connectDB} from '@/lib/db'
+import Contact from '@/models/Contact'
+import { sendNotificationEmail } from '@/lib/mail'
 
 export async function POST(request) {
   try {
-    const body = await request.json()
-    const { name, email, message } = body
-
-    // Validate input
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: 'جميع الحقول مطلوبة' },
-        { status: 400 }
-      )
+    await connectDB();
+    
+    const data = await request.json();
+    const contact = await Contact.create(data);
+    
+    // Optional: Send notification email
+    if (typeof sendNotificationEmail === 'function') {
+      await sendNotificationEmail(data);
     }
 
-    // Connect to database
-    const db = await connectDB()
-    
-    // Save contact form submission
-    await db.collection('contacts').insertOne({
-      name,
-      email,
-      message,
-      createdAt: new Date()
-    })
-
-    return NextResponse.json(
-      { message: 'تم إرسال رسالتك بنجاح' },
-      { status: 200 }
-    )
+    return NextResponse.json({ success: true, contact });
   } catch (error) {
-    console.error('Contact form error:', error)
+    console.error('Contact API Error:', error);
     return NextResponse.json(
-      { error: 'حدث خطأ أثناء إرسال الرسالة' },
+      { success: false, error: 'Failed to submit contact form' },
       { status: 500 }
-    )
+    );
   }
 } 

@@ -33,10 +33,10 @@ const Footer = () => {
   ]
 
   const socialLinks = [
-    { icon: FaWhatsapp, href: 'https://wa.me/YOUR_NUMBER', label: 'واتساب' },
-    { icon: FaTwitter, href: '#', label: 'تويتر' },
-    { icon: FaLinkedinIn, href: '#', label: 'لينكد إن' },
-    { icon: FaInstagram, href: '#', label: 'انستغرام' },
+    { icon: FaWhatsapp, href: 'https://wa.me/972543113297', label: 'واتساب' },
+    // { icon: FaTwitter, href: '#', label: 'تويتر' },
+    { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/shhady-serhan-a11403124', label: 'لينكد إن' },
+    { icon: FaInstagram, href: 'https://www.instagram.com/fikra__ai/', label: 'انستغرام' },
   ]
 
   return (

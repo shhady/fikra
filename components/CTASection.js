@@ -25,13 +25,13 @@ export default function CTASection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/contact"
-                className="px-8 py-4 bg-white text-blue-900 rounded-full text-lg font-medium hover:bg-blue-50 transform hover:scale-105 transition-all duration-200"
+                className="px-8 py-4 bg-white text-blue-900 rounded-full text-lg font-medium hover:bg-blue-50 transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
               >
                 ابدأ الآن
               </Link>
               <Link
                 href="/services"
-                className="px-8 py-4 bg-blue-500/20 text-white rounded-full text-lg font-medium hover:bg-blue-500/30 backdrop-blur-sm transform hover:scale-105 transition-all duration-200"
+                className="px-8 py-4 bg-blue-500/20 text-white rounded-full text-lg font-medium hover:bg-blue-500/30 backdrop-blur-sm transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
               >
                 تعرف على المزيد
               </Link>
