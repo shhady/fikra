@@ -1,0 +1,11 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M96 0H100V4H96V0Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M0 0H4V4H0V0Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M48 0H52V4H48V0Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M96 48H100V52H96V48Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M0 48H4V52H0V48Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M48 48H52V52H48V48Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M96 96H100V100H96V96Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M0 96H4V100H0V96Z" fill="currentColor" fill-opacity="0.1"/>
+  <path d="M48 96H52V100H48V96Z" fill="currentColor" fill-opacity="0.1"/>
+</svg> 
