@@ -8,38 +8,23 @@ export const metadata = {
 }
 
 const teamMembers = [
-  {
-    id: 1,
-    name: 'أحمد محمد',
-    role: 'المدير التنفيذي',
-    image: '/team/ceo.jpg',
-    linkedin: '#',
-    twitter: '#',
-  },
-  {
-    id: 2,
-    name: 'سارة أحمد',
-    role: 'مديرة التطوير',
-    image: '/team/dev-lead.jpg',
-    linkedin: '#',
-    twitter: '#',
-  },
-  {
-    id: 3,
-    name: 'محمد علي',
-    role: 'خبير الذكاء الاصطناعي',
-    image: '/team/ai-expert.jpg',
-    linkedin: '#',
-    twitter: '#',
-  },
-  {
-    id: 4,
-    name: 'نور حسن',
-    role: 'مديرة التسويق',
-    image: '/team/marketing-lead.jpg',
-    linkedin: '#',
-    twitter: '#',
-  },
+    {
+        id: 1,
+        name: 'شحاده سرحان',
+        // role: 'الرئيس التنفيذي/المدير التقني/خبير الذكاء الاصطناعي',
+        role: '',
+        image: '/team/ceo.jpg',
+        linkedin: 'https://www.linkedin.com/in/shhady-serhan-a11403124/',
+        // twitter: '#',
+      },
+      {
+        id: 2,
+        name: 'عُمري منصور',
+        role: '',
+        image: '/team/devops-specialist.jpg',
+        linkedin: 'https://www.linkedin.com/in/omri-mansour-1b35b6a0/',
+        // twitter: '#',
+      },
 ]
 
 const values = [
@@ -129,7 +114,7 @@ export default function AboutPage() {
       <section className="py-16 bg-gradient-to-b from-black to-blue-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white text-center mb-12">فريقنا المتميز</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {teamMembers.map((member) => (
               <div key={member.id} className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-xl text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
@@ -146,9 +131,9 @@ export default function AboutPage() {
                   <a href={member.linkedin} className="text-gray-400 hover:text-white">
                     <FaLinkedinIn className="w-5 h-5" />
                   </a>
-                  <a href={member.twitter} className="text-gray-400 hover:text-white">
+                  {/* <a href={member.twitter} className="text-gray-400 hover:text-white">
                     <FaTwitter className="w-5 h-5" />
-                  </a>
+                  </a> */}
                 </div>
               </div>
             ))}
