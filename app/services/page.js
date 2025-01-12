@@ -9,10 +9,10 @@ export const metadata = {
 
 export default function ServicesPage() {
   const stats = [
-    { id: 1, number: '150+', label: 'عميل سعيد' },
+    { id: 1, number: '20+', label: 'زبون راضٍ' },
     { id: 2, number: '95%', label: 'نسبة رضا العملاء' },
-    { id: 3, number: '200+', label: 'مشروع مكتمل' },
-    { id: 4, number: '10+', label: 'سنوات خبرة' },
+    { id: 3, number: '20+', label: 'مشروع مكتمل' },
+    { id: 4, number: '3+', label: 'سنوات خبرة' },
   ]
 
   const processSteps = [
