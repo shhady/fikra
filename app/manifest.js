@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
     name: 'وكالة الذكاء الاصطناعي',
-    short_name: ' فكرة نوفا',
+    short_name: 'FikraNova',
     description: 'حلول ذكية لتطوير أعمالك باستخدام تقنيات الذكاء الاصطناعي',
     start_url: '/',
     display: 'standalone',
