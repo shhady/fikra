@@ -3,7 +3,7 @@ import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ChatbaseProvider from '../components/ChatbaseProvider'
-
+import { Analytics } from "@vercel/analytics/react"
 const tajawal = Tajawal({
   subsets: ['arabic'],
   weight: ['200', '300', '400', '500', '700', '800', '900'],
@@ -79,9 +79,12 @@ export default function RootLayout({ children }) {
     <html lang="ar" dir="rtl">
       <body className={tajawal.className}>
         <Header />
-        <main className="min-h-screen pt-16">{children}</main>
+        <main className="min-h-screen pt-16">{children}
+        
+        </main>
         <Footer />
         <ChatbaseProvider />
+        <Analytics />
       </body>
     </html>
   )
