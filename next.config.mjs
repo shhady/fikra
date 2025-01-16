@@ -1,26 +1,55 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    
-    images: {
-        // Combine `remotePatterns` and `domains`
-        remotePatterns: [
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
           {
-            protocol: 'https',
-            hostname: 'images.pexels.com',
-            pathname: '/**',
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
           },
           {
-            protocol: 'https',
-            hostname: 'res.cloudinary.com',
-            pathname: '/**',
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
           },
           {
-            protocol: 'https',
-            hostname: 'img.clerk.com',
-            pathname: '/**',
-          },    
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
         ],
-    },
+      },
+    ];
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        pathname: '/**',
+      },
+    ],
+  },
+ 
 };
 
 export default nextConfig;

@@ -10,9 +10,8 @@ export const metadata = {
 export default function ServicesPage() {
   const stats = [
     { id: 1, number: '20+', label: 'زبون راضٍ' },
-    { id: 2, number: '95%', label: 'نسبة رضا العملاء' },
-    { id: 3, number: '20+', label: 'مشروع مكتمل' },
-    { id: 4, number: '3+', label: 'سنوات خبرة' },
+    { id: 2, number: '20+', label: 'مشروع مكتمل' },
+    { id: 3, number: '3+', label: 'سنوات خبرة' },
   ]
 
   const processSteps = [
@@ -60,7 +59,7 @@ export default function ServicesPage() {
           </div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-3 gap-8">
             {stats.map((stat) => (
               <div key={stat.id} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2">
