@@ -2,6 +2,7 @@ import { Tajawal } from 'next/font/google'
 import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import ChatbaseProvider from '../components/ChatbaseProvider'
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -80,6 +81,7 @@ export default function RootLayout({ children }) {
         <Header />
         <main className="min-h-screen pt-16">{children}</main>
         <Footer />
+        <ChatbaseProvider />
       </body>
     </html>
   )
