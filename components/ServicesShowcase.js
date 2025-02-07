@@ -8,24 +8,39 @@ import {
   FaVideo, 
   FaRobot,
 } from 'react-icons/fa'
+import { useLanguage } from '../context/LanguageContext'
+import { ar } from '../translations/ar'
+import { he } from '../translations/he'
+import { en } from '../translations/en'
 
 const ServicesShowcase = () => {
   const router = useRouter()
+  const { language, isRTL } = useLanguage()
+  
+  const getTranslations = () => {
+    switch (language) {
+      case 'he':
+        return he;
+      case 'en':
+        return en;
+      default:
+        return ar;
+    }
+  };
+
+  const translations = getTranslations();
 
   const services = [
     {
       id: 'web-dev',
-      title: 'تطوير المواقع بالذكاء الاصطناعي',
-      description: 'نقدم حلولاً متكاملة لتطوير المواقع الإلكترونية باستخدام أحدث تقنيات الذكاء الاصطناعي',
+      title: translations.home.services.items.webDev.title,
+      description: translations.home.services.items.webDev.description,
       icon: FaCode,
       gradient: 'from-blue-500 to-cyan-400',
-      features: [
-        { id: 'web-1', text: 'تصميم واجهات مستخدم ذكية وتفاعلية' },
-        { id: 'web-2', text: 'تحسين تجربة المستخدم باستخدام التعلم الآلي' },
-        { id: 'web-3', text: 'تكامل مع أنظمة الذكاء الاصطناعي' },
-        { id: 'web-4', text: 'تحسين الأداء والسرعة' },
-        { id: 'web-5', text: 'دعم متعدد اللغات' },
-      ],
+      features: translations.home.services.items.webDev.features.map((text, index) => ({
+        id: `web-${index + 1}`,
+        text
+      })),
       technologies: [
         { id: 'tech-1', name: 'Next.js' },
         { id: 'tech-2', name: 'React' },
@@ -36,17 +51,14 @@ const ServicesShowcase = () => {
     },
     {
       id: 'business',
-      title: 'تحليل وتحسين الأعمال',
-      description: 'نساعد الشركات على تحسين عملياتها وزيادة كفاءتها من خلال حلول الذكاء الاصطناعي المتقدمة',
+      title: translations.home.services.items.business.title,
+      description: translations.home.services.items.business.description,
       icon: FaChartLine,
       gradient: 'from-purple-500 to-pink-400',
-      features: [
-        { id: 'bus-1', text: 'تحليل البيانات التشغيلية' },
-        { id: 'bus-2', text: 'التنبؤ بالاتجاهات المستقبلية' },
-        { id: 'bus-3', text: 'أتمتة العمليات الروتينية' },
-        { id: 'bus-4', text: 'تحسين اتخاذ القرارات' },
-        { id: 'bus-5', text: 'تقارير تحليلية متقدمة' },
-      ],
+      features: translations.home.services.items.business.features.map((text, index) => ({
+        id: `bus-${index + 1}`,
+        text
+      })),
       technologies: [
         { id: 'tech-6', name: 'Power BI' },
         { id: 'tech-7', name: 'Tableau' },
@@ -57,17 +69,14 @@ const ServicesShowcase = () => {
     },
     {
       id: 'marketing',
-      title: 'التسويق الرقمي الذكي',
-      description: 'استراتيجيات تسويقية مدعومة بالذكاء الاصطناعي لتحقيق أفضل النتائج',
+      title: translations.home.services.items.marketing.title,
+      description: translations.home.services.items.marketing.description,
       icon: FaMegaport,
       gradient: 'from-orange-500 to-red-400',
-      features: [
-        { id: 'mkt-1', text: 'تحليل سلوك المستخدم' },
-        { id: 'mkt-2', text: 'استهداف دقيق للجمهور' },
-        { id: 'mkt-3', text: 'تحسين معدلات التحويل' },
-        { id: 'mkt-4', text: 'إدارة الحملات الإعلانية' },
-        { id: 'mkt-5', text: 'تحليل المنافسين' },
-      ],
+      features: translations.home.services.items.marketing.features.map((text, index) => ({
+        id: `mkt-${index + 1}`,
+        text
+      })),
       technologies: [
         { id: 'tech-11', name: 'Google Analytics' },
         { id: 'tech-12', name: 'Meta Ads' },
@@ -77,17 +86,14 @@ const ServicesShowcase = () => {
     },
     {
       id: 'content',
-      title: 'إنتاج المحتوى الإبداعي',
-      description: 'إنتاج محتوى مرئي وفيديوهات احترافية باستخدام تقنيات الذكاء الاصطناعي',
+      title: translations.home.services.items.content.title,
+      description: translations.home.services.items.content.description,
       icon: FaVideo,
       gradient: 'from-green-500 to-emerald-400',
-      features: [
-        { id: 'cnt-1', text: 'تصميم جرافيك ذكي' },
-        { id: 'cnt-2', text: 'إنتاج فيديوهات تفاعلية' },
-        { id: 'cnt-3', text: 'تحرير صور احترافي' },
-        { id: 'cnt-4', text: 'تصميم هويات بصرية' },
-        { id: 'cnt-5', text: 'معالجة الصور والفيديو' },
-      ],
+      features: translations.home.services.items.content.features.map((text, index) => ({
+        id: `cnt-${index + 1}`,
+        text
+      })),
       technologies: [
         { id: 'tech-15', name: 'Adobe Creative Suite' },
         { id: 'tech-16', name: 'Midjourney' },
@@ -122,10 +128,10 @@ const ServicesShowcase = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-white mb-4">
-            خدماتنا المتميزة
+            {translations.home.services.title}
           </h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            نقدم مجموعة شاملة من الحلول المبتكرة المدعومة بأحدث تقنيات الذكاء الاصطناعي
+            {translations.home.services.subtitle}
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-8"></div>
         </div>
@@ -140,11 +146,11 @@ const ServicesShowcase = () => {
               
               <div className="relative z-10 p-8">
                 {/* Header */}
-                <div className="flex items-start gap-4 mb-6">
+                <div className={`flex items-start gap-4 mb-6 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
                   <div className={`p-4 rounded-xl bg-gradient-to-r ${service.gradient}`}>
                     <service.icon className="h-6 w-6 text-white" />
                   </div>
-                  <div>
+                  <div className={`text-${isRTL ? 'right' : 'left'}`}>
                     <h3 className="text-2xl font-bold text-white mb-2">
                       {service.title}
                     </h3>
@@ -156,11 +162,13 @@ const ServicesShowcase = () => {
 
                 {/* Features */}
                 <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-white mb-3">المميزات الرئيسية:</h4>
+                  <h4 className={`text-lg font-semibold text-white mb-3 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.home.services.mainFeatures}
+                  </h4>
                   <ul className="space-y-2">
                     {service.features.map((feature) => (
-                      <li key={feature.id} className="flex items-center text-gray-300">
-                        <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient} mr-2`}></span>
+                      <li key={feature.id} className={`flex items-center text-gray-300 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${service.gradient} ${isRTL ? 'ml-2' : 'mr-2'}`}></span>
                         {feature.text}
                       </li>
                     ))}
@@ -169,8 +177,10 @@ const ServicesShowcase = () => {
 
                 {/* Technologies */}
                 <div className="mb-8">
-                  <h4 className="text-lg font-semibold text-white mb-3">التقنيات المستخدمة:</h4>
-                  <div className="flex flex-wrap gap-2">
+                  <h4 className={`text-lg font-semibold text-white mb-3 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.home.services.technologies}
+                  </h4>
+                  <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : 'justify-start'}`}>
                     {service.technologies.map((tech) => (
                       <span
                         key={tech.id}
@@ -182,12 +192,12 @@ const ServicesShowcase = () => {
                   </div>
                 </div>
 
-                {/* CTA Button with higher z-index */}
+                {/* CTA Button */}
                 <Link 
                   href={`/contact?service=${encodeURIComponent(service.title)}`}
                   className="relative z-20 block w-full text-center py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium"
                 >
-                  اطلب الخدمة الآن
+                  {translations.home.services.requestService}
                 </Link>
               </div>
             </div>

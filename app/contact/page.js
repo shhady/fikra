@@ -2,30 +2,35 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiMail, FiPhone, FiMapPin, FiClock, FiMessageCircle, FiCheckCircle, FiLinkedin, FiFacebook, FiInstagram } from 'react-icons/fi'
+import { useLanguage } from '../../context/LanguageContext'
+import { ar } from '@/translations/ar'
+import { en } from '@/translations/en'
+import { he } from '@/translations/he'
+// import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 
-const contactInfo = [
+const getContactInfo = (translations) => [
   {
     icon: <FiMail className="w-6 h-6" />,
-    title: 'البريد الإلكتروني',
+    title: translations.contact.info.email,
     details: 'shhadyse@gmail.com',
     link: 'mailto:shhadyse@gmail.com'
   },
   {
     icon: <FiPhone className="w-6 h-6" />,
-    title: 'رقم الهاتف',
+    title: translations.contact.info.phone,
     details: '0543113297',
     link: 'tel:+972543113297'
   },
   {
     icon: <FiMapPin className="w-6 h-6" />,
-    title: 'العنوان',
-    details: 'الناصرة',
+    title: translations.contact.info.address,
+    details: 'נצרת',
     link: 'https://maps.google.com/?q=Nazareth'
   },
   {
     icon: <FiClock className="w-6 h-6" />,
-    title: 'ساعات العمل',
-    details: 'الاثنين - الجمعة: ٩ ص - ٥ م',
+    title: translations.contact.info.hours,
+    details: translations.contact.info.workingHours,
     link: null
   }
 ]
@@ -48,15 +53,16 @@ const socialLinks = [
   }
 ]
 
-const serviceOptions = [
-  'تطوير المواقع بالذكاء الاصطناعي',
-  'تحليل وتحسين الأعمال',
-  'التسويق الرقمي الذكي',
-  'إنتاج المحتوى الإبداعي',
-  'أخرى'
+const getServiceOptions = (translations) => [
+  translations.home.services.items.webDev.title,
+  translations.home.services.items.business.title,
+  translations.home.services.items.marketing.title,
+  translations.home.services.items.content.title,
+  translations.contact.form.other
 ]
 
 export default function ContactPage() {
+  const { language, isRTL } = useLanguage()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -69,6 +75,19 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [errors, setErrors] = useState({})
+
+  const getTranslations = () => {
+    switch (language) {
+      case 'he':
+        return he
+      case 'en':
+        return en
+      default:
+        return ar
+    }
+  }
+
+  const translations = getTranslations()
 
   // Handle service selection from URL on client side
   useEffect(() => {
@@ -178,6 +197,14 @@ export default function ContactPage() {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   return (
     <main className="min-h-screen bg-black">
       {/* Hero Section */}
@@ -194,272 +221,202 @@ export default function ContactPage() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-wide">
-              تواصل معنا
+              {translations.contact.hero.title}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
-              نحن هنا لمساعدتك. فريقنا جاهز للإجابة على جميع استفساراتك وتقديم الدعم اللازم.
+              {translations.contact.hero.subtitle}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Info Grid */}
-      <section className="py-16 relative z-10 -mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {contactInfo.map((info, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl hover:from-blue-900/20 hover:to-purple-900/20 transition-all duration-300"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="text-blue-500">{info.icon}</div>
-                  <div>
-                    <h3 className="text-white font-semibold mb-1">{info.title}</h3>
-                    {info.link ? (
-                      <a
-                        href={info.link}
-                        className="text-gray-400 hover:text-blue-400 transition-colors"
-                        target={info.link.startsWith('http') ? '_blank' : undefined}
-                        rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      >
-                        {info.details}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400">{info.details}</p>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Form & Map Section */}
-      <section className="py-16">
+      {/* Contact Form Section */}
+      <section className="py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-3xl p-8 shadow-2xl"
-            >
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-white mb-4">
-                  أرسل لنا رسالة
-                </h2>
-                <p className="text-gray-400">
-                  املأ النموذج أدناه وسنتواصل معك في أقرب وقت ممكن
-                </p>
-              </div>
+            {/* Form */}
+            <div className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl">
+              <h2 className={`text-2xl font-bold text-white mb-2 text-${isRTL ? 'right' : 'left'}`}>
+                {translations.contact.form.title}
+              </h2>
+              <p className={`text-gray-400 mb-8 text-${isRTL ? 'right' : 'left'}`}>
+                {translations.contact.form.subtitle}
+              </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-400 mb-2 font-medium">الاسم</label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => {
-                        setFormData({ ...formData, name: e.target.value })
-                        if (errors.name) {
-                          setErrors({ ...errors, name: '' })
-                        }
-                      }}
-                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                        errors.name ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
-                      } transition-all duration-300`}
-                      required
-                    />
-                    {errors.name && (
-                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 mb-2">البريد الإلكتروني</label>
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value })
-                        if (errors.email) {
-                          setErrors({ ...errors, email: '' })
-                        }
-                      }}
-                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                        errors.email ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
-                      } transition-all duration-300`}
-                      required
-                    />
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-400 mb-2">رقم الهاتف</label>
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => {
-                        setFormData({ ...formData, phone: e.target.value })
-                        if (errors.phone) {
-                          setErrors({ ...errors, phone: '' })
-                        }
-                      }}
-                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                        errors.phone ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
-                      } transition-all duration-300`}
-                      dir="ltr"
-                    />
-                    {errors.phone && (
-                      <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 mb-2">نوع الخدمة</label>
-                    <select
-                      value={formData.service}
-                      onChange={(e) => {
-                        setFormData({ ...formData, service: e.target.value })
-                        if (errors.service) {
-                          setErrors({ ...errors, service: '' })
-                        }
-                      }}
-                      className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                        errors.service ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
-                      } transition-all duration-300`}
-                      required
-                    >
-                      <option value="" className="bg-gray-900">اختر نوع الخدمة</option>
-                      {serviceOptions.map((service, index) => (
-                        <option 
-                          key={index} 
-                          value={service} 
-                          className="bg-gray-900"
-                        >
-                          {service}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.service && (
-                      <p className="mt-1 text-sm text-red-500">{errors.service}</p>
-                    )}
-                  </div>
+                <div>
+                  <label htmlFor="name" className={`block text-sm font-medium text-gray-300 mb-1 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.contact.form.name}
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 mb-2">
-                    الرسالة
-                    <span className="text-gray-500 text-sm mr-2">(اختياري)</span>
+                  <label htmlFor="email" className={`block text-sm font-medium text-gray-300 mb-1 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.contact.form.email}
                   </label>
-                  <textarea
-                    value={formData.message}
-                    onChange={(e) => {
-                      setFormData({ ...formData, message: e.target.value })
-                      if (errors.message) {
-                        setErrors({ ...errors, message: '' })
-                      }
-                    }}
-                    rows="4"
-                    className={`w-full px-4 py-3 bg-white/5 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
-                      errors.message ? 'ring-2 ring-red-500' : 'focus:ring-blue-500'
-                    } transition-all duration-300`}
-                    placeholder="اكتب رسالتك هنا..."
-                  ></textarea>
-                  {errors.message && (
-                    <p className="mt-1 text-sm text-red-500">{errors.message}</p>
-                  )}
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
+                  />
                 </div>
 
-                {errors.submit && (
-                  <div className="text-red-500 text-center mb-4">
-                    {errors.submit}
-                  </div>
-                )}
+                <div>
+                  <label htmlFor="phone" className={`block text-sm font-medium text-gray-300 mb-1 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.contact.form.phone}
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="service" className={`block text-sm font-medium text-gray-300 mb-1 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.contact.form.service}
+                  </label>
+                  <select
+                    name="service"
+                    id="service"
+                    required
+                    value={formData.service}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
+                  >
+                    <option value="">{translations.contact.form.selectService}</option>
+                    {getServiceOptions(translations).map((service, index) => (
+                      <option key={index} value={service} className="bg-gray-900">
+                        {service}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className={`block text-sm font-medium text-gray-300 mb-1 text-${isRTL ? 'right' : 'left'}`}>
+                    {translations.contact.form.message}
+                  </label>
+                  <textarea
+                    name="message"
+                    id="message"
+                    rows={4}
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder={translations.contact.form.messagePlaceholder}
+                    className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
+                  />
+                </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium tracking-wide
-                    ${!isSubmitting ? 'hover:from-blue-600 hover:to-purple-600' : 'opacity-75 cursor-not-allowed'}
-                    transition-all duration-300 flex items-center justify-center gap-2`}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg px-4 py-3 transition-all duration-300 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <FiMessageCircle className="w-5 h-5 animate-spin" />
-                      يتم الارسال...
-                    </>
-                  ) : showSuccess ? (
-                    <>
-                      <FiCheckCircle className="w-5 h-5" />
-                      تم الإرسال بنجاح
-                    </>
-                  ) : (
-                    <>
-                      <FiMessageCircle className="w-5 h-5" />
-                      إرسال الرسالة
-                    </>
-                  )}
+                  {isSubmitting ? translations.contact.form.submitting : translations.contact.form.submit}
                 </button>
+
+                {showSuccess && (
+                  <div className="text-green-400 text-center mt-4">
+                    {translations.contact.form.success}
+                  </div>
+                )}
+
+                {errors.submit && (
+                  <div className="text-red-400 text-center mt-4">
+                    {translations.contact.form.error}
+                  </div>
+                )}
               </form>
-            </motion.div>
+            </div>
 
-            {/* Map */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="rounded-3xl overflow-hidden h-[600px] relative"
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26724.67961929919!2d35.27962973067478!3d32.70421504646431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c4e7cf16c0fff%3A0xd2385b30c1275dd6!2sNazareth!5e0!3m2!1sen!2sil!4v1709774008600!5m2!1sen!2sil"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+            {/* Contact Info & Map */}
+            <div className="space-y-8">
+              {/* Contact Info */}
+              <div>
+                <h2 className={`text-2xl font-bold text-white mb-6 text-${isRTL ? 'right' : 'left'}`}>
+                  {translations.contact.info.title}
+                </h2>
+                <div className="grid grid-cols-1 gap-6">
+                  {getContactInfo(translations).map((info, index) => (
+                    <div key={index} className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <div className="text-blue-500">{info.icon}</div>
+                      <div className={`text-${isRTL ? 'right' : 'left'}`}>
+                        <h3 className="text-white font-semibold mb-1">{info.title}</h3>
+                        {info.link ? (
+                          <a
+                            href={info.link}
+                            className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                          >
+                            {info.details}
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">{info.details}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-      {/* Social Links */}
-      <section className="py-16 bg-gradient-to-t from-blue-900/20 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              تابعنا على مواقع التواصل الاجتماعي
-            </h2>
-            <p className="text-gray-400">
-              ابق على اطلاع بآخر أخبارنا ومستجداتنا
-            </p>
-          </div>
-          <div className="flex justify-center gap-6">
-            {socialLinks.map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-4 bg-gradient-to-br from-gray-900 to-black rounded-full text-blue-500 hover:text-blue-400 transition-all duration-300"
-              >
-                {social.icon}
-              </motion.a>
-            ))}
+              {/* Map */}
+              <div>
+                <h2 className={`text-2xl font-bold text-white mb-6 text-${isRTL ? 'right' : 'left'}`}>
+                  {translations.contact.map.title}
+                </h2>
+                <div className="h-[400px] rounded-2xl overflow-hidden">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26724.67961929919!2d35.27962973067478!3d32.70421504646431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c4e7cf16c0fff%3A0xd2385b30c1275dd6!2sNazareth!5e0!3m2!1sen!2sil!4v1709774008600!5m2!1sen!2sil"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div>
+                <h2 className={`text-2xl font-bold text-white mb-2 text-${isRTL ? 'right' : 'left'}`}>
+                  {translations.contact.social.title}
+                </h2>
+                <p className={`text-gray-400 mb-6 text-${isRTL ? 'right' : 'left'}`}>
+                  {translations.contact.social.subtitle}
+                </p>
+                <div className="flex gap-4">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                    >
+                      {social.icon}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

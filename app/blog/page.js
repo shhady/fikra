@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 
 const blogs = [
   {
@@ -49,6 +50,39 @@ const blogs = [
 ]
 
 export default function BlogPage() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState({ type: '', message: '' })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setStatus({ type: '', message: '' })
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setStatus({ type: 'success', message: data.message })
+        setEmail('')
+      } else {
+        setStatus({ type: 'error', message: data.error })
+      }
+    } catch (error) {
+      setStatus({ type: 'error', message: 'حدث خطأ أثناء الاشتراك' })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-black">
       {/* Hero Section */}
@@ -159,19 +193,32 @@ export default function BlogPage() {
               <p className="text-gray-300 mb-8">
                 احصل على آخر الأخبار والمقالات حول الذكاء الاصطناعي وتطوير الأعمال
               </p>
-              <form className="flex flex-col sm:flex-row gap-4">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="بريدك الإلكتروني"
                   className="flex-1 px-6 py-4 bg-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
                 />
                 <button
                   type="submit"
-                  className="px-8 py-4 bg-white text-blue-900 rounded-xl font-semibold hover:bg-blue-50 transition-colors duration-300"
+                  disabled={isSubmitting}
+                  className={`px-8 py-4 bg-white text-blue-900 rounded-xl font-semibold 
+                    ${!isSubmitting ? 'hover:bg-blue-50' : 'opacity-75 cursor-not-allowed'}
+                    transition-colors duration-300`}
                 >
-                  اشترك الآن
+                  {isSubmitting ? 'جاري الاشتراك...' : 'اشترك الآن'}
                 </button>
               </form>
+              {status.message && (
+                <p className={`mt-4 text-sm ${
+                  status.type === 'success' ? 'text-green-400' : 'text-red-400'
+                }`}>
+                  {status.message}
+                </p>
+              )}
             </div>
           </div>
         </div>

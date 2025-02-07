@@ -3,33 +3,63 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
+import { useLanguage } from '../context/LanguageContext'
+import { ar } from '../translations/ar'
+import { he } from '../translations/he'
+import { en } from '../translations/en'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { language, changeLanguage } = useLanguage()
+  
+  const getTranslations = () => {
+    switch (language) {
+      case 'he':
+        return he;
+      case 'en':
+        return en;
+      default:
+        return ar;
+    }
+  };
+
+  const translations = getTranslations();
 
   const navigation = [
-    { name: 'الرئيسية', href: '/' },
-    { name: 'من نحن', href: '/about' },
-    { name: 'خدماتنا', href: '/services' },
-    { name: 'المدونة', href: '/blog' },
-    { name: 'الأسئلة الشائعة', href: '/faq' },
-    { name: 'تواصل معنا', href: '/contact' },
+    { name: translations.nav.home, href: '/' },
+    { name: translations.nav.about, href: '/about' },
+    { name: translations.nav.services, href: '/services' },
+    { name: translations.nav.blog, href: '/blog' },
+    { name: 'FAQ', href: '/faq' },
+    { name: translations.nav.contact, href: '/contact' },
   ]
 
   return (
     <header className="fixed w-full z-50 bg-black/50 backdrop-blur-lg border-b border-white/10 py-2">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-row-reverse items-center justify-between h-16">
+        <div className="flex flex-row items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-white">
-             <Image src="/my-logo.png" alt="Logo" width={100} height={100} />
+             <Image src="/my-logo.png" alt="Logo" width={170} height={120} />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8 space-x-reverse">
+          <div className="hidden md:flex items-center gap-8 flex-row-reverse">
+            {/* Language Switcher - Always First (Right) */}
+            <select
+              value={language}
+              onChange={(e) => changeLanguage(e.target.value)}
+              className="bg-black text-gray-300 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400 order-first"
+            >
+              <option value="ar">العربية</option>
+              <option value="he">עברית</option>
+              <option value="en">English</option>
+            </select>
+
+            {/* Navigation Links */}
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -43,9 +73,13 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
-         <Link href="/contact" >   <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
-              ابدأ مشروعك
-            </button></Link> 
+
+            {/* Start Project Button */}
+            <Link href="/contact">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
+                {language === 'he' ? 'התחל פרויקט' : language === 'en' ? 'Start Project' : 'ابدأ مشروعك'}
+              </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -54,7 +88,7 @@ const Header = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-400 hover:text-white"
             >
-              <span className="sr-only">القائمة</span>
+              <span className="sr-only">Menu</span>
               {!isMobileMenuOpen ? (
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -72,6 +106,17 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {/* Mobile Language Switcher */}
+              <select
+                value={language}
+                onChange={(e) => {changeLanguage(e.target.value);setIsMobileMenuOpen(false)}}
+                className="w-full bg-black text-gray-300 border border-gray-600 rounded px-3 py-2 mb-2 text-base focus:outline-none focus:border-blue-400"
+              >
+                <option value="ar">العربية</option>
+                <option value="he">עברית</option>
+                <option value="en">English</option>
+              </select>
+
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -80,17 +125,17 @@ const Header = () => {
                     pathname === item.href
                       ? 'text-blue-400 bg-black/30'
                       : 'text-gray-300 hover:text-white hover:bg-black/30'
-                  } block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200`}
+                  } block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-right`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
-              <Link href="/contact"                   onClick={() => setIsMobileMenuOpen(false)}
-              >
-              <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
-                ابدأ مشروعك
-              </button></Link>
+              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
+                  {language === 'he' ? 'התחל פרויקט' : language === 'en' ? 'Start Project' : 'ابدأ مشروعك'}
+                </button>
+              </Link>
             </div>
           </div>
         )}

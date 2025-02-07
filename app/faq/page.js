@@ -1,8 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiPlus, FiMinus } from 'react-icons/fi'
+import { useLanguage } from '../../context/LanguageContext'
+import { ar } from '../../translations/ar'
+import { he } from '../../translations/he'
+import { en } from '../../translations/en'
+import { FaChevronDown } from 'react-icons/fa'
 
 // export const metadata = {
 //   title: 'الأسئلة الشائعة | وكالة الذكاء الاصطناعي',
@@ -97,46 +102,83 @@ const faqCategories = [
 ]
 
 export default function FAQPage() {
-  const [activeCategory, setActiveCategory] = useState('general')
-  const [openQuestions, setOpenQuestions] = useState([])
+  const { language, isRTL } = useLanguage()
+  const [activeCategory, setActiveCategory] = useState(0)
+  const [activeQuestions, setActiveQuestions] = useState({})
+  
+  const getTranslations = () => {
+    switch (language) {
+      case 'he':
+        return he;
+      case 'en':
+        return en;
+      default:
+        return ar;
+    }
+  };
 
-  const toggleQuestion = (questionId) => {
-    setOpenQuestions(prev => 
-      prev.includes(questionId) 
-        ? prev.filter(id => id !== questionId)
-        : [...prev, questionId]
-    )
+  const translations = getTranslations();
+
+  // Add error handling for translations
+  if (!translations || !translations.faq) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  const toggleQuestion = (categoryIndex, questionIndex) => {
+    setActiveQuestions(prev => {
+      const key = `${categoryIndex}-${questionIndex}`
+      return {
+        ...prev,
+        [key]: !prev[key]
+      }
+    })
   }
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="bg-black min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-black opacity-90"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            الأسئلة الشائعة
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            إجابات على أكثر الأسئلة شيوعاً حول خدماتنا وكيفية عملنا
-          </p>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-6xl font-bold text-white mb-6"
+          >
+            {translations.faq.hero.title}
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl text-gray-300 max-w-3xl mx-auto"
+          >
+            {translations.faq.hero.subtitle}
+          </motion.p>
         </div>
       </section>
 
-      {/* FAQ Content */}
+      {/* FAQ Section */}
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category Tabs */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Categories */}
           <div className="flex flex-wrap gap-4 mb-12 justify-center">
-            {faqCategories.map((category) => (
+            {translations.faq.categories.map((category, index) => (
               <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`px-6 py-3 rounded-full text-lg transition-all duration-300 ${
-                  activeCategory === category.id
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                key={index}
+                onClick={() => setActiveCategory(index)}
+                className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeCategory === index
+                    ? 'bg-blue-500 text-white'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
@@ -147,40 +189,42 @@ export default function FAQPage() {
 
           {/* Questions */}
           <div className="space-y-6">
-            {faqCategories
-              .find(cat => cat.id === activeCategory)
-              ?.questions.map((item) => (
+            <AnimatePresence mode="wait">
+              {translations.faq.categories[activeCategory]?.questions.map((item, questionIndex) => (
                 <motion.div
-                  key={item.id}
+                  key={questionIndex}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-gradient-to-r from-gray-900 to-black rounded-xl overflow-hidden"
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
                 >
                   <button
-                    onClick={() => toggleQuestion(item.id)}
-                    className="w-full px-6 py-4 flex items-center justify-between text-right"
+                    onClick={() => toggleQuestion(activeCategory, questionIndex)}
+                    className={`w-full p-6 text-${isRTL ? 'right' : 'left'} flex items-center justify-between gap-4`}
                   >
-                    <span className="text-lg font-semibold text-white">
+                    <span className="text-lg font-medium text-white">
                       {item.question}
                     </span>
-                    <span className="text-gray-400">
-                      {openQuestions.includes(item.id) ? (
-                        <FiMinus className="w-6 h-6" />
-                      ) : (
-                        <FiPlus className="w-6 h-6" />
-                      )}
-                    </span>
+                    <motion.span
+                      animate={{ rotate: activeQuestions[`${activeCategory}-${questionIndex}`] ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`flex-shrink-0 ${isRTL ? 'ml-4' : 'mr-4'}`}
+                    >
+                      <FaChevronDown className="w-5 h-5 text-blue-400" />
+                    </motion.span>
                   </button>
                   
                   <AnimatePresence>
-                    {openQuestions.includes(item.id) && (
+                    {activeQuestions[`${activeCategory}-${questionIndex}`] && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
+                        className="px-6 pb-6"
                       >
-                        <div className="px-6 pb-4 text-gray-400">
+                        <div className={`text-gray-300 text-${isRTL ? 'right' : 'left'}`}>
                           {item.answer}
                         </div>
                       </motion.div>
@@ -188,27 +232,40 @@ export default function FAQPage() {
                   </AnimatePresence>
                 </motion.div>
               ))}
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <section className="py-16">
+      {/* CTA Section */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-900 to-purple-900 rounded-3xl p-8 md:p-16 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              لم تجد إجابة لسؤالك؟
-            </h2>
-            <p className="text-xl text-gray-300 mb-8">
-              فريقنا جاهز للإجابة على جميع استفساراتك
-            </p>
-            <a
-              href="/contact"
-              className="inline-block bg-white text-blue-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-colors duration-300"
-            >
-              تواصل معنا
-            </a>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-gradient-to-r from-blue-900 to-purple-900 rounded-3xl p-8 md:p-16 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-black opacity-50"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative z-10">
+              <div className="text-center">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  {translations.faq.cta.title}
+                </h2>
+                <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                  {translations.faq.cta.subtitle}
+                </p>
+                <Link
+                  href="/contact"
+                  className="inline-block bg-white text-blue-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-colors duration-300 transform hover:scale-105"
+                >
+                  {translations.faq.cta.button}
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>

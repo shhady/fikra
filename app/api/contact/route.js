@@ -10,9 +10,18 @@ export async function POST(request) {
     const data = await request.json();
     const contact = await Contact.create(data);
     
-    // Optional: Send notification email
-    if (typeof sendNotificationEmail === 'function') {
-      await sendNotificationEmail(data);
+    // Send notification email with proper type and data
+    try {
+      await sendNotificationEmail({
+        email: data.email,
+        type: 'Contact',
+        name: data.name,
+        phone: data.phone,
+        service: data.service,
+        message: data.message
+      });
+    } catch (emailError) {
+      console.error('Email sending error:', emailError);
     }
 
     return NextResponse.json({ success: true, contact });

@@ -118,8 +118,8 @@ export async function generateStaticParams() {
   }))
 }
 
-export default function BlogPost({ params }) {
-  const post = blogData[params.slug]
+export default async function BlogPost({ params }) {
+  const post =await blogData[params.slug]
 
   if (!post) {
     notFound()

@@ -19,3 +19,72 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* RTL/LTR Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Adjust spacing for RTL/LTR */
+.rtl .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+.ltr .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+}
+
+/* Adjust margins for RTL/LTR */
+.rtl .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.rtl .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+/* Adjust text alignment for form elements */
+.rtl input[type="text"],
+.rtl input[type="email"],
+.rtl input[type="password"],
+.rtl textarea {
+  text-align: right;
+}
+
+.ltr input[type="text"],
+.ltr input[type="email"],
+.ltr input[type="password"],
+.ltr textarea {
+  text-align: left;
+}
+
+/* Adjust border radius for RTL/LTR specific cases */
+.rtl .rounded-r-lg {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.rtl .rounded-l-lg {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Adjust transforms for RTL */
+.rtl .rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Adjust flexbox order for RTL */
+.rtl .flex-row {
+  flex-direction: row-reverse;
+}
+
+.rtl .flex-row-reverse {
+  flex-direction: row;
+}
