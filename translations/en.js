@@ -325,28 +325,30 @@ export const en = {
   },
   privacy: {
     title: 'Privacy Policy',
-    intro: 'At Fikra, we are committed to protecting our users\' privacy. This policy describes how we collect, use, and protect your personal information.',
+    intro: 'We value your privacy and are committed to protecting your personal data. This privacy policy describes how we collect, use, and protect your information when using our website and services.',
     collection: {
       title: 'Information Collection',
-      description: 'We collect information that you provide directly to us when:',
+      description: 'We collect the following information when you use our website:',
       items: [
-        'Contacting us through the contact form',
-        'Requesting our services',
-        'Subscribing to our newsletter'
+        'Personal information you provide us such as name, email, and phone number',
+        'Technical information such as IP address and browsing data',
+        'Information related to your use of our services',
+        'Communications between us'
       ]
     },
     usage: {
       title: 'Information Usage',
-      description: 'We use the information we collect to:',
+      description: 'We use the information we collect for the following purposes:',
       items: [
-        'Provide and improve our services',
-        'Communicate with you about your requests',
-        'Send updates about our services'
+        'Providing and improving our services',
+        'Communicating with you about our services',
+        'Sending updates and news about our services',
+        'Analyzing and improving our website performance'
       ]
     },
     protection: {
       title: 'Information Protection',
-      description: 'We take appropriate security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.'
+      description: 'We take appropriate security measures to protect your information from unauthorized access, alteration, disclosure, or destruction. We use standard encryption protocols to protect data transmission.'
     }
   },
   terms: {
