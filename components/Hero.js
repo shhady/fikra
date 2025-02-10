@@ -45,6 +45,10 @@ const Hero = () => {
       2000,
       services.automation,
       2000,
+      services.aiAgents,
+      2000,
+      services.aiAutomation,
+      2000,
     ];
   };
 

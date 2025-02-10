@@ -133,6 +133,28 @@ export const en = {
             'Brand Identity Design',
             'Image and Video Processing'
           ]
+        },
+        aiAgents: {
+          title: 'AI Agents',
+          description: 'Custom AI agents that automate complex tasks and decision-making processes',
+          features: [
+            'Intelligent virtual assistants',
+            'Task-specific AI agents',
+            'Natural language processing',
+            'Adaptive learning capabilities',
+            'Multi-agent systems integration'
+          ]
+        },
+        aiAutomation: {
+          title: 'AI Automation',
+          description: 'Advanced automation solutions powered by artificial intelligence',
+          features: [
+            'Workflow automation',
+            'Process optimization',
+            'Intelligent document processing',
+            'Predictive maintenance',
+            'Custom automation solutions'
+          ]
         }
       }
     },

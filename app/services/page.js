@@ -10,6 +10,8 @@ import {
   FaChartLine, 
   FaMegaport, 
   FaVideo,
+  FaRobot,
+  FaCogs,
 } from 'react-icons/fa'
 
 export default function ServicesPage() {
@@ -85,6 +87,36 @@ export default function ServicesPage() {
         { id: 'tech-16', name: 'Midjourney' },
         { id: 'tech-17', name: 'DALL-E' },
         { id: 'tech-18', name: 'Stable Diffusion' },
+      ],
+    },
+    {
+      id: 'ai-agents',
+      title: translations.home.services.items.aiAgents.title,
+      description: translations.home.services.items.aiAgents.description,
+      icon: FaRobot,
+      gradient: 'from-indigo-500 to-violet-400',
+      features: translations.home.services.items.aiAgents.features,
+      technologies: [
+        { id: 'tech-19', name: 'OpenAI' },
+        { id: 'tech-20', name: 'LangChain' },
+        { id: 'tech-21', name: 'Hugging Face' },
+        { id: 'tech-22', name: 'TensorFlow' },
+        { id: 'tech-23', name: 'PyTorch' },
+      ],
+    },
+    {
+      id: 'ai-automation',
+      title: translations.home.services.items.aiAutomation.title,
+      description: translations.home.services.items.aiAutomation.description,
+      icon: FaCogs,
+      gradient: 'from-blue-600 to-indigo-400',
+      features: translations.home.services.items.aiAutomation.features,
+      technologies: [
+        { id: 'tech-24', name: 'Make.com' },
+        { id: 'tech-25', name: 'Power Automate' },
+        { id: 'tech-26', name: 'Python RPA' },
+        { id: 'tech-27', name: 'Azure AI' },
+        { id: 'tech-28', name: 'Google Cloud AI' },
       ],
     },
   ]

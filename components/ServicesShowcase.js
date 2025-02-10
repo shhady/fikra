@@ -7,6 +7,7 @@ import {
   FaMegaport, 
   FaVideo, 
   FaRobot,
+  FaCogs,
 } from 'react-icons/fa'
 import { useLanguage } from '../context/LanguageContext'
 import { ar } from '../translations/ar'
@@ -101,26 +102,43 @@ const ServicesShowcase = () => {
         { id: 'tech-18', name: 'Stable Diffusion' },
       ],
     },
-    // {
-    //   id: 'automation',
-    //   title: 'أتمتة العمليات الروبوتية',
-    //   description: 'أتمتة العمليات التجارية باستخدام الروبوتات البرمجية وتقنيات الذكاء الاصطناعي',
-    //   icon: FaRobot,
-    //   gradient: 'from-indigo-500 to-blue-400',
-    //   features: [
-    //     { id: 'auto-1', text: 'أتمتة المهام المتكررة' },
-    //     { id: 'auto-2', text: 'معالجة المستندات الذكية' },
-    //     { id: 'auto-3', text: 'التكامل مع الأنظمة الحالية' },
-    //     { id: 'auto-4', text: 'تحسين الكفاءة التشغيلية' },
-    //     { id: 'auto-5', text: 'تقليل الأخطاء البشرية' },
-    //   ],
-    //   technologies: [
-    //     { id: 'tech-19', name: 'UiPath' },
-    //     { id: 'tech-20', name: 'Blue Prism' },
-    //     { id: 'tech-21', name: 'Automation Anywhere' },
-    //     { id: 'tech-22', name: 'Python RPA' },
-    //   ],
-    // },
+    {
+      id: 'ai-automation',
+      title: translations.home.services.items.aiAutomation.title,
+      description: translations.home.services.items.aiAutomation.description,
+      icon: FaCogs,
+      gradient: 'from-blue-600 to-indigo-400',
+      features: translations.home.services.items.aiAutomation.features.map((text, index) => ({
+        id: `aut-${index + 1}`,
+        text
+      })),
+      technologies: [
+        { id: 'tech-24', name: 'Make.com' },
+        { id: 'tech-25', name: 'Zapier' },
+        { id: 'tech-27', name: 'N8N' },
+        // { id: 'tech-28', name: 'Google Cloud AI' },
+
+      ],
+    },
+    {
+      id: 'ai-agents',
+      title: `${translations.home.services.items.aiAgents.title} (${language === 'he' ? 'בקרוב' : language === 'en' ? 'Soon' : 'قريباً'})`,
+      description: translations.home.services.items.aiAgents.description,
+      icon: FaRobot,
+      gradient: 'from-indigo-500 to-violet-400',
+      features: translations.home.services.items.aiAgents.features.map((text, index) => ({
+        id: `agt-${index + 1}`,
+        text
+      })),
+      technologies: [
+        { id: 'tech-19', name: 'OpenAI' },
+        { id: 'tech-20', name: 'LangChain' },
+        { id: 'tech-21', name: 'Hugging Face' },
+        { id: 'tech-22', name: 'TensorFlow' },
+        { id: 'tech-23', name: 'PyTorch' },
+      ],
+    },
+   
   ]
 
   return (
