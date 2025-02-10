@@ -180,8 +180,32 @@ export const en = {
     }
   },
   footer: {
-    rights: 'All Rights Reserved',
-    newsletter: 'Subscribe to Our Newsletter',
+    quickLinks: {
+      title: 'Quick Links',
+    },
+    services: {
+      title: 'Our Services',
+    },
+    contact: {
+      title: 'Contact Us',
+      faq: 'FAQ',
+      support: 'Technical Support',
+      contactUs: 'Contact Us',
+    },
+    social: {
+      whatsapp: 'WhatsApp',
+      linkedin: 'LinkedIn',
+      instagram: 'Instagram',
+    },
+    description: 'We provide comprehensive AI solutions to develop your business and improve your performance. We combine advanced technology and practical experience to achieve exceptional results.',
+    copyright: {
+      text: `© ${new Date().getFullYear()} All rights reserved by`,
+      company: 'Fikra AI',
+    },
+    links: {
+      privacy: 'Privacy Policy',
+      terms: 'Terms & Conditions',
+    },
   },
   faq: {
     meta: {
@@ -298,5 +322,58 @@ export const en = {
       title: 'Connect With Us on Social Media',
       subtitle: 'Follow us on social media to stay updated with our latest news and updates',
     },
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    intro: 'At Fikra, we are committed to protecting our users\' privacy. This policy describes how we collect, use, and protect your personal information.',
+    collection: {
+      title: 'Information Collection',
+      description: 'We collect information that you provide directly to us when:',
+      items: [
+        'Contacting us through the contact form',
+        'Requesting our services',
+        'Subscribing to our newsletter'
+      ]
+    },
+    usage: {
+      title: 'Information Usage',
+      description: 'We use the information we collect to:',
+      items: [
+        'Provide and improve our services',
+        'Communicate with you about your requests',
+        'Send updates about our services'
+      ]
+    },
+    protection: {
+      title: 'Information Protection',
+      description: 'We take appropriate security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.'
+    }
+  },
+  terms: {
+    title: 'Terms & Conditions',
+    intro: 'Welcome to Fikra. Your use of our website and services is subject to the following terms and conditions.',
+    sections: [
+      {
+        title: 'Acceptance of Terms',
+        content: 'By accessing our website or using our services, you agree to these terms. If you do not agree to these terms, please refrain from using our website and services.'
+      },
+      {
+        title: 'Use of Services',
+        content: 'Our services are intended for legitimate business and personal use only. You agree to use the services in compliance with all applicable laws and regulations.'
+      },
+      {
+        title: 'Intellectual Property',
+        content: 'All content, logos, trademarks, and intellectual property rights on our website and services are our exclusive property. No copying, distribution, or use is permitted without our express written consent.'
+      },
+      {
+        title: 'Limited Liability',
+        content: 'Services are provided "as is" and "as available". We make no guarantees that the services will be uninterrupted or error-free.'
+      },
+      {
+        title: 'Changes to Terms',
+        content: 'We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting to the website. Continued use of the services after such changes constitutes acceptance of the updated terms.'
+      }
+    ],
+    lastUpdated: 'These terms were last updated on January 1, 2024'
   },
 }; 

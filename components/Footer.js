@@ -1,43 +1,64 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaTwitter, FaLinkedinIn, FaInstagram, FaWhatsapp } from 'react-icons/fa'
+import { useLanguage } from '../context/LanguageContext'
+import { ar } from '../translations/ar'
+import { he } from '../translations/he'
+import { en } from '../translations/en'
 
 const Footer = () => {
-  const footerLinks = [
+  const { language, isRTL } = useLanguage()
+  
+  const getTranslations = () => {
+    switch (language) {
+      case 'he':
+        return he;
+      case 'en':
+        return en;
+      default:
+        return ar;
+    }
+  };
+
+  const translations = getTranslations();
+
+  const getFooterLinks = (translations) => [
     {
-      title: 'روابط سريعة',
+      title: translations.footer.quickLinks.title,
       links: [
-        { name: 'الرئيسية', href: '/' },
-        { name: 'من نحن', href: '/about' },
-        { name: 'خدماتنا', href: '/services' },
-        { name: 'المدونة', href: '/blog' },
+        { name: translations.nav.home, href: '/' },
+        { name: translations.nav.about, href: '/about' },
+        { name: translations.nav.services, href: '/services' },
+        { name: translations.nav.blog, href: '/blog' },
       ],
     },
     {
-      title: 'خدماتنا',
+      title: translations.footer.services.title,
       links: [
-        { name: 'تطوير المواقع', href: '/services#web' },
-        { name: 'الذكاء الاصطناعي', href: '/services#ai' },
-        { name: 'التسويق الرقمي', href: '/services#marketing' },
-        { name: 'تحليل البيانات', href: '/services#data' },
+        { name: translations.home.services.items.webDev.title, href: '/services#web' },
+        { name: translations.home.services.items.business.title, href: '/services#ai' },
+        { name: translations.home.services.items.marketing.title, href: '/services#marketing' },
+        { name: translations.home.services.items.content.title, href: '/services#data' },
       ],
     },
     {
-      title: 'تواصل معنا',
+      title: translations.footer.contact.title,
       links: [
-        { name: 'الأسئلة الشائعة', href: '/faq' },
-        { name: 'الدعم الفني', href: '/support' },
-        { name: 'اتصل بنا', href: '/contact' },
+        { name: translations.footer.contact.faq, href: '/faq' },
+        { name: translations.footer.contact.support, href: '/support' },
+        { name: translations.footer.contact.contactUs, href: '/contact' },
       ],
     },
   ]
 
   const socialLinks = [
-    { icon: FaWhatsapp, href: 'https://wa.me/972543113297', label: 'واتساب' },
-    // { icon: FaTwitter, href: '#', label: 'تويتر' },
-    { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/shhady-serhan-a11403124', label: 'لينكد إن' },
-    { icon: FaInstagram, href: 'https://www.instagram.com/fikra__ai/', label: 'انستغرام' },
+    { icon: FaWhatsapp, href: 'https://wa.me/972543113297', label: translations.footer.social.whatsapp },
+    { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/shhady-serhan-a11403124', label: translations.footer.social.linkedin },
+    { icon: FaInstagram, href: 'https://www.instagram.com/fikranova_/', label: translations.footer.social.instagram },
   ]
+
+  const footerLinks = getFooterLinks(translations)
 
   return (
     <footer className="bg-gradient-to-b from-black to-blue-950 border-t border-white/10">
@@ -45,15 +66,15 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div className={`lg:col-span-2 ${isRTL ? 'text-right' : 'text-left'}`}>
             <Link href="/" className="text-2xl font-bold text-white">
-              <Image src="/my-logo.png" alt="Logo" width={100} height={100} />
+              <Image src="/logo-4.png" alt="Logo" width={100} height={100} />
             </Link>
             <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-              نقدم حلولاً متكاملة في مجال الذكاء الاصطناعي لتطوير أعمالك وتحسين أدائك. نحن نجمع بين التقنيات المتقدمة والخبرة العملية لتحقيق نتائج استثنائية.
+              {translations.footer.description}
             </p>
             {/* Social Links */}
-            <div className="mt-6 flex space-x-6 space-x-reverse">
+            <div className={`mt-6 flex gap-6 ${isRTL ? 'justify-start' : 'justify-start'}`}>
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -71,7 +92,7 @@ const Footer = () => {
 
           {/* Footer Links */}
           {footerLinks.map((section) => (
-            <div key={section.title}>
+            <div key={section.title} className={isRTL ? 'text-right' : 'text-left'}>
               <h3 className="text-white font-bold mb-4">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link) => (
@@ -91,23 +112,23 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className={`flex flex-col md:flex-row justify-between items-center gap-4 ${isRTL ? 'text-right' : 'text-left'}`}>
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} جميع الحقوق محفوظة لشركة
-              <span className="text-white mx-1">اسم الشركة</span>
+              {translations.footer.copyright.text}{' '}
+              <span className="text-white mx-1">FIKRANOVA</span>
             </p>
-            <div className="flex space-x-6 space-x-reverse text-sm">
+            <div className={`flex gap-6 text-sm ${isRTL ? 'md:justify-start' : 'md:justify-end'}`}>
               <Link
                 href="/privacy"
                 className="text-gray-400 hover:text-white transition-colors duration-300"
               >
-                سياسة الخصوصية
+                {translations.footer.links.privacy}
               </Link>
               <Link
                 href="/terms"
                 className="text-gray-400 hover:text-white transition-colors duration-300"
               >
-                الشروط والأحكام
+                {translations.footer.links.terms}
               </Link>
             </div>
           </div>
