@@ -1,12 +1,12 @@
 export const metadata = {
   title: {
-    default: 'צור קשר | וكالة الذكاء الاصطناعي',
-    template: '%s | فكرة نوفا'
+    default: 'Contact Us | AI Agency',
+    template: '%s | Fikra Nova'
   },
-  description: 'צור קשר עם הסוכנות שלנו לקבלת ייעוץ חינם ולמידע נוסף על שירותי הבינה המלאכותית שלנו',
+  description: 'Contact our agency for a free consultation and learn more about our AI services',
   openGraph: {
-    title: 'צור קשר | וكالة الذكاء الاصطناعي',
-    description: 'צור קשר עם הסוכנות שלנו לקבלת ייעוץ חינם ולמידע נוסף על שירותי הבינה המלאכותית שלנו',
+    title: 'Contact Us | AI Agency',
+    description: 'Contact our agency for a free consultation and learn more about our AI services',
   },
 }
 

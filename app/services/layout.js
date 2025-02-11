@@ -1,12 +1,12 @@
 export const metadata = {
   title: {
-    default: 'خدماتنا | وكالة الذكاء الاصطناعي',
-    template: '%s | فكرة نوفا'
+    default: 'Our Services | AI Agency',
+    template: '%s | Fikra Nova'
   },
-  description: 'اكتشف خدماتنا المتميزة في مجال الذكاء الاصطناعي، من تطوير المواقع إلى التسويق الرقمي وتحليل البيانات',
+  description: 'Discover our exceptional AI services, from web development to digital marketing and data analysis',
   openGraph: {
-    title: 'خدماتنا | وكالة الذكاء الاصطناعي',
-    description: 'اكتشف خدماتنا المتميزة في مجال الذكاء الاصطناعي، من تطوير المواقع إلى التسويق الرقمي وتحليل البيانات',
+    title: 'Our Services | AI Agency',
+    description: 'Discover our exceptional AI services, from web development to digital marketing and data analysis',
   },
 }
 
