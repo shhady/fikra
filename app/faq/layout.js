@@ -1,12 +1,12 @@
 export const metadata = {
   title: {
-    default: 'الأسئلة الشائعة | وكالة الذكاء الاصطناعي',
-    template: '%s | فكرة نوفا'
+    default: 'FAQ | AI Agency',
+    template: '%s | Fikra Nova'
   },
-  description: 'اعثر على إجابات لأكثر الأسئلة شيوعاً حول خدماتنا وحلول الذكاء الاصطناعي',
+  description: 'Find answers to frequently asked questions about our services and AI solutions',
   openGraph: {
-    title: 'الأسئلة الشائعة | وكالة الذكاء الاصطناعي',
-    description: 'اعثر على إجابات لأكثر الأسئلة شيوعاً حول خدماتنا وحلول الذكاء الاصطناعي',
+    title: 'FAQ | AI Agency',
+    description: 'Find answers to frequently asked questions about our services and AI solutions',
   },
 }
 
