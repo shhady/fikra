@@ -287,6 +287,7 @@ export default function ChatPage() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onFocus={scrollToBottom}
             placeholder={
               language === 'he' ? 'הקלד את הודעתך כאן...' :
               language === 'en' ? 'Type your message here...' :
