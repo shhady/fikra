@@ -72,6 +72,13 @@ export default function ChatPage() {
       // Get the visual viewport height
       const height = window.visualViewport?.height || window.innerHeight
       setViewportHeight(`${height}px`)
+      
+      // Prevent automatic scrolling when keyboard opens
+      if (window.visualViewport) {
+        window.scrollTo(0, 0)
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      }
     }
 
     // Add event listeners
@@ -85,6 +92,14 @@ export default function ChatPage() {
     return () => {
       window.visualViewport?.removeEventListener('resize', handleResize)
       window.visualViewport?.removeEventListener('scroll', handleResize)
+    }
+  }, [])
+
+  // Add overflow hidden to body when component mounts
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
     }
   }, [])
 
@@ -174,7 +189,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col bg-black fixed inset-0 overflow-hidden" style={{ height: viewportHeight }}>
+    <div className="flex flex-col bg-black fixed inset-0 overflow-hidden max-h-[100dvh]" style={{ height: viewportHeight }}>
       {/* Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 to-black border-b border-gray-800">
         <div className="flex items-center h-16 px-4">
