@@ -114,7 +114,7 @@ export default function ChatPage() {
     }
   }
 
-  const formatMessage = (content) => {
+  const formatMessage = (content) => {8
     if (typeof content !== 'string') return content;
     
     // Convert markdown links to HTML first
@@ -166,7 +166,9 @@ export default function ChatPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Too many requests. Please try again in a few minutes.');
+        throw new Error(language === 'he' ? 'נא לפנות לדף יצירת הקשר שלנו <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>' : 
+                       language === 'en' ? 'Please visit our contact page at /contact' : 
+                       'يرجى زيارة صفحة الاتصال الخاصة بنا /contact');
       }
 
       const reader = response.body.getReader()
