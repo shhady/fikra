@@ -1,17 +1,3 @@
-import { Tajawal } from 'next/font/google'
-import './globals.css'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import { Analytics } from "@vercel/analytics/react"
-import { LanguageProvider } from '../context/LanguageContext'
-import ChatButton from '../components/ChatButton'
-
-const tajawal = Tajawal({
-  subsets: ['arabic'],
-  weight: ['200', '300', '400', '500', '700', '800', '900'],
-  display: 'swap',
-})
-
 export const metadata = {
   metadataBase: new URL('https://www.fikranova.com'),
   title: {
@@ -74,20 +60,4 @@ export const metadata = {
     ],
   },
   manifest: '/manifest.json',
-}
-
-export default function RootLayout({ children }) {
-  return (
-    <LanguageProvider>
-      <html lang="ar" dir="rtl">
-        <body className={tajawal.className}>
-          <Header />
-          <main className="min-h-screen pt-16">{children}</main>
-          <Footer />
-          <ChatButton />
-          <Analytics />
-        </body>
-      </html>
-    </LanguageProvider>
-  )
-}
+} 
