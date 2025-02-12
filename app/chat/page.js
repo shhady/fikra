@@ -154,13 +154,13 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-72px)]">
+    <div className="flex flex-col h-[100dvh] md:h-[calc(100vh-72px)]">
       {/* Messages Container */}
       <div 
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto bg-black py-6 px-4 scroll-smooth"
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto pb-safe">
           {/* Welcome Message */}
           {messages.length === 0 && (
             <motion.div
@@ -230,7 +230,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input Form - Fixed at bottom */}
-      <div className="bg-gradient-to-r from-gray-900 to-black border-t border-gray-800 p-4">
+      <div className="bg-gradient-to-r from-gray-900 to-black border-t border-gray-800 p-4 sticky bottom-0 left-0 right-0">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex gap-4">
           <input
             value={input}
@@ -251,12 +251,12 @@ export default function ChatPage() {
                 : 'hover:from-blue-600 hover:to-blue-700'
             }`}
           >
-            <span>
+            <span className="hidden sm:inline">
               {language === 'he' ? 'שלח' :
                language === 'en' ? 'Send' :
                'إرسال'}
             </span>
-            <FiSend />
+            <FiSend className="w-5 h-5" />
           </button>
         </form>
       </div>

@@ -6,9 +6,11 @@ import { useLanguage } from '../context/LanguageContext'
 import { ar } from '../translations/ar'
 import { he } from '../translations/he'
 import { en } from '../translations/en'
+import { usePathname } from 'next/navigation'
 
 const Footer = () => {
   const { language, isRTL } = useLanguage()
+  const pathname = usePathname()
   
   const getTranslations = () => {
     switch (language) {
@@ -22,6 +24,9 @@ const Footer = () => {
   };
 
   const translations = getTranslations();
+  const isChatPage = pathname === '/chat';
+
+  if (isChatPage) return null;
 
   const getFooterLinks = (translations) => [
     {
