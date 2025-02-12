@@ -124,8 +124,7 @@ export default function ChatPage() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.details || 'Failed to fetch response');
+        throw new Error('Too many requests. Please try again in a few minutes.');
       }
 
       const reader = response.body.getReader()
@@ -143,10 +142,9 @@ export default function ChatPage() {
         setMessages(prev => [...prev.slice(0, -1), { ...assistantMessage }])
       }
     } catch (error) {
-      console.error('Error:', error)
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: `Sorry, there was an error: ${error.message}. Please try again.` 
+        content: error.message
       }])
     } finally {
       setIsLoading(false)
@@ -154,84 +152,86 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[100dvh] md:h-[calc(100vh-72px)]">
+    <div className="flex flex-col h-[calc(100vh-72px)] pt-6 ">
       {/* Messages Container */}
       <div 
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto bg-black py-6 px-4 scroll-smooth"
+        className="flex-1 overflow-y-auto bg-black relative w-full min-h-0 "
       >
-        <div className="max-w-4xl mx-auto pb-safe">
-          {/* Welcome Message */}
-          {messages.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex items-start gap-4 mb-4"
-            >
-              <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
-                🤖
-              </div>
-              <div className="bg-gray-800 text-gray-200 rounded-2xl px-4 py-2">
-                {language === 'he' ? 'שלום! איך אוכל לעזור לך היום?' :
-                 language === 'en' ? 'Hello! How can I help you today?' :
-                 'مرحباً! كيف يمكنني مساعدتك اليوم؟'}
-              </div>
-            </motion.div>
-          )}
+        <div className="h-full px-4 ">
+          <div className="max-w-4xl mx-auto pb-1">
+            {/* Welcome Message */}
+            {messages.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-start gap-4 mb-4"
+              >
+                <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
+                  🤖
+                </div>
+                <div className="bg-gray-800 text-gray-200 rounded-2xl px-4 py-2">
+                  {language === 'he' ? 'שלום! איך אוכל לעזור לך היום?' :
+                   language === 'en' ? 'Hello! How can I help you today?' :
+                   'مرحباً! كيف يمكنني مساعدتك اليوم؟'}
+                </div>
+              </motion.div>
+            )}
 
-          {/* Chat Messages */}
-          {messages.map((message, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex items-start gap-4 mb-4 ${
-                message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-              }`}
-            >
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                message.role === 'user' ? 'bg-blue-500' : 'bg-purple-500'
-              }`}>
-                {message.role === 'user' ? '👤' : '🤖'}
-              </div>
-              
-              <div className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                message.role === 'user' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-800 text-gray-200'
-              }`}>
-                <div className="prose prose-invert max-w-none">
-                  {formatMessage(message.content)}
+            {/* Chat Messages */}
+            {messages.map((message, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex items-start gap-4 mb-4 ${
+                  message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  message.role === 'user' ? 'bg-blue-500' : 'bg-purple-500'
+                }`}>
+                  {message.role === 'user' ? '👤' : '🤖'}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-          
-          {/* Loading Indicator */}
-          {isLoading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex items-start gap-4 mb-4"
-            >
-              <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
-                🤖
-              </div>
-              <div className="bg-gray-800 rounded-2xl px-4 py-2">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                
+                <div className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                  message.role === 'user' 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-800 text-gray-200'
+                }`}>
+                  <div className="prose prose-invert max-w-none">
+                    {formatMessage(message.content)}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            ))}
+            
+            {/* Loading Indicator */}
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-start gap-4 mb-4"
+              >
+                <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
+                  🤖
+                </div>
+                <div className="bg-gray-800 rounded-2xl px-4 py-2">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Input Form - Fixed at bottom */}
-      <div className="bg-gradient-to-r from-gray-900 to-black border-t border-gray-800 p-4 sticky bottom-0 left-0 right-0">
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex gap-4">
+      <div className="bg-gradient-to-r from-gray-900 to-black border-t border-gray-800 w-full">
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex gap-4 p-4">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
