@@ -152,7 +152,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-black">
+    <div className="flex flex-col h-[100dvh] bg-black">
       {/* Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 to-black border-b border-gray-800">
         <div className="flex items-center h-16 px-4">
