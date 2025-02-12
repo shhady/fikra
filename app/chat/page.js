@@ -174,7 +174,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col bg-black fixed inset-0" style={{ height: viewportHeight }}>
+    <div className="flex flex-col bg-black fixed inset-0 overflow-hidden" style={{ height: viewportHeight }}>
       {/* Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 to-black border-b border-gray-800">
         <div className="flex items-center h-16 px-4">
@@ -191,7 +191,7 @@ export default function ChatPage() {
       </div> */}
 
       {/* Messages Container */}
-      <div className="flex-1 mt-16 relative" style={{ height: `calc(${viewportHeight} - 72px - 80px)` }}>
+      <div className="flex-1 mt-20 relative" style={{ height: `calc(${viewportHeight} - 72px - 80px)` }}>
         <div 
           ref={messagesContainerRef}
           className="absolute inset-0 overflow-y-auto"
