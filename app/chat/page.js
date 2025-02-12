@@ -167,8 +167,8 @@ export default function ChatPage() {
 
       if (!response.ok) {
         throw new Error(language === 'he' ? 'נא לפנות לדף יצירת הקשר שלנו <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>' : 
-                       language === 'en' ? 'Please visit our contact page at /contact' : 
-                       'يرجى زيارة صفحة الاتصال الخاصة بنا /contact');
+                       language === 'en' ? 'Please visit our contact page at <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>' : 
+                       'يرجى زيارة صفحة الاتصال الخاصة بنا <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>');
       }
 
       const reader = response.body.getReader()
