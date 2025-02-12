@@ -13,6 +13,7 @@ export default function ChatPage() {
   const messagesContainerRef = useRef(null)
   const hasEmailBeenSent = useRef(false)
   const currentMessages = useRef([])
+  const [viewportHeight, setViewportHeight] = useState('100dvh')
 
   useEffect(() => {
     scrollToBottom()
@@ -65,6 +66,27 @@ export default function ChatPage() {
       }
     };
   }, []); // Remove messages dependency, use ref instead
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Get the visual viewport height
+      const height = window.visualViewport?.height || window.innerHeight
+      setViewportHeight(`${height}px`)
+    }
+
+    // Add event listeners
+    window.visualViewport?.addEventListener('resize', handleResize)
+    window.visualViewport?.addEventListener('scroll', handleResize)
+
+    // Initial call
+    handleResize()
+
+    // Cleanup
+    return () => {
+      window.visualViewport?.removeEventListener('resize', handleResize)
+      window.visualViewport?.removeEventListener('scroll', handleResize)
+    }
+  }, [])
 
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
@@ -152,7 +174,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-black">
+    <div className="flex flex-col bg-black" style={{ height: viewportHeight }}>
       {/* Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 to-black border-b border-gray-800">
         <div className="flex items-center h-16 px-4">
@@ -169,12 +191,12 @@ export default function ChatPage() {
       </div> */}
 
       {/* Chat Container */}
-      <div className="flex-1 pt-24 pb-[72px] overflow-hidden">
+      <div className="flex-1 pt-24 overflow-hidden">
         <div 
           ref={messagesContainerRef}
           className="h-full overflow-y-auto"
         >
-          <div className="px-4">
+          <div className="px-4 pb-4">
             <div className="max-w-4xl mx-auto">
               {/* Welcome Message */}
               {messages.length === 0 && (
@@ -247,7 +269,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input Form - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-800">
+      <div className="sticky bottom-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-800">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex gap-4 p-4">
           <input
             value={input}
