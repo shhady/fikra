@@ -191,7 +191,7 @@ export default function ChatPage() {
       </div> */}
 
       {/* Messages Container */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 mt-16 relative" style={{ height: `calc(${viewportHeight} - 72px - 80px)` }}>
         <div 
           ref={messagesContainerRef}
           className="absolute inset-0 overflow-y-auto"
@@ -267,7 +267,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input Form - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-800">
+      <div className="h-20 bg-gradient-to-r from-gray-900 to-black border-t border-gray-800">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex gap-4 p-4">
           <input
             value={input}
