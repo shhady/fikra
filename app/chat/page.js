@@ -78,6 +78,11 @@ export default function ChatPage() {
         window.scrollTo(0, 0)
         document.body.scrollTop = 0
         document.documentElement.scrollTop = 0
+        
+        // Add a small delay to ensure the layout has adjusted
+        setTimeout(() => {
+          scrollToBottom()
+        }, 100)
       }
     }
 
