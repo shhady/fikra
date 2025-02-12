@@ -152,7 +152,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-72px)] pt-6 ">
+    <div className="flex flex-col h-[calc(100dvh-72px)] pt-6 ">
       {/* Messages Container */}
       <div 
         ref={messagesContainerRef}
