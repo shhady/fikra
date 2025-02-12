@@ -206,7 +206,7 @@ export default function ChatPage() {
               </motion.div>
             ))}
             
-            {/* Loading Indicator */}
+            {/* Loading Indicator   */}
             {isLoading && (
               <motion.div
                 initial={{ opacity: 0 }}
