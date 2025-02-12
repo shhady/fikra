@@ -169,7 +169,7 @@ export default function ChatPage() {
       </div> */}
 
       {/* Chat Container */}
-      <div className="flex-1 pt-16 pb-[72px] overflow-hidden">
+      <div className="flex-1 pt-24 pb-[72px] overflow-hidden">
         <div 
           ref={messagesContainerRef}
           className="h-full overflow-y-auto"
