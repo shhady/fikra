@@ -166,9 +166,13 @@ export default function ChatPage() {
       })
 
       if (!response.ok) {
-        throw new Error(language === 'he' ? 'נא לפנות לדף יצירת הקשר שלנו <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>' : 
-                       language === 'en' ? 'Please visit our contact page at <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>' : 
-                       'يرجى زيارة صفحة الاتصال الخاصة بنا <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a>');
+        throw new Error(
+          language === 'he' 
+            ? 'נא לפנות לדף יצירת הקשר שלנו <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a> או לקבוע פגישה ישירות דרך <a href="https://calendly.com/shhadyse/30min" target="_blank" class="text-blue-400 hover:text-blue-300 underline">הקישור הזה</a>'
+            : language === 'en' 
+              ? 'Please visit our contact page at <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a> or schedule a meeting directly via <a href="https://calendly.com/shhadyse/30min" target="_blank" class="text-blue-400 hover:text-blue-300 underline">this link</a>'
+              : 'يرجى زيارة صفحة الاتصال الخاصة بنا <a href="https://fikranova.com/contact" target="_blank" class="text-blue-400 hover:text-blue-300 underline">https://fikranova.com/contact</a> أو جدولة موعد مباشرة عبر <a href="https://calendly.com/shhadyse/30min" target="_blank" class="text-blue-400 hover:text-blue-300 underline">هذا الرابط</a>'
+        );
       }
 
       const reader = response.body.getReader()

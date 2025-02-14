@@ -311,6 +311,11 @@ export const en = {
       title: 'Contact Us',
       subtitle: 'We are here to help. Our team is ready to answer all your questions and provide the support you need.',
     },
+    calendly: {
+      title: 'Schedule a Free Consultation',
+      subtitle: 'Choose a time that works best for you for a personal chat',
+      buttonText: 'Schedule Now'
+    },
     form: {
       title: 'Send us a Message',
       subtitle: 'Fill out the form below and we will get back to you as soon as possible',

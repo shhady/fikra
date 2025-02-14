@@ -226,9 +226,24 @@ export default function ContactPage() {
             <p className="text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
               {translations.contact.hero.subtitle}
             </p>
+            <p className="text-xl text-gray-300 my-8">
+              {translations.contact.calendly?.subtitle || 'Book a time that works best for you'}
+            </p>
+            <a
+              href="https://calendly.com/shhadyse/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+            >
+              <FiClock className="w-5 h-5 mr-2" />
+              {translations.contact.calendly?.buttonText || 'Schedule Now'}
+            </a>
           </motion.div>
         </div>
       </section>
+
+      {/* Calendly Section */}
+     
 
       {/* Contact Form Section */}
       <section className="py-16 relative z-10">
