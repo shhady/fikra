@@ -98,7 +98,8 @@ function extractUserDetails(message) {
         return {
           name: nameWords.join(' ').trim(),
           email: email,
-          phone: phoneMatch.replace(/[^\d+]/g, '')
+          phone: phoneMatch.replace(/[^\d+]/g, ''),
+          source: 'Chatbot',
         };
       }
     }

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Support from '@/models/Support';
 import { sendNotificationEmail } from '@/lib/mail';
+import { addLeadToGoogleSheets } from '@/lib/googleSheets';
 
 export async function POST(request) {
   try {
@@ -22,6 +23,20 @@ export async function POST(request) {
       });
     } catch (emailError) {
       console.error('Email sending error:', emailError);
+    }
+
+    // Add to Google Sheets
+    try {
+      await addLeadToGoogleSheets({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        source: 'Support Form',
+        subject: data.subject,
+        message: data.message
+      });
+    } catch (sheetsError) {
+      console.error('Google Sheets error:', sheetsError);
     }
 
     return NextResponse.json({ success: true, support });
