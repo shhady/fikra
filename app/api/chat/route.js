@@ -184,10 +184,10 @@ export async function POST(req) {
       console.log('❌ No user details found in message');
       // Log the attempted patterns
       console.log('Message patterns attempted:');
-      console.log('- Bold pattern match:', message.match(/\*\*(Name|Email|Phone)\*\*:/i) !== null);
-      console.log('- Structured pattern match:', message.match(/(Name|Email|Phone):/i) !== null);
-      console.log('- Comma pattern match:', message.includes(','));
-      console.log('- Email pattern match:', message.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+/i) !== null);
+      console.log('- Bold pattern match:', lastMessage.content.match(/\*\*(Name|Email|Phone)\*\*:/i) !== null);
+      console.log('- Structured pattern match:', lastMessage.content.match(/(Name|Email|Phone):/i) !== null);
+      console.log('- Comma pattern match:', lastMessage.content.includes(','));
+      console.log('- Email pattern match:', lastMessage.content.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+/i) !== null);
     }
 
     // Convert the response into a ReadableStream
