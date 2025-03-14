@@ -22,7 +22,7 @@ export default function ChatbaseProvider({ user }) {
     }
 
     const initChatbase = async () => {
-      // Load Chatbase script
+      // Load Chatbase 
       const script = document.createElement("script")
       script.src = "https://www.chatbase.co/embed.min.js"
       script.id = "JWCTDqGF6GHId3GzMS-wQ"
