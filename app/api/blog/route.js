@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Blog from '@/models/Blog';
+import sanitizeHtml from 'sanitize-html';
 
 // GET all blogs
 export async function GET(request) {
@@ -57,19 +58,14 @@ export async function GET(request) {
 const cleanContent = (content) => {
   if (!content || typeof content !== 'string') return '';
 
-  return content
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
-    .replace(/\r/g, '') // Remove carriage returns
-    .replace(/\t/g, ' ') // Replace tabs with spaces
-    .replace(/\f/g, '') // Remove form feed character
-    .replace(/\b/g, '') // Remove backspace character
-    .replace(/\v/g, '') // Remove vertical tab character
-    .replace(/&/g, '&amp;') // Escape & symbol
-    .replace(/</g, '&lt;') // Escape < to prevent HTML injection
-    .replace(/>/g, '&gt;') // Escape > to prevent HTML injection
-    .replace(/"/g, '&quot;') // Escape double quotes
-    .replace(/'/g, '&#039;') // Escape single quotes
-    .trim(); // Remove leading and trailing spaces
+  return sanitizeHtml(content, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'p', 'ul', 'li']),
+    allowedAttributes: {
+      'a': ['href', 'name', 'target'],
+      'img': ['src', 'alt']
+    },
+    textFilter: (text) => text.replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove hidden control characters
+  });
 };
 export async function POST(request) {
   try {
