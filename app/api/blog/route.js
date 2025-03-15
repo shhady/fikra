@@ -54,12 +54,40 @@ export async function GET(request) {
 }
 
 // POST new blog
+import { NextResponse } from 'next/server';
+import { connectDB } from '@/lib/db';
+import Blog from '@/models/Blog';
+
+// Function to sanitize and clean content
+const cleanContent = (content) => {
+  if (!content || typeof content !== 'string') return '';
+
+  return content
+    .replace(/\r/g, '') // Remove carriage returns
+    .replace(/\t/g, ' ') // Replace tabs with spaces
+    .replace(/\n/g, '\\n') // Escape newlines to prevent JSON errors
+    .replace(/"/g, '\"'); // Escape double quotes
+};
+
+// POST new blog
 export async function POST(request) {
   try {
     await connectDB();
     
     const data = await request.json();
-    
+
+    // Ensure content is properly sanitized
+    data.content = cleanContent(data.content);
+
+    // Ensure title and slug are valid
+    if (!data.title || !data.slug) {
+      return NextResponse.json(
+        { error: 'Title and slug are required' },
+        { status: 400 }
+      );
+    }
+
+    // Create the blog entry
     const blog = await Blog.create({
       ...data,
       publishedAt: data.isPublished ? new Date() : null
@@ -73,4 +101,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-} 
+}
