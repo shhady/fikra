@@ -54,11 +54,6 @@ export async function GET(request) {
 }
 
 // POST new blog
-import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db';
-import Blog from '@/models/Blog';
-
-// Function to sanitize and clean content
 const cleanContent = (content) => {
   if (!content || typeof content !== 'string') return '';
 
@@ -69,7 +64,7 @@ const cleanContent = (content) => {
     .replace(/"/g, '\"'); // Escape double quotes
 };
 
-// POST new blog
+
 export async function POST(request) {
   try {
     await connectDB();
