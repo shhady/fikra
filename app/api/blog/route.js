@@ -72,21 +72,52 @@ export async function POST(request) {
   try {
     await connectDB();
     
-    // Skip JSON parsing entirely and work with raw data
-    const formData = await request.formData();
+    // Get the content type
+    const contentType = request.headers.get('content-type') || '';
+    let data;
     
-    // Extract data from form
-    const title = formData.get('title');
-    const slug = formData.get('slug');
-    const content = formData.get('content');
-    const coverImage = formData.get('coverImage');
-    const language = formData.get('language');
-    const author = formData.get('author');
-    const tags = formData.get('tags')?.split(',').map(tag => tag.trim()) || [];
-    const isPublished = formData.get('isPublished') === 'true';
-    
+    // Handle different content types
+    if (contentType.includes('application/json')) {
+      // Get the raw text and manually clean it
+      const text = await request.text();
+      
+      // Replace problematic control characters
+      const cleanedText = text
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+        .replace(/\r/g, '');
+      
+      try {
+        data = JSON.parse(cleanedText);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        return NextResponse.json({
+          error: 'Invalid JSON format',
+          details: parseError.message
+        }, { status: 400 });
+      }
+    } else if (contentType.includes('multipart/form-data') || contentType.includes('application/x-www-form-urlencoded')) {
+      // Handle form data
+      const formData = await request.formData();
+      data = {
+        title: formData.get('title'),
+        slug: formData.get('slug'),
+        content: formData.get('content'),
+        coverImage: formData.get('coverImage'),
+        language: formData.get('language'),
+        author: formData.get('author'),
+        tags: formData.get('tags')?.split(',').map(tag => tag.trim()) || [],
+        isPublished: formData.get('isPublished') === 'true'
+      };
+    } else {
+      // Unsupported content type
+      return NextResponse.json({
+        error: 'Unsupported content type',
+        details: `Content-Type must be application/json, multipart/form-data, or application/x-www-form-urlencoded. Received: ${contentType}`
+      }, { status: 415 });
+    }
+
     // Validate required fields
-    if (!title || !slug) {
+    if (!data.title || !data.slug) {
       return NextResponse.json(
         { error: 'Title and slug are required' },
         { status: 400 }
@@ -94,8 +125,9 @@ export async function POST(request) {
     }
 
     // Clean the HTML content
-    const cleanedContent = content ? cleanHtmlContent(content) : '';
-    if (!cleanedContent) {
+    if (data.content) {
+      data.content = cleanHtmlContent(data.content);
+    } else {
       return NextResponse.json(
         { error: 'Content is required' },
         { status: 400 }
@@ -104,15 +136,8 @@ export async function POST(request) {
 
     // Create the blog post
     const blog = await Blog.create({
-      title,
-      slug,
-      content: cleanedContent,
-      coverImage,
-      language,
-      author,
-      tags,
-      isPublished,
-      publishedAt: isPublished ? new Date() : null
+      ...data,
+      publishedAt: data.isPublished ? new Date() : null
     });
 
     return NextResponse.json({ 
