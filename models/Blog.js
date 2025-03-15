@@ -1,60 +1,55 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const BlogSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
-    required: true 
-  },
-  slug: { 
-    type: String, 
-    required: true, 
-    unique: true 
-  },
-  content: { 
-    type: String, 
-    required: true 
-  },
-  coverImage: { 
-    type: String, 
-    required: true 
-  },
-  author: { 
-    type: String, 
+  slug: {
+    type: String,
     required: true,
-    default: 'فريق فكرة نوفا'
+    unique: true
   },
-  language: { type: String, enum: ['ar', 'he', 'en'], required: true }, // Add Language
-  
-  tags: [{ 
-    type: String 
-  }],
-  isPublished: { 
-    type: Boolean, 
-    default: false 
+  translations: {
+    en: {
+      title: { type: String, required: true },
+      content: { type: String, required: true }
+    },
+    ar: {
+      title: { type: String, required: true },
+      content: { type: String, required: true }
+    },
+    he: {
+      title: { type: String, required: true },
+      content: { type: String, required: true }
+    }
   },
-  publishedAt: { 
-    type: Date 
+  coverImage: {
+    type: String,
+    required: true
   },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
+  author: {
+    type: String,
+    required: true,
+    default: "فريق فكرة نوفا"
   },
-  updatedAt: { 
-    type: Date 
+  tags: [{ type: String }],
+  isPublished: {
+    type: Boolean,
+    default: false
+  },
+  publishedAt: {
+    type: Date
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date
   }
 });
 
-// Auto-generate slug from title before saving
-BlogSchema.pre('save', function(next) {
-  if (this.isModified('title')) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^a-z0-9\u0621-\u064A\s]/g, '')
-      .replace(/\s+/g, '-')
-      + '-' + Date.now().toString().slice(-4);
-  }
+// Automatically update the `updatedAt` field
+BlogSchema.pre("save", function (next) {
   this.updatedAt = new Date();
   next();
 });
 
-export default mongoose.models.Blog || mongoose.model('Blog', BlogSchema); 
+export default mongoose.models.Blog || mongoose.model("Blog", BlogSchema);
