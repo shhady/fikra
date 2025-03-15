@@ -59,19 +59,7 @@ export async function POST(request) {
     await connectDB();
     
     const data = await request.json();
-
-    // 🔹 Ensure all required fields exist
-    if (!data.title || !data.content || !data.language) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    // 🔹 Check for duplicate blog with same title & language
-    const existingBlog = await Blog.findOne({ title: data.title, language: data.language });
-    if (existingBlog) {
-      return NextResponse.json({ error: 'Blog with this title and language already exists' }, { status: 400 });
-    }
-
-    // 🔹 Create the new blog post
+    
     const blog = await Blog.create({
       ...data,
       publishedAt: data.isPublished ? new Date() : null
@@ -85,4 +73,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-}
+} 
