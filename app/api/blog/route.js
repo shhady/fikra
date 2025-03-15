@@ -79,52 +79,32 @@ export async function POST(request) {
   try {
     await connectDB();
     
-    // Try to get the data directly from the request
+    // Read the request body only once
+    const buffer = await request.arrayBuffer();
+    const text = new TextDecoder().decode(buffer);
+    
+    // Clean the text before parsing
+    const cleanedText = text
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, '')
+      .replace(/\r/g, '');
+    
+    // Try to parse the JSON
     let data;
     try {
-      data = await request.json();
-    } catch (jsonError) {
-      // If direct JSON parsing fails, try manual approach
-      const buffer = await request.arrayBuffer();
-      const text = new TextDecoder().decode(buffer);
+      data = JSON.parse(cleanedText);
+    } catch (parseError) {
+      console.error('JSON Parse Error:', parseError);
       
-      // Manually clean the JSON string
-      const cleanedText = text
-        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
-        .replace(/\\u0000-\\u001F\\u007F-\\u009F/g, '')
-        .replace(/\r/g, '')
-        .replace(/\n/g, '\\n')
-        .replace(/\t/g, '\\t');
-      
-      try {
-        data = JSON.parse(cleanedText);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        
-        // Last resort: try to extract fields manually
-        try {
-          // Create a minimal blog object with required fields
-          data = {
-            title: extractField(text, 'title'),
-            slug: extractField(text, 'slug'),
-            content: extractField(text, 'content', true),
-            coverImage: extractField(text, 'coverImage') || '',
-            language: extractField(text, 'language') || 'ar',
-            author: extractField(text, 'author') || 'فريق فكرة نوفا',
-            tags: extractTags(text),
-            isPublished: true
-          };
-        } catch (extractError) {
-          return NextResponse.json(
-            { 
-              error: 'Could not parse request data', 
-              details: parseError.message,
-              suggestion: 'Try sending data with simpler formatting'
-            },
-            { status: 400 }
-          );
-        }
-      }
+      // Create a simple response for debugging
+      return NextResponse.json({
+        error: 'Invalid JSON format',
+        details: parseError.message,
+        position: parseError.message.match(/position (\d+)/)?.[1] || 'unknown',
+        snippet: cleanedText.substring(
+          Math.max(0, parseInt(parseError.message.match(/position (\d+)/)?.[1] || 0) - 20),
+          Math.min(cleanedText.length, parseInt(parseError.message.match(/position (\d+)/)?.[1] || 0) + 20)
+        )
+      }, { status: 400 });
     }
 
     // Validate required fields
