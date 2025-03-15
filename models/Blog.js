@@ -23,6 +23,8 @@ const BlogSchema = new mongoose.Schema({
     required: true,
     default: 'فريق فكرة نوفا'
   },
+  language: { type: String, enum: ['ar', 'he', 'en'], required: true }, // Add Language
+  
   tags: [{ 
     type: String 
   }],
