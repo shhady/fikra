@@ -72,48 +72,38 @@ export async function POST(request) {
   try {
     await connectDB();
     
-    // Get the content type
-    const contentType = request.headers.get('content-type') || '';
-    let data;
+    // Get the raw text
+    const text = await request.text();
     
-    // Handle different content types
-    if (contentType.includes('application/json')) {
-      // Get the raw text and manually clean it
-      const text = await request.text();
+    // Aggressively clean the text by removing ALL control characters
+    const cleanedText = text.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+    
+    let data;
+    try {
+      data = JSON.parse(cleanedText);
+    } catch (parseError) {
+      // If JSON parsing still fails, create a minimal valid object
+      console.error('JSON Parse Error:', parseError);
       
-      // Replace problematic control characters
-      const cleanedText = text
-        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
-        .replace(/\r/g, '');
+      // Extract key fields using regex
+      const titleMatch = /\"title\":\s*\"([^\"]+)\"/.exec(cleanedText);
+      const slugMatch = /\"slug\":\s*\"([^\"]+)\"/.exec(cleanedText);
+      const contentMatch = /\"content\":\s*\"(.*?)\"(?=,\s*\"|\s*\})/.exec(cleanedText);
       
-      try {
-        data = JSON.parse(cleanedText);
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
+      if (titleMatch && slugMatch) {
+        data = {
+          title: titleMatch[1],
+          slug: slugMatch[1],
+          content: contentMatch ? contentMatch[1] : '<p>Content placeholder</p>',
+          author: 'فريق فكرة نوفا',
+          isPublished: true
+        };
+      } else {
         return NextResponse.json({
-          error: 'Invalid JSON format',
+          error: 'Could not parse blog data',
           details: parseError.message
         }, { status: 400 });
       }
-    } else if (contentType.includes('multipart/form-data') || contentType.includes('application/x-www-form-urlencoded')) {
-      // Handle form data
-      const formData = await request.formData();
-      data = {
-        title: formData.get('title'),
-        slug: formData.get('slug'),
-        content: formData.get('content'),
-        coverImage: formData.get('coverImage'),
-        language: formData.get('language'),
-        author: formData.get('author'),
-        tags: formData.get('tags')?.split(',').map(tag => tag.trim()) || [],
-        isPublished: formData.get('isPublished') === 'true'
-      };
-    } else {
-      // Unsupported content type
-      return NextResponse.json({
-        error: 'Unsupported content type',
-        details: `Content-Type must be application/json, multipart/form-data, or application/x-www-form-urlencoded. Received: ${contentType}`
-      }, { status: 415 });
     }
 
     // Validate required fields
@@ -124,20 +114,20 @@ export async function POST(request) {
       );
     }
 
-    // Clean the HTML content
-    if (data.content) {
-      data.content = cleanHtmlContent(data.content);
-    } else {
-      return NextResponse.json(
-        { error: 'Content is required' },
-        { status: 400 }
-      );
-    }
-
-    // Create the blog post
+    // For content, use what was provided or create a placeholder
+    const content = data.content || '<p>Content placeholder</p>';
+    
+    // Create the blog post with minimal required fields
     const blog = await Blog.create({
-      ...data,
-      publishedAt: data.isPublished ? new Date() : null
+      title: data.title,
+      slug: data.slug,
+      content: content,
+      coverImage: data.coverImage || '',
+      language: data.language || 'ar',
+      author: data.author || 'فريق فكرة نوفا',
+      tags: Array.isArray(data.tags) ? data.tags : ['Content'],
+      isPublished: data.isPublished !== false,
+      publishedAt: data.isPublished !== false ? new Date() : null
     });
 
     return NextResponse.json({ 
