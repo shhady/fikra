@@ -64,13 +64,6 @@ const cleanHtmlContent = (content) => {
       'a': ['href', 'name', 'target', 'rel', 'title'],
       'img': ['src', 'alt', 'title', 'width', 'height', 'loading'],
       '*': ['id', 'class', 'style']
-    },
-    allowedStyles: {
-      '*': {
-        'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
-        'text-align': [/^left$/, /^right$/, /^center$/, /^justify$/],
-        'font-size': [/^\d+(?:px|em|rem|%)$/]
-      }
     }
   });
 };
@@ -79,36 +72,21 @@ export async function POST(request) {
   try {
     await connectDB();
     
-    // Read the request body only once
-    const buffer = await request.arrayBuffer();
-    const text = new TextDecoder().decode(buffer);
+    // Skip JSON parsing entirely and work with raw data
+    const formData = await request.formData();
     
-    // Clean the text before parsing
-    const cleanedText = text
-      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, '')
-      .replace(/\r/g, '');
+    // Extract data from form
+    const title = formData.get('title');
+    const slug = formData.get('slug');
+    const content = formData.get('content');
+    const coverImage = formData.get('coverImage');
+    const language = formData.get('language');
+    const author = formData.get('author');
+    const tags = formData.get('tags')?.split(',').map(tag => tag.trim()) || [];
+    const isPublished = formData.get('isPublished') === 'true';
     
-    // Try to parse the JSON
-    let data;
-    try {
-      data = JSON.parse(cleanedText);
-    } catch (parseError) {
-      console.error('JSON Parse Error:', parseError);
-      
-      // Create a simple response for debugging
-      return NextResponse.json({
-        error: 'Invalid JSON format',
-        details: parseError.message,
-        position: parseError.message.match(/position (\d+)/)?.[1] || 'unknown',
-        snippet: cleanedText.substring(
-          Math.max(0, parseInt(parseError.message.match(/position (\d+)/)?.[1] || 0) - 20),
-          Math.min(cleanedText.length, parseInt(parseError.message.match(/position (\d+)/)?.[1] || 0) + 20)
-        )
-      }, { status: 400 });
-    }
-
     // Validate required fields
-    if (!data.title || !data.slug) {
+    if (!title || !slug) {
       return NextResponse.json(
         { error: 'Title and slug are required' },
         { status: 400 }
@@ -116,9 +94,8 @@ export async function POST(request) {
     }
 
     // Clean the HTML content
-    if (data.content) {
-      data.content = cleanHtmlContent(data.content);
-    } else {
+    const cleanedContent = content ? cleanHtmlContent(content) : '';
+    if (!cleanedContent) {
       return NextResponse.json(
         { error: 'Content is required' },
         { status: 400 }
@@ -127,8 +104,15 @@ export async function POST(request) {
 
     // Create the blog post
     const blog = await Blog.create({
-      ...data,
-      publishedAt: data.isPublished ? new Date() : null
+      title,
+      slug,
+      content: cleanedContent,
+      coverImage,
+      language,
+      author,
+      tags,
+      isPublished,
+      publishedAt: isPublished ? new Date() : null
     });
 
     return NextResponse.json({ 
