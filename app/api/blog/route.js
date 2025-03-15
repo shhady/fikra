@@ -61,24 +61,25 @@ const cleanContent = (content) => {
     .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
     .replace(/\r/g, '') // Remove carriage returns
     .replace(/\t/g, ' ') // Replace tabs with spaces
-    .replace(/\n/g, '\\n') // Escape newlines to prevent JSON errors
     .replace(/\f/g, '') // Remove form feed character
     .replace(/\b/g, '') // Remove backspace character
     .replace(/\v/g, '') // Remove vertical tab character
-    .replace(/\\"/g, '"') // Ensure proper escaping of quotes
-    .trim(); // Remove leading and trailing whitespace
+    .replace(/&/g, '&amp;') // Escape & symbol
+    .replace(/</g, '&lt;') // Escape < to prevent HTML injection
+    .replace(/>/g, '&gt;') // Escape > to prevent HTML injection
+    .replace(/"/g, '&quot;') // Escape double quotes
+    .replace(/'/g, '&#039;') // Escape single quotes
+    .trim(); // Remove leading and trailing spaces
 };
-
 export async function POST(request) {
   try {
     await connectDB();
     
     const data = await request.json();
 
-    // Ensure content is properly sanitized
+    // Sanitize content
     data.content = cleanContent(data.content);
 
-    // Ensure title and slug are valid
     if (!data.title || !data.slug) {
       return NextResponse.json(
         { error: 'Title and slug are required' },
@@ -86,7 +87,6 @@ export async function POST(request) {
       );
     }
 
-    // Create the blog entry
     const blog = await Blog.create({
       ...data,
       publishedAt: data.isPublished ? new Date() : null
