@@ -79,30 +79,52 @@ export async function POST(request) {
   try {
     await connectDB();
     
-    // Use buffer to handle the raw request data
-    const buffer = await request.arrayBuffer();
-    const decoder = new TextDecoder('utf-8');
-    const rawBody = decoder.decode(buffer);
-    
-    // Process the raw body to remove problematic characters
-    const cleanedBody = rawBody
-      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, '') // Remove control characters
-      .replace(/\r/g, '') // Remove carriage returns
-      .replace(/\t/g, ' ') // Replace tabs with spaces
-      .replace(/\f/g, '') // Remove form feed character
-      .replace(/\b/g, '') // Remove backspace character
-      .replace(/\v/g, ''); // Remove vertical tab character
-    
-    // Parse the cleaned JSON
+    // Try to get the data directly from the request
     let data;
     try {
-      data = JSON.parse(cleanedBody);
-    } catch (parseError) {
-      console.error('JSON Parse Error:', parseError);
-      return NextResponse.json(
-        { error: 'Invalid JSON format in request body', details: parseError.message },
-        { status: 400 }
-      );
+      data = await request.json();
+    } catch (jsonError) {
+      // If direct JSON parsing fails, try manual approach
+      const buffer = await request.arrayBuffer();
+      const text = new TextDecoder().decode(buffer);
+      
+      // Manually clean the JSON string
+      const cleanedText = text
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+        .replace(/\\u0000-\\u001F\\u007F-\\u009F/g, '')
+        .replace(/\r/g, '')
+        .replace(/\n/g, '\\n')
+        .replace(/\t/g, '\\t');
+      
+      try {
+        data = JSON.parse(cleanedText);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        
+        // Last resort: try to extract fields manually
+        try {
+          // Create a minimal blog object with required fields
+          data = {
+            title: extractField(text, 'title'),
+            slug: extractField(text, 'slug'),
+            content: extractField(text, 'content', true),
+            coverImage: extractField(text, 'coverImage') || '',
+            language: extractField(text, 'language') || 'ar',
+            author: extractField(text, 'author') || 'فريق فكرة نوفا',
+            tags: extractTags(text),
+            isPublished: true
+          };
+        } catch (extractError) {
+          return NextResponse.json(
+            { 
+              error: 'Could not parse request data', 
+              details: parseError.message,
+              suggestion: 'Try sending data with simpler formatting'
+            },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // Validate required fields
@@ -145,4 +167,56 @@ export async function POST(request) {
       { status: 500 }
     );
   }
+}
+
+// Helper functions to extract fields from malformed JSON
+function extractField(text, fieldName, isHtml = false) {
+  const regex = new RegExp(`"${fieldName}"\\s*:\\s*"([^"]*)"`, 'i');
+  const match = text.match(regex);
+  if (match && match[1]) {
+    return match[1];
+  }
+  
+  // For HTML content which might contain quotes
+  if (isHtml) {
+    const startMarker = `"${fieldName}": "`;
+    const startIndex = text.indexOf(startMarker);
+    if (startIndex !== -1) {
+      let content = '';
+      let inContent = true;
+      let i = startIndex + startMarker.length;
+      let quoteCount = 0;
+      
+      while (i < text.length && inContent) {
+        if (text[i] === '"' && text[i-1] !== '\\') {
+          quoteCount++;
+          if (quoteCount > 0 && text[i+1] === ',') {
+            inContent = false;
+          }
+        }
+        if (inContent) {
+          content += text[i];
+        }
+        i++;
+      }
+      
+      return content;
+    }
+  }
+  
+  return '';
+}
+
+function extractTags(text) {
+  try {
+    const tagsMatch = text.match(/"tags"\s*:\s*\[(.*?)\]/);
+    if (tagsMatch && tagsMatch[1]) {
+      return tagsMatch[1].split(',').map(tag => 
+        tag.trim().replace(/"/g, '')
+      ).filter(tag => tag);
+    }
+  } catch (e) {
+    console.error('Error extracting tags:', e);
+  }
+  return [];
 }
