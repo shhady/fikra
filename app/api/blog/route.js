@@ -55,16 +55,28 @@ export async function GET(request) {
 }
 
 // POST new blog
+
 const cleanContent = (content) => {
   if (!content || typeof content !== 'string') return '';
 
   return sanitizeHtml(content, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'p', 'ul', 'li']),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'p', 'ul', 'li', 'strong', 'em', 'a']),
     allowedAttributes: {
       'a': ['href', 'name', 'target'],
       'img': ['src', 'alt']
     },
-    textFilter: (text) => text.replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove hidden control characters
+    textFilter: (text) =>
+      text
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
+        .replace(/\r/g, '') // Remove carriage returns
+        .replace(/\t/g, ' ') // Replace tabs with spaces
+        .replace(/\f/g, '') // Remove form feed character
+        .replace(/\b/g, '') // Remove backspace character
+        .replace(/\v/g, '') // Remove vertical tab character
+        .replace(/\\/g, '\\\\') // Properly escape backslashes
+        .replace(/"/g, '\"') // Properly escape double quotes
+        .replace(/\n/g, ' ') // Remove newlines to prevent JSON issues
+        .trim(), // Remove leading and trailing whitespace
   });
 };
 export async function POST(request) {
