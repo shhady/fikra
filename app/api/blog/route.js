@@ -58,12 +58,16 @@ const cleanContent = (content) => {
   if (!content || typeof content !== 'string') return '';
 
   return content
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
     .replace(/\r/g, '') // Remove carriage returns
     .replace(/\t/g, ' ') // Replace tabs with spaces
     .replace(/\n/g, '\\n') // Escape newlines to prevent JSON errors
-    .replace(/"/g, '\"'); // Escape double quotes
+    .replace(/\f/g, '') // Remove form feed character
+    .replace(/\b/g, '') // Remove backspace character
+    .replace(/\v/g, '') // Remove vertical tab character
+    .replace(/\\"/g, '"') // Ensure proper escaping of quotes
+    .trim(); // Remove leading and trailing whitespace
 };
-
 
 export async function POST(request) {
   try {
