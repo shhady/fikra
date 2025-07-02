@@ -3,10 +3,9 @@ import { CHAT_INSTRUCTIONS } from './instructions';
 import { sendChatHistoryEmail } from '@/lib/chatMail';
 import { addLeadToGoogleSheets } from '@/lib/googleSheets';
 
-// Create an OpenAI API client (Azure configuration)
+// Create an OpenAI API client (Standard OpenAI configuration)
 const client = new OpenAI({
-  baseURL: "https://models.inference.ai.azure.com",
-  apiKey: process.env.AZURE_OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 // Helper function to safely parse request body
@@ -41,7 +40,8 @@ function extractUserDetails(message) {
     return {
       name: boldMatch[2].trim(),
       email: boldMatch[4].trim(),
-      phone: boldMatch[6].trim()
+      phone: boldMatch[6].trim(),
+      source: 'Chat Bot'
     };
   }
 
@@ -52,7 +52,8 @@ function extractUserDetails(message) {
     return {
       name: structuredMatch[1].trim(),
       email: structuredMatch[2].trim(),
-      phone: structuredMatch[3].trim()
+      phone: structuredMatch[3].trim(),
+      source: 'Chat Bot'
     };
   }
 
@@ -64,42 +65,83 @@ function extractUserDetails(message) {
       return {
         name: commaMatch[1].trim(),
         email: commaMatch[2].trim(),
-        phone: phone
+        phone: phone,
+        source: 'Chat Bot'
       };
     }
   }
 
-  // Try line break or space-separated format
-  // First, look for an email address
+  // Try to extract email first, then find name and phone around it
   const emailMatch = message.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i);
   if (emailMatch) {
     const email = emailMatch[1];
-    // Split the message into words
-    const words = message.split(/[\s,\n]+/).filter(word => word.length > 0);
     
-    // Find the position of the email in the words array
-    const emailIndex = words.findIndex(word => word.includes(email));
+    // Find phone number in the message
+    const phoneMatches = message.match(/(\+?\d[\d\s\-\(\)]{8,})/g);
+    let validPhone = null;
     
-    // Find a phone number (sequence of digits, possibly with +)
-    const phoneMatch = words.find(word => {
-      const digits = word.replace(/[^\d+]/g, '');
-      return /^[+\d]\d{8,}$/.test(digits);
-    });
+    if (phoneMatches) {
+      for (const phoneCandidate of phoneMatches) {
+        const cleanPhone = phoneCandidate.replace(/[^\d+]/g, '');
+        if (cleanPhone.length >= 9) {
+          validPhone = cleanPhone;
+          break;
+        }
+      }
+    }
     
-    if (phoneMatch) {
-      // Everything before the email (excluding the email) could be the name
-      const nameWords = words.slice(0, emailIndex).filter(word => 
-        !word.includes('@') && 
-        !/^\d+$/.test(word) && 
-        ![...nameLabels, ...emailLabels, ...phoneLabels].includes(word.toLowerCase().replace(':', ''))
-      );
-
-      if (nameWords.length > 0) {
+    if (validPhone) {
+      // Try to extract name - look for text before email or after common patterns
+      let name = '';
+      
+      // Split message into parts and look for name
+      const parts = message.split(/[\s,\.]+/).filter(part => part.length > 1);
+      const emailIndex = parts.findIndex(part => part.includes('@'));
+      
+      if (emailIndex > 0) {
+        // Take words before email as potential name
+        const nameParts = parts.slice(0, emailIndex).filter(part => 
+          !part.match(/^\d+$/) && // not just numbers
+          !part.match(/^[+\d\-\(\)\s]+$/) && // not phone number
+          ![...nameLabels, ...emailLabels, ...phoneLabels].some(label => 
+            part.toLowerCase().includes(label.toLowerCase())
+          ) // not labels
+        );
+        
+        if (nameParts.length > 0) {
+          name = nameParts.join(' ').trim();
+        }
+      }
+      
+      // If no name found before email, try after
+      if (!name && emailIndex < parts.length - 1) {
+        const namePartsAfter = parts.slice(emailIndex + 1).filter(part => 
+          !part.match(/^\d+$/) && // not just numbers
+          !part.match(/^[+\d\-\(\)\s]+$/) && // not phone number
+          ![...nameLabels, ...emailLabels, ...phoneLabels].some(label => 
+            part.toLowerCase().includes(label.toLowerCase())
+          ) // not labels
+        );
+        
+        if (namePartsAfter.length > 0) {
+          name = namePartsAfter.join(' ').trim();
+        }
+      }
+      
+      // Try alternative approach: look for patterns like "name email phone"
+      if (!name) {
+        const simplePattern = message.match(/([a-zA-Z]+\s+[a-zA-Z]+)[\s,]*([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)[\s,]*([+\d\s\-\(\)]+)/i);
+        if (simplePattern) {
+          name = simplePattern[1].trim();
+        }
+      }
+      
+      if (name && name.length > 1) {
         return {
-          name: nameWords.join(' ').trim(),
+          name: name,
           email: email,
-          phone: phoneMatch.replace(/[^\d+]/g, ''),
-          source: 'Chatbot website',
+          phone: validPhone,
+          source: 'Chat Bot'
         };
       }
     }
