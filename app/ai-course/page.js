@@ -191,8 +191,7 @@ export default function AICourse() {
             
             <p className="text-xl md:text-2xl mb-8 text-gray-300 max-w-4xl mx-auto leading-relaxed">
               ليس مجرد تعريف - بل تطبيق عملي للذكاء الاصطناعي في الحياة والدراسة والعمل!
-              <br />
-              كل مشارك يخرج بمنتج شخصي + تدريب شامل + مساعد AI مخصص
+              
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
