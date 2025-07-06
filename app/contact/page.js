@@ -9,22 +9,22 @@ import { he } from '@/translations/he'
 // import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 
 const getContactInfo = (translations) => [
-  {
-    icon: <FiMail className="w-6 h-6" />,
-    title: translations.contact.info.email,
-    details: 'shhadyse@gmail.com',
-    link: 'mailto:shhadyse@gmail.com'
-  },
-  {
-    icon: <FiPhone className="w-6 h-6" />,
-    title: translations.contact.info.phone,
-    details: '0543113297',
-    link: 'tel:+972543113297'
-  },
+  // {
+  //   icon: <FiMail className="w-6 h-6" />,
+  //   title: translations.contact.info.email,
+  //   details: 'shhadyse@gmail.com',
+  //   link: 'mailto:shhadyse@gmail.com'
+  // },
+  // {
+  //   icon: <FiPhone className="w-6 h-6" />,
+  //   title: translations.contact.info.phone,
+  //   details: '0543113297',
+  //   link: 'tel:+972543113297'
+  // },
   {
     icon: <FiMapPin className="w-6 h-6" />,
     title: translations.contact.info.address,
-    details: 'נצרת',
+    details: 'الناصرة , נצרת',
     link: 'https://maps.google.com/?q=Nazareth'
   },
   {

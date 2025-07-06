@@ -190,7 +190,7 @@ export default function AICourse() {
             </p>
             
             <p className="text-xl md:text-2xl mb-8 text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              ليس مجرد تعريف - بل تطبيق عملي للذكاء الاصطناعي في الحياة والدراسة والعمل!
+            تطبيق عملي للذكاء الاصطناعي في الحياة والدراسة والعمل!
               
             </p>
 
