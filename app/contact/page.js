@@ -36,11 +36,11 @@ const getContactInfo = (translations) => [
 ]
 
 const socialLinks = [
-  {
-    icon: <FiLinkedin className="w-6 h-6" />,
-    name: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/shhady-serhan-a11403124'
-  },
+  // {
+  //   icon: <FiLinkedin className="w-6 h-6" />,
+  //   name: 'LinkedIn',
+  //   url: 'https://www.linkedin.com/in/shhady-serhan-a11403124'
+  // },
 //   {
 //     icon: <FiFacebook className="w-6 h-6" />,
 //     name: 'Facebook',
@@ -49,7 +49,7 @@ const socialLinks = [
   {
     icon: <FiInstagram className="w-6 h-6" />,
     name: 'Instagram',
-    url: 'https://www.instagram.com/fikra__ai/'
+    url: 'https://www.instagram.com/fikranova_'
   }
 ]
 
