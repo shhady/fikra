@@ -141,8 +141,10 @@ export default function ContactPage() {
       newErrors.service = 'يرجى اختيار نوع الخدمة'
     }
 
-    // Message validation (optional but must be at least 10 chars if provided)
-    if (formData.message.trim() && formData.message.length < 10) {
+    // Message validation (required)
+    if (!formData.message.trim()) {
+      newErrors.message = 'الرسالة مطلوبة'
+    } else if (formData.message.length < 10) {
       newErrors.message = 'الرسالة يجب أن تكون أكثر من 10 أحرف'
     }
 
@@ -152,14 +154,18 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted with data:', formData);
     
     if (!validateForm()) {
+      console.log('Form validation failed:', errors);
       return;
     }
 
+    console.log('Form validation passed, submitting...');
     setIsSubmitting(true);
 
     try {
+      console.log('Sending request to /api/contact');
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -168,9 +174,12 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (data.success) {
+        console.log('Form submission successful!');
         setShowSuccess(true);
         setFormData({
           name: '',
@@ -181,13 +190,14 @@ export default function ContactPage() {
         });
         setErrors({});
       } else {
+        console.log('Form submission failed:', data.error);
         setErrors(prev => ({
           ...prev,
           submit: data.error || 'حدث خطأ أثناء إرسال النموذج'
         }));
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error during form submission:', error);
       setErrors(prev => ({
         ...prev,
         submit: 'حدث خطأ في الاتصال بالخادم'
@@ -272,6 +282,9 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
                   />
+                  {errors.name && (
+                    <p className="text-red-400 text-sm mt-1">{errors.name}</p>
+                  )}
                 </div>
 
                 <div>
@@ -287,6 +300,9 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
                   />
+                  {errors.email && (
+                    <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 <div>
@@ -301,6 +317,9 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
                   />
+                  {errors.phone && (
+                    <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
 
                 <div>
@@ -322,6 +341,9 @@ export default function ContactPage() {
                       </option>
                     ))}
                   </select>
+                  {errors.service && (
+                    <p className="text-red-400 text-sm mt-1">{errors.service}</p>
+                  )}
                 </div>
 
                 <div>
@@ -338,6 +360,9 @@ export default function ContactPage() {
                     placeholder={translations.contact.form.messagePlaceholder}
                     className={`w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-${isRTL ? 'right' : 'left'}`}
                   />
+                  {errors.message && (
+                    <p className="text-red-400 text-sm mt-1">{errors.message}</p>
+                  )}
                 </div>
 
                 <button
