@@ -10,6 +10,7 @@ export const en = {
     about: 'About',
     services: 'Services',
     blog: 'Blog',
+    projects: 'Projects',
     contact: 'Contact',
   },
   about: {

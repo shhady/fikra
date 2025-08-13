@@ -10,6 +10,7 @@ export const ar = {
     about: 'من نحن',
     services: 'خدماتنا',
     blog: 'المدونة',
+    projects: 'المشاريع',
     contact: 'تواصل معنا',
   },
   about: {

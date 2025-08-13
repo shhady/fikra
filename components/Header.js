@@ -30,7 +30,7 @@ const Header = () => {
     { name: translations.nav.home, href: '/' },
     { name: translations.nav.about, href: '/about' },
     { name: translations.nav.services, href: '/services' },
-    { name: translations.nav.blog, href: '/blog' },
+    { name: translations.nav.projects, href: '/projects' },
     { name: 'FAQ', href: '/faq' },
     { name: translations.nav.contact, href: '/contact' },
   ]

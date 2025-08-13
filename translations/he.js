@@ -10,6 +10,7 @@ export const he = {
     about: 'אודות',
     services: 'שירותים',
     blog: 'בלוג',
+    projects: 'פרויקטים',
     contact: 'צור קשר',
   },
   about: {
