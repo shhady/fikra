@@ -40,11 +40,11 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto pr-4 sm:pr-6 lg:pr-8">
         <div className="flex flex-row items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0 flex flex-row items-center">
+          <div className="flex-shrink-0 flex flex-row justify-center items-center">
             <Link href="/" className="text-2xl font-bold text-white">
-             <Image src="/logo-8.png" alt="Logo" width={100} height={100} className='h-11 w-20 object-contain' />
+             <Image src="/logo-9.png" alt="Logo" width={100} height={100} className='h-8 w-16 object-contain' />
             </Link>
-            <p className='text-white text-xl'>FIKRANOVA</p>
+            <p className='text-white text-xl h-8 flex items-center'>FIKRANOVA</p>
           </div>
 
           {/* Desktop Navigation */}
