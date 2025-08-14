@@ -122,7 +122,7 @@ const ServicesShowcase = () => {
     },
     {
       id: 'ai-agents',
-      title: `${translations.home.services.items.aiAgents.title} (${language === 'he' ? 'בקרוב' : language === 'en' ? 'Soon' : 'قريباً'})`,
+      title: `${translations.home.services.items.aiAgents.title}`,
       description: translations.home.services.items.aiAgents.description,
       icon: FaRobot,
       gradient: 'from-indigo-500 to-violet-400',
