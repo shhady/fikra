@@ -37,14 +37,14 @@ const Header = () => {
 
   return (
     <header className="fixed w-full z-50 from-black/50 to-[rgb(30,35,46)] bg-gradient-to-l backdrop-blur-lg border-b border-white/10 py-2">
-      <nav className="max-w-7xl mx-auto pr-4 sm:pr-6 lg:pr-8">
+      <nav className="max-w-7xl mx-auto px-4 sm:pr-6 lg:pr-8">
         <div className="flex flex-row items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0 flex flex-row justify-center items-center">
+          <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2">
             <Link href="/" className="text-2xl font-bold text-white">
-             <Image src="/logo-9.png" alt="Logo" width={100} height={100} className='h-8 w-16 object-contain' />
+             <Image src="/logo-10-removebg.png" alt="Logo" width={100} height={100} className='h-8 w-8 object-contain' />
             </Link>
-            <p className='text-white text-xl h-8 flex items-center'>FIKRANOVA</p>
+            <p className='text-white text-xl h-10 flex items-center'>FIKRANOVA</p>
           </div>
 
           {/* Desktop Navigation */}
