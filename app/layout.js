@@ -1,4 +1,5 @@
 import { Tajawal } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -86,6 +87,10 @@ export default function RootLayout({ children }) {
           <Footer />
           <ChatButton />
           <Analytics />
+          <Script
+            src="https://cdn.enable.co.il/licenses/enable-L47784k8n24pqfm7-0925-75470/init.js"
+            strategy="afterInteractive"
+          />
         </body>
       </html>
     </LanguageProvider>
