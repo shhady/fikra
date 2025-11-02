@@ -10,6 +10,7 @@ import { en } from '../translations/en'
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false)
   const pathname = usePathname()
   const { language, changeLanguage } = useLanguage()
   
@@ -39,8 +40,8 @@ const Header = () => {
     <header className="fixed w-full z-50 from-black/50 to-[rgb(30,35,46)] bg-gradient-to-l backdrop-blur-lg border-b border-white/10 py-2">
       <nav className="max-w-7xl mx-auto px-4 sm:pr-6 lg:pr-8">
         <div className="flex flex-row items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2">
+        {/* Logo */}
+        <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2">
             <Link href="/" className="text-2xl font-bold text-white">
              <Image src="/logo-10-removebg.png" alt="Logo" width={100} height={100} className='h-8 w-8 object-contain' />
             </Link>
@@ -49,16 +50,25 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 flex-row-reverse">
-            {/* Language Switcher - Always First (Right) */}
-            <select
-              value={language}
-              onChange={(e) => changeLanguage(e.target.value)}
-              className="bg-black text-gray-300 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400 order-first"
-            >
-              <option value="ar">العربية</option>
-              <option value="he">עברית</option>
-              <option value="en">English</option>
-            </select>
+            {/* Language Switcher - Always First (Right) with globe icon */}
+            <div className="flex items-center gap-2 order-first" dir='rtl'>
+              <span className="text-gray-300" aria-hidden="true">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2 12h20" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2c3 2.5 3 17.5 0 20M12 2c-3 2.5-3 17.5 0 20" />
+                </svg>
+              </span>
+              <select
+                value={language}
+                onChange={(e) => changeLanguage(e.target.value)}
+                className="bg-black text-gray-300 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400"
+              >
+                <option value="ar">العربية</option>
+                <option value="he">עברית</option>
+                <option value="en">English</option>
+              </select>
+            </div>
 
             {/* Navigation Links */}
             {navigation.map((item) => (
@@ -83,9 +93,10 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
+        {/* Mobile actions: language globe + hamburger */}
+        <div className="md:hidden flex items-center justify-center gap-3" dir='rtl'>
+          <div className="relative flex items-center justify-center gap-3">
+          <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-400 hover:text-white"
             >
@@ -100,6 +111,44 @@ const Header = () => {
                 </svg>
               )}
             </button>
+            <button
+              onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+              className="text-gray-300 hover:text-white flex items-center gap-2"
+              aria-label="Languages"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2 12h20" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2c3 2.5 3 17.5 0 20M12 2c-3 2.5-3 17.5 0 20" />
+              </svg>
+              <span className="text-gray-300 text-sm">
+                {language === 'he' ? 'עברית' : language === 'en' ? 'English' : 'العربية'}
+              </span>
+            </button>
+            {isLanguageMenuOpen && (
+              <div className="absolute right-0 mt-2 w-36 bg-black border border-gray-600 rounded shadow-lg z-50">
+                <button
+                  className="block w-full text-right px-3 py-2 text-gray-300 hover:bg-black/30"
+                  onClick={() => { changeLanguage('ar'); setIsLanguageMenuOpen(false); }}
+                >
+                  العربية
+                </button>
+                <button
+                  className="block w-full text-right px-3 py-2 text-gray-300 hover:bg-black/30"
+                  onClick={() => { changeLanguage('he'); setIsLanguageMenuOpen(false); }}
+                >
+                  עברית
+                </button>
+                <button
+                  className="block w-full text-right px-3 py-2 text-gray-300 hover:bg-black/30"
+                  onClick={() => { changeLanguage('en'); setIsLanguageMenuOpen(false); }}
+                >
+                  English
+                </button>
+              </div>
+            )}
+           </div>
+           
           </div>
         </div>
 
@@ -107,17 +156,6 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {/* Mobile Language Switcher */}
-              <select
-                value={language}
-                onChange={(e) => {changeLanguage(e.target.value);setIsMobileMenuOpen(false)}}
-                className="w-full bg-black text-gray-300 border border-gray-600 rounded px-3 py-2 mb-2 text-base focus:outline-none focus:border-blue-400"
-              >
-                <option value="ar">العربية</option>
-                <option value="he">עברית</option>
-                <option value="en">English</option>
-              </select>
-
               {navigation.map((item) => (
                 <Link
                   key={item.name}
