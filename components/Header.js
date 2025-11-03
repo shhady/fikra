@@ -42,10 +42,11 @@ const Header = () => {
         <div className="flex flex-row items-center justify-between h-16">
         {/* Logo */}
         <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2">
-            <Link href="/" className="text-2xl font-bold text-white">
+            <Link href="/" className="text-2xl font-bold text-white flex items-center gap-2">
              <Image src="/logo-10-removebg.png" alt="Logo" width={100} height={100} className='h-8 w-8 object-contain' />
-            </Link>
+           
             <p className='text-white text-xl h-10 flex items-center'>FIKRANOVA</p>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}

@@ -38,7 +38,7 @@ export default function ChatButton() {
         
         {/* Tooltip */}
         <div className="absolute bottom-full mb-2 hidden group-hover:block">
-          <div className="bg-gray-900 text-white text-sm rounded-lg py-1 px-3 whitespace-nowrap">
+          <div className="bg-gray-900 text-white text-sm rounded-lg py-1 px-3 whitespace-nowrap ml-[-100px]">
             {tooltipText[language]}
           </div>
           <div className="w-2 h-2 bg-gray-900 transform rotate-45 translate-x-1/2 translate-y-[-4px] mx-auto"></div>
