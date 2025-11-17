@@ -1,19 +1,22 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import React from 'react'
-
-const Spline = dynamic(() => import('@splinetool/react-spline/dist'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <span className="loader" />
-    </div>
-  ),
-})
+import Script from 'next/script'
 
 export function SplineScene({ scene, className }) {
-  return <Spline scene={scene} className={className} />
+  return (
+    <>
+      <Script
+        src="https://unpkg.com/@splinetool/runtime/build/spline-viewer.js"
+        strategy="afterInteractive"
+      />
+      <spline-viewer
+        url={scene}
+        class={className}
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      />
+    </>
+  )
 }
 
 
