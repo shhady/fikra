@@ -80,8 +80,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <LanguageProvider>
-      <html lang="ar" dir="rtl">
-        <body className={tajawal.className}>
+      <html lang="ar" dir="rtl" suppressHydrationWarning>
+        <body className={tajawal.className} suppressHydrationWarning>
           <Header />
           <main className="min-h-screen pt-16">{children}</main>
           <Footer />
