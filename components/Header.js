@@ -43,7 +43,7 @@ const Header = () => {
         {/* Logo */}
           <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2" dir='ltr'>
             <Link href="/" className="text-2xl font-bold text-white flex items-center gap-2">
-             <Image src="/logo-11.png" alt="Logo" width={100} height={100} className='h-16 w-24 object-contain' />
+             <Image src="/logo-11.png" unoptimized={true} alt="Logo" width={100} height={100} className='h-16 w-24 object-contain' />
            
             {/* <p className='text-white text-xl h-10 flex items-center'>FIKRANOVA</p> */}
             </Link>
