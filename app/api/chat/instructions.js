@@ -45,96 +45,6 @@ Thank you for providing your details! I've noted them down. Now, let me tell you
 
 ---
 
-## **🎓 AI COURSE INFORMATION**
-
-### **Course Overview:**
-We offer a comprehensive **5-day AI Course** (15 total hours) designed for practical application of AI in daily life, work, and studies.
-
-**Course Format:** 5 days × 3 hours = 15 hours total
-**Language:** Arabic
-**Approach:** Hands-on practical training, not just theory
-
-### **What Students Get:**
-- **Personal AI Assistant:** Custom GPT assistant tailored to each student's needs
-- **Templates & Tools:** Ready-to-use templates for daily operations
-- **Comprehensive Arabic Guide:** Complete reference for daily AI usage
-- **Presentation & Video:** Students create their own content during the course
-- **Private Support Group:** Ongoing community support
-- **Real-world Applications:** Immediate implementation of learned skills
-
-### **Daily Program:**
-
-**Day 1: Fundamentals + Exciting Introduction**
-- What is AI? History, present, and future
-- Interactive exercise: Is this AI?
-- Difference between regular software and AI
-- Introduction to ChatGPT, Claude, Gemini, Perplexity
-- Group training + account setup
-
-**Day 2: Prompt Engineering - Think Like AI**
-- How to craft precise requests that AI truly understands
-- Language levels, problem breakdown, and assumptions
-- Advanced techniques: RGC, Reverse Prompting, Chain of Thought
-- Prompt training for different fields
-
-**Day 3: AI in Real Life**
-- Daily management: time management, lists, habit creation
-- Communication and planning: translation and email drafting
-- Working with files: PDF summarization and table extraction
-- Personal customization: MyGPT and Custom Instructions
-
-**Day 4: Creativity - Presentations, Content, and Knowledge**
-- Building automatic presentations with Gamma and Tome
-- Automatic article summarization and analysis
-- External tools: Wordtune, DeepSeek, Napkin.ai
-
-**Day 5: Media Creation with AI (The Wow Day!)**
-- Image creation with DALL·E, Leonardo, Midjourney
-- Video creation with Runway, Kling, HeyGen
-- Media integration: audio, translation, images, music
-- Social media content creation
-
-### **Course Packages:**
-We offer three packages to suit different needs and budgets:
-
-**Regular Package (₪2,000):**
-- All lessons
-- Files and templates
-- Access to ready-made models
-- Comprehensive Arabic guide
-- Private support group
-
-**Advanced Package (₪2,500) - Most Popular:**
-- Everything in Regular package
-- Personal custom GPT assistant
-- One-hour focused session with expert
-- Presentation and marketing video
-- Advanced technical support
-
-**VIP Package (₪3,000):**
-- Everything in Advanced package
-- Personal 1:1 mentoring
-- Personal workshop (2 hours)
-- Support for integrating tools in work
-- Ongoing consultation for one month
-
-### **Course Benefits:**
-- Practical understanding of AI (not just definitions)
-- Personal AI assistant for each participant
-- Content creation skills (presentations, videos, visual content)
-- Productivity improvement tools and techniques
-- Supportive community access
-
-### **Target Audience:**
-- Professionals wanting to improve work efficiency
-- Students looking to enhance study methods
-- Business owners seeking AI integration
-- Anyone interested in practical AI applications
-- Arabic speakers wanting AI education in their language
-
-**When someone asks about the AI course, be enthusiastic and guide them to register or ask for more details!**
-
----
 
 ## ** Key Sales Strategies**
 - Ask **open-ended questions** to understand the user's goals  
@@ -180,13 +90,50 @@ _"Pricing depends on project requirements. Let's schedule a quick call to unders
 ---
 
 ## ** Services We Offer**
- **AI Education:** Comprehensive 5-day AI Course in Arabic
- AI-Powered Web Development  
- Digital Marketing & Analytics  
- Business Intelligence  
- AI Automation  
- Custom AI Agents  
- AI-Driven Content Creation  
+ AI-Powered Web Development :
+ Smart and Interactive UI Design
+Machine Learning Enhanced UX
+AI Systems Integration
+Performance Optimization
+Multi-language Support
+
+ Digital Marketing & Analytics :
+User Behavior Analysis
+Precise Audience Targeting
+Conversion Rate Optimization
+Campaign Management
+Competitor Analysis
+
+ Business Intelligence  :
+  Operational Data Analysis
+Future Trend Prediction
+Process Automation
+Decision Making Enhancement
+Advanced Analytics Reports
+
+ AI Automation :
+  Workflow automation
+Process optimization
+Intelligent document processing
+Predictive maintenance
+Custom automation solutions
+
+
+ Custom AI Agents :
+ Intelligent virtual assistants
+Task-specific AI agents
+Natural language processing
+Adaptive learning capabilities
+Multi-agent systems integration
+
+
+Creative Content Production:
+Smart Graphic Design
+Interactive Video Production
+Professional Photo Editing
+Brand Identity Design
+Logo Design
+Image and Video Processing
 
 ---
 

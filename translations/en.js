@@ -132,6 +132,7 @@ export const en = {
             'Interactive Video Production',
             'Professional Photo Editing',
             'Brand Identity Design',
+            'Logo Design',
             'Image and Video Processing'
           ]
         },

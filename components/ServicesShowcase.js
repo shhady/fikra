@@ -97,9 +97,13 @@ const ServicesShowcase = () => {
       })),
       technologies: [
         { id: 'tech-15', name: 'Adobe Creative Suite' },
-        { id: 'tech-16', name: 'Midjourney' },
-        { id: 'tech-17', name: 'DALL-E' },
-        { id: 'tech-18', name: 'Stable Diffusion' },
+        { id: 'tech-16', name: 'Nano Banana' },
+        { id: 'tech-17', name: 'ChatGPT' },
+        { id: 'tech-18', name: 'Ideogram' },
+        { id: 'tech-19', name: 'Kling' },
+        { id: 'tech-20', name: 'Sora2' },
+        { id: 'tech-21', name: 'Veo3' },
+        { id: 'tech-22', name: 'Runway' },
       ],
     },
     {
