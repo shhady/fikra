@@ -47,7 +47,7 @@ export default function ProjectsPage() {
       tagline: 'Match buyers to the right keys in seconds.',
       tags: ['AI', 'Real Estate', 'Automation'],
       gradient: 'from-blue-500 to-cyan-400',
-      image: '/keysmatch.jpeg',
+      image: '/keysmatch.png',
       url: 'https://www.keysmatch.com'
     },
     {
@@ -75,7 +75,7 @@ export default function ProjectsPage() {
       tagline: 'Local tours. Real-time availability. Zero hassle.',
       tags: ['Travel', 'Guides', 'Calendar'],
       gradient: 'from-rose-500 to-red-400',
-      image: '/watermelon.jpeg',
+      image: '/watermelon.png',
       url: 'https://watermelontours.com'
     },
     {
