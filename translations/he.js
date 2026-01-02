@@ -63,16 +63,18 @@ export const he = {
   },
   home: {
     hero: {
-      title: 'סוכנות בינה מלאכותית',
-      subtitle: 'אנו מספקים פתרונות חכמים לפיתוח העסק שלך',
+      title: 'סוכנות אוטומציית AI',
+      subtitle: 'פיתוח אתרים מבוססי בינה מלאכותית, סוכני AI מותאמים ואוטומציה לעסקים',
       badge: 'עתיד העסקים מתחיל כאן',
       mainHeading: 'מפתחים את העסק שלך עם',
       aiText: 'בינה מלאכותית',
       services: {
-        webDev: 'פיתוח אתרים',
+        webDev: 'פיתוח אתרים מבוססי בינה מלאכותית',
         dataAnalysis: 'ניתוח נתונים',
-        digitalMarketing: 'שיווק דיגיטלי',
-        automation: 'אוטומציה של תהליכים'
+        digitalMarketing: 'סוכנות שיווק AI',
+        automation: 'אוטומציה לעסקים',
+        aiAgents: 'בניית צ\'אטבוטים וסוכני AI',
+        aiAutomation: 'אוטומציית AI'
       },
       cta: {
         startProject: 'התחל פרויקט',
@@ -407,4 +409,4 @@ export const he = {
     ],
     lastUpdated: 'תנאים אלה עודכנו לאחרונה ב-1 בינואר 2024'
   },
-}; 
+};

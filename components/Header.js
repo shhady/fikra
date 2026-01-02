@@ -27,13 +27,18 @@ const Header = () => {
 
   const translations = getTranslations();
 
+  const currentLang = (() => {
+    const first = (pathname || '').split('/')[1] || 'en'
+    return ['en', 'ar', 'he'].includes(first) ? first : 'en'
+  })()
+
   const navigation = [
-    { name: translations.nav.home, href: '/' },
-    { name: translations.nav.about, href: '/about' },
-    { name: translations.nav.services, href: '/services' },
-    { name: translations.nav.projects, href: '/projects' },
-    { name: 'FAQ', href: '/faq' },
-    { name: translations.nav.contact, href: '/contact' },
+    { name: translations.nav.home, href: `/${currentLang}` },
+    { name: translations.nav.about, href: `/${currentLang}/about` },
+    { name: translations.nav.services, href: `/${currentLang}/services` },
+    { name: translations.nav.projects, href: `/${currentLang}/projects` },
+    { name: 'FAQ', href: `/${currentLang}/faq` },
+    { name: translations.nav.contact, href: `/${currentLang}/contact` },
   ]
 
   return (
@@ -42,8 +47,17 @@ const Header = () => {
         <div className="flex flex-row items-center justify-between h-16">
         {/* Logo */}
           <div className="flex-shrink-0 flex flex-row justify-center items-center gap-2" dir='ltr'>
-            <Link href="/" className="text-2xl font-bold text-white flex items-center gap-2">
-             <Image src="/logo-11.png" unoptimized={true} alt="Logo" width={100} height={100} className='h-16 w-24 object-contain' />
+            <Link href={`/${currentLang}`} className="text-2xl font-bold text-white flex items-center gap-2">
+             <Image
+               src="/logo-11.png"
+               unoptimized={true}
+               alt="Logo"
+               width={100}
+               height={100}
+               className='h-16 w-24 object-contain'
+               decoding="async"
+               sizes="(max-width: 768px) 96px, 120px"
+             />
            
             {/* <p className='text-white text-xl h-10 flex items-center'>FIKRANOVA</p> */}
             </Link>
@@ -87,7 +101,7 @@ const Header = () => {
             ))}
 
             {/* Start Project Button */}
-            <Link href="/contact">
+            <Link href={`/${currentLang}/contact`}>
               <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
                 {language === 'he' ? 'התחל פרויקט' : language === 'en' ? 'Start Project' : 'ابدأ مشروعك'}
               </button>
@@ -171,7 +185,7 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link href={`/${currentLang}/contact`} onClick={() => setIsMobileMenuOpen(false)}>
                 <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">
                   {language === 'he' ? 'התחל פרויקט' : language === 'en' ? 'Start Project' : 'ابدأ مشروعك'}
                 </button>

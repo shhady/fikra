@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Script from 'next/script'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useLanguage } from '../../context/LanguageContext'
-import { ar } from '../../translations/ar'
-import { he } from '../../translations/he'
-import { en } from '../../translations/en'
+import { useLanguage } from '@/context/LanguageContext'
+import { ar } from '@/translations/ar'
+import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 import { FaChevronDown } from 'react-icons/fa'
 
 // export const metadata = {
@@ -142,6 +143,33 @@ export default function FAQPage() {
 
   return (
     <main className="bg-black min-h-screen">
+      <Script id="faq-jsonld" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: (translations.faq.categories || []).flatMap((cat) =>
+              (cat.questions || []).map((q) => ({
+                '@type': 'Question',
+                name: q.question,
+                acceptedAnswer: { '@type': 'Answer', text: q.answer }
+              }))
+            )
+          })
+        }}
+      />
+      <Script id="breadcrumbs-faq" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `https://www.fikranova.com/${language}` },
+              { '@type': 'ListItem', position: 2, name: 'FAQ', item: `https://www.fikranova.com/${language}/faq` }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-black opacity-90"></div>
@@ -258,7 +286,7 @@ export default function FAQPage() {
                   {translations.faq.cta.subtitle}
                 </p>
                 <Link
-                  href="/contact"
+                  href={`/${language}/contact`}
                   className="inline-block bg-white text-blue-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-colors duration-300 transform hover:scale-105"
                 >
                   {translations.faq.cta.button}

@@ -1,44 +1,38 @@
 'use client';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 const LanguageContext = createContext();
 
-export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState('ar'); // Default to Arabic
+export function LanguageProvider({ children, initialLocale }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  // If initialLocale is not provided, try to parse from pathname or default to 'ar'
+  const currentLocale = initialLocale || pathname?.split('/')[1] || 'ar';
 
   const changeLanguage = (newLang) => {
-    setLanguage(newLang);
-    localStorage.setItem('preferredLanguage', newLang);
-    document.documentElement.lang = newLang;
-    // Set direction based on language
-    const isRTL = newLang === 'ar' || newLang === 'he';
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-    // Update body class for styling
-    document.body.classList.remove('rtl', 'ltr');
-    document.body.classList.add(isRTL ? 'rtl' : 'ltr');
+    if (newLang === currentLocale) return;
+
+    // Redirect to the new locale
+    const pathSegments = pathname.split('/');
+    pathSegments[1] = newLang; // Replace the locale segment
+    const newPath = pathSegments.join('/');
+    
+    router.push(newPath);
   };
 
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage) {
-      changeLanguage(savedLanguage);
-    } else {
-      // Try to detect user's browser language
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.includes('ar')) {
-        changeLanguage('ar');
-      } else if (browserLang.includes('he')) {
-        changeLanguage('he');
-      } else {
-        changeLanguage('en');
-      }
-    }
-  }, []);
+  const isRTL = currentLocale === 'ar' || currentLocale === 'he';
 
-  const isRTL = language === 'ar' || language === 'he';
+  useEffect(() => {
+    document.documentElement.lang = currentLocale;
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.body.classList.remove('rtl', 'ltr');
+    document.body.classList.add(isRTL ? 'rtl' : 'ltr');
+    localStorage.setItem('preferredLanguage', currentLocale);
+  }, [currentLocale, isRTL]);
 
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage, isRTL }}>
+    <LanguageContext.Provider value={{ language: currentLocale, changeLanguage, isRTL }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -50,4 +44,4 @@ export function useLanguage() {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
-} 
+}

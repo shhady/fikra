@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useLanguage } from '../../context/LanguageContext'
-import { ar } from '../../translations/ar'
-import { he } from '../../translations/he'
-import { en } from '../../translations/en'
+import Script from 'next/script'
+import { useLanguage } from '@/context/LanguageContext'
+import { ar } from '@/translations/ar'
+import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 
 export default function ProjectsPage() {
   const { language, isRTL } = useLanguage()
@@ -156,6 +157,18 @@ export default function ProjectsPage() {
 
   return (
     <main className="bg-black min-h-screen">
+      <Script id="breadcrumbs-projects" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `https://www.fikranova.com/${language}` },
+              { '@type': 'ListItem', position: 2, name: 'Projects', item: `https://www.fikranova.com/${language}/projects` }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-black opacity-90"></div>

@@ -28,31 +28,36 @@ const Footer = () => {
 
   if (isChatPage) return null;
 
+  const currentLang = (() => {
+    const first = (pathname || '').split('/')[1] || 'en'
+    return ['en', 'ar', 'he'].includes(first) ? first : 'en'
+  })()
+
   const getFooterLinks = (translations) => [
     {
       title: translations.footer.quickLinks.title,
       links: [
-        { name: translations.nav.home, href: '/' },
-        { name: translations.nav.about, href: '/about' },
-        { name: translations.nav.services, href: '/services' },
-        { name: translations.nav.blog, href: '/blog' },
+        { name: translations.nav.home, href: `/${currentLang}` },
+        { name: translations.nav.about, href: `/${currentLang}/about` },
+        { name: translations.nav.services, href: `/${currentLang}/services` },
+        { name: translations.nav.blog, href: `/${currentLang}/blog` },
       ],
     },
     {
       title: translations.footer.services.title,
       links: [
-        { name: translations.home.services.items.webDev.title, href: '/services#web' },
-        { name: translations.home.services.items.business.title, href: '/services#ai' },
-        { name: translations.home.services.items.marketing.title, href: '/services#marketing' },
-        { name: translations.home.services.items.content.title, href: '/services#data' },
+        { name: translations.home.services.items.webDev.title, href: `/${currentLang}/services#web` },
+        { name: translations.home.services.items.business.title, href: `/${currentLang}/services#ai` },
+        { name: translations.home.services.items.marketing.title, href: `/${currentLang}/services#marketing` },
+        { name: translations.home.services.items.content.title, href: `/${currentLang}/services#data` },
       ],
     },
     {
       title: translations.footer.contact.title,
       links: [
-        { name: translations.footer.contact.faq, href: '/faq' },
-        { name: translations.footer.contact.support, href: '/support' },
-        { name: translations.footer.contact.contactUs, href: '/contact' },
+        { name: translations.footer.contact.faq, href: `/${currentLang}/faq` },
+        { name: translations.footer.contact.support, href: `/${currentLang}/support` },
+        { name: translations.footer.contact.contactUs, href: `/${currentLang}/contact` },
       ],
     },
   ]
@@ -73,7 +78,15 @@ const Footer = () => {
           {/* Brand Section */}
           <div className={`lg:col-span-2 ${isRTL ? 'text-right' : 'text-left'}`}>
             <Link href="/" className="text-2xl font-bold text-white">
-              <Image src="/logo-4.png" alt="Logo" width={100} height={100} />
+              <Image
+                src="/logo-4.png"
+                alt="Logo"
+                width={100}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 768px) 64px, 100px"
+              />
             </Link>
             <p className="mt-4 text-gray-400 text-sm leading-relaxed">
               {translations.footer.description}
@@ -124,13 +137,13 @@ const Footer = () => {
             </p>
             <div className={`flex gap-6 text-sm ${isRTL ? 'md:justify-start' : 'md:justify-end'}`}>
               <Link
-                href="/privacy"
+                href={`/${currentLang}/privacy`}
                 className="text-gray-400 hover:text-white transition-colors duration-300"
               >
                 {translations.footer.links.privacy}
               </Link>
               <Link
-                href="/terms"
+                href={`/${currentLang}/terms`}
                 className="text-gray-400 hover:text-white transition-colors duration-300"
               >
                 {translations.footer.links.terms}

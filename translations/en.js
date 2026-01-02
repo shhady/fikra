@@ -63,16 +63,18 @@ export const en = {
   },
   home: {
     hero: {
-      title: 'AI Agency',
+      title: 'AI Automation Agency',
       subtitle: 'We provide smart solutions to develop your business',
       badge: 'The Future of Business Starts Here',
-      mainHeading: 'Develop Your Business with',
+      mainHeading: 'Scale Your Business with',
       aiText: 'Artificial Intelligence',
       services: {
-        webDev: 'Web Development',
+        webDev: 'AI-Powered Web Development',
         dataAnalysis: 'Data Analysis',
         digitalMarketing: 'Digital Marketing',
-        automation: 'Process Automation'
+        automation: 'Business Process Automation',
+        aiAgents: 'Custom AI Agents',
+        aiAutomation: 'AI Automation Services'
       },
       cta: {
         startProject: 'Start Your Project',
@@ -93,7 +95,7 @@ export const en = {
       items: {
         webDev: {
           title: 'AI-Powered Web Development',
-          description: 'We provide comprehensive web development solutions using the latest artificial intelligence technologies',
+          description: 'We build high-performance websites with Next.js and AI integration.',
           features: [
             'Smart and Interactive UI Design',
             'Machine Learning Enhanced UX',
@@ -125,8 +127,8 @@ export const en = {
           ]
         },
         content: {
-          title: 'Creative Content Production',
-          description: 'Professional visual content and video production using AI technologies',
+          title: 'Professional AI Video Production',
+          description: 'Create stunning visual content and videos using advanced AI technologies.',
           features: [
             'Smart Graphic Design',
             'Interactive Video Production',
@@ -137,8 +139,8 @@ export const en = {
           ]
         },
         aiAgents: {
-          title: 'AI Agents',
-          description: 'Custom AI agents that automate complex tasks and decision-making processes',
+          title: 'Custom AI Agents for Business',
+          description: 'Deploy intelligent agents to automate customer service and complex workflows.',
           features: [
             'Intelligent virtual assistants',
             'Task-specific AI agents',
@@ -148,8 +150,8 @@ export const en = {
           ]
         },
         aiAutomation: {
-          title: 'AI Automation',
-          description: 'Advanced automation solutions powered by artificial intelligence',
+          title: 'AI Automation Agency',
+          description: 'End-to-end automation solutions to streamline your business operations.',
           features: [
             'Workflow automation',
             'Process optimization',
@@ -407,4 +409,4 @@ export const en = {
     ],
     lastUpdated: 'These terms were last updated on January 1, 2024'
   },
-}; 
+};

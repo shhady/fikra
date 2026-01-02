@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FiSend } from 'react-icons/fi'
-import { useLanguage } from '../../context/LanguageContext'
+import { useLanguage } from '@/context/LanguageContext'
 import Image from 'next/image'
 
 export default function ChatPage() {

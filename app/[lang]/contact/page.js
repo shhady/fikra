@@ -1,11 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Script from 'next/script'
 import { motion } from 'framer-motion'
 import { FiMail, FiPhone, FiMapPin, FiClock, FiMessageCircle, FiCheckCircle, FiLinkedin, FiFacebook, FiInstagram } from 'react-icons/fi'
-import { useLanguage } from '../../context/LanguageContext'
+import { useLanguage } from '@/context/LanguageContext'
 import { ar } from '@/translations/ar'
-import { en } from '@/translations/en'
 import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 // import { FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 
 const getContactInfo = (translations) => [
@@ -217,6 +218,18 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-black">
+      <Script id="breadcrumbs-contact" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `https://www.fikranova.com/${language}` },
+              { '@type': 'ListItem', position: 2, name: 'Contact', item: `https://www.fikranova.com/${language}/contact` }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-24">
         <div className="absolute inset-0">

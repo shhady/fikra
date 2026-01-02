@@ -2,10 +2,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useLanguage } from '../../context/LanguageContext'
-import { ar } from '../../translations/ar'
-import { he } from '../../translations/he'
-import { en } from '../../translations/en'
+import Script from 'next/script'
+import { useLanguage } from '@/context/LanguageContext'
+import { ar } from '@/translations/ar'
+import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 
 export default function AboutPage() {
   const { language, isRTL } = useLanguage()
@@ -25,6 +26,18 @@ export default function AboutPage() {
 
   return (
     <main className="bg-black min-h-screen">
+      <Script id="breadcrumbs-about" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `https://www.fikranova.com/${language}` },
+              { '@type': 'ListItem', position: 2, name: 'About', item: `https://www.fikranova.com/${language}/about` }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-black opacity-90"></div>
@@ -177,7 +190,7 @@ export default function AboutPage() {
                   {translations.about.cta.subtitle}
                 </p>
                 <Link
-                  href="/contact"
+                  href={`/${language}/contact`}
                   className="inline-block bg-white text-blue-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition-colors duration-300 transform hover:scale-105"
                 >
                   {translations.about.cta.button}

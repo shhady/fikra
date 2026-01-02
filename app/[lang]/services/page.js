@@ -1,10 +1,11 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useLanguage } from '../../context/LanguageContext'
-import { ar } from '../../translations/ar'
-import { he } from '../../translations/he'
-import { en } from '../../translations/en'
+import { useLanguage } from '@/context/LanguageContext'
+import Script from 'next/script'
+import { ar } from '@/translations/ar'
+import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 import { 
   FaCode, 
   FaChartLine, 
@@ -127,6 +128,18 @@ export default function ServicesPage() {
 
   return (
     <main className="bg-black min-h-screen">
+      <Script id="breadcrumbs-services" type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `https://www.fikranova.com/${language}` },
+              { '@type': 'ListItem', position: 2, name: 'Services', item: `https://www.fikranova.com/${language}/services` }
+            ]
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-black to-black opacity-90"></div>
