@@ -3,6 +3,7 @@ import ServicesShowcase from '@/components/ServicesShowcase'
 import FeaturesSection from '@/components/FeaturesSection'
 import CTASection from '@/components/CTASection'
 import Script from 'next/script'
+import Link from 'next/link'
 
 export async function generateMetadata({ params }) {
   const { lang } = await params
@@ -76,6 +77,14 @@ export default function Home() {
       <ServicesShowcase />
       <FeaturesSection />
       <CTASection />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+          <Link href="services" className="text-blue-400 hover:text-blue-300 underline">Explore our Services</Link>
+          <Link href="projects" className="text-blue-400 hover:text-blue-300 underline">See recent Projects</Link>
+          <Link href="blog" className="text-blue-400 hover:text-blue-300 underline">Read AI Insights</Link>
+          <Link href="contact" className="text-blue-400 hover:text-blue-300 underline">Get a Free Audit</Link>
+        </div>
+      </section>
     </main>
   )
 }

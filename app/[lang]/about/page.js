@@ -138,6 +138,17 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Internal Links */}
+      <section className="pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="services" className="text-blue-400 hover:text-blue-300 underline">Our AI Services</Link>
+            <Link href="projects" className="text-blue-400 hover:text-blue-300 underline">Recent Projects</Link>
+            <Link href="contact" className="text-blue-400 hover:text-blue-300 underline">Talk to Us</Link>
+          </div>
+        </div>
+      </section>
+
       {/* Team Section */}
       {/* <section className="py-16 bg-gradient-to-b from-black to-blue-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -296,6 +296,17 @@ export default function FAQPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Internal Links */}
+      <section className="pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="services" className="text-blue-400 hover:text-blue-300 underline">Our Services</Link>
+            <Link href="projects" className="text-blue-400 hover:text-blue-300 underline">Our Projects</Link>
+            <Link href="blog" className="text-blue-400 hover:text-blue-300 underline">Read Blog</Link>
+          </div>
+        </div>
+      </section>
     </main>
   )
 } 

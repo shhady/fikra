@@ -473,6 +473,17 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Internal Links */}
+      <section className="pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <a href="services" className="text-blue-400 hover:text-blue-300 underline">Explore Services</a>
+            <a href="projects" className="text-blue-400 hover:text-blue-300 underline">See Projects</a>
+            <a href="blog" className="text-blue-400 hover:text-blue-300 underline">Read Blog</a>
+          </div>
+        </div>
+      </section>
     </main>
   )
 } 

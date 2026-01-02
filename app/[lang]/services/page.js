@@ -241,6 +241,17 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* Internal Links */}
+      <section className="pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="projects" className="text-blue-400 hover:text-blue-300 underline">View our Projects</Link>
+            <Link href="blog" className="text-blue-400 hover:text-blue-300 underline">Read our Blog</Link>
+            <Link href="contact" className="text-blue-400 hover:text-blue-300 underline">Request a Proposal</Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
