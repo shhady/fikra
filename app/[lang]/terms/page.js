@@ -1,9 +1,9 @@
 'use client'
 import { motion } from 'framer-motion'
-import { useLanguage } from '../../context/LanguageContext'
-import { ar } from '../../translations/ar'
-import { he } from '../../translations/he'
-import { en } from '../../translations/en'
+import { useLanguage } from '@/context/LanguageContext'
+import { ar } from '@/translations/ar'
+import { he } from '@/translations/he'
+import { en } from '@/translations/en'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
