@@ -1,4 +1,4 @@
-import { blogData } from '@/lib/blogData'
+import { blogData } from './lib/blogData'
 
 export default async function sitemap() {
   const baseUrl = 'https://www.fikranova.com'
