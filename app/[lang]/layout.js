@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { LanguageProvider } from '@/context/LanguageContext'
 import ChatButton from '@/components/ChatButton'
 import { metadata as baseMetadata } from '../metadata'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -39,6 +40,7 @@ export default async function RootLayout({ children, params }) {
   return (
     <LanguageProvider initialLocale={lang}>
       <html lang={lang} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+        <GoogleTagManager gtmId="GTM-PPZLNWV7" />
         <body className={tajawal.className} suppressHydrationWarning>
           <Header />
           <main className="min-h-screen pt-16">{children}</main>
