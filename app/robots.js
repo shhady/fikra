@@ -8,5 +8,6 @@ export default function robots() {
       },
     ],
     sitemap: 'https://www.fikranova.com/sitemap.xml',
+    host: 'https://www.fikranova.com', 
   }
 }

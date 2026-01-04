@@ -1,0 +1,28 @@
+# FikraNova
+
+## Overview
+FikraNova is a specialized AI agency providing integrated solutions to empower companies to grow and evolve. We bridge the gap between traditional business practices and advanced AI technologies, helping businesses improve efficiency and enhance customer experience.
+
+## Key Services/Features
+- **AI-Powered Web Development**: High-performance websites with Next.js, smart UI design, and ML-enhanced UX.
+- **Custom AI Agents**: Intelligent virtual assistants, task-specific agents, and multi-agent systems integration.
+- **Business Analysis & Optimization**: Operational data analysis, future trend prediction, and decision-making enhancement.
+- **Smart Digital Marketing**: AI-powered user behavior analysis, precise audience targeting, and campaign management.
+- **AI Automation**: Workflow automation, process optimization, and intelligent document processing.
+- **Creative Content Production**: AI video production, smart graphic design, and brand identity.
+
+## Contact & Support
+- **Website**: https://www.fikranova.com
+- **Phone/WhatsApp**: +972 54-311-3297
+- **Social Media**:
+  - LinkedIn: https://www.linkedin.com/in/shhady-serhan-a11403124
+  - Instagram: https://www.instagram.com/fikranova_/
+- **Address**: 1 First Street, Tel Aviv, Israel
+
+## Technical Context
+- **Framework**: Next.js (React)
+- **Styling**: Tailwind CSS
+- **Database**: MongoDB
+- **AI Integration**: OpenAI API, Vercel AI SDK
+- **Deployment**: Vercel
+
