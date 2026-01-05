@@ -24,6 +24,6 @@ export function middleware(request) {
 export const config = {
   matcher: [
     // Skip all internal paths (_next, api, assets)
-    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json|.*\\.png|.*\\.jpg|.*\\.svg).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json|llms.txt|.*\\.png|.*\\.jpg|.*\\.svg).*)',
   ],
 }

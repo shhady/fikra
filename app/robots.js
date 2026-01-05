@@ -7,7 +7,10 @@ export default function robots() {
         disallow: ['/api/', '/admin/'],
       },
     ],
-    sitemap: 'https://www.fikranova.com/sitemap.xml',
+    sitemap: [
+      'https://www.fikranova.com/sitemap.xml',
+      'https://www.fikranova.com/llms.txt',
+    ],
     host: 'https://www.fikranova.com', 
   }
 }
