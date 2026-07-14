@@ -194,7 +194,7 @@ Triggered by the owner's decision that projects without a live URL should open a
 2. **`projects/page.js` branches**: external `<a target="_blank">` when `url` is present; internal `<Link href={/projects/[slug]}>` when it is not. This also makes broken links impossible by construction — a project whose site dies falls back to its own page.
 3. **New route** `app/[lang]/projects/[slug]/page.js` — case study: problem, what was built, outcome.
 4. **Expand Projects** from 8 to the public-safe subset of the 18 in `/projects-done` (any project with a usable logo).
-5. **Combined SaaS** (`management-saas` + `tishreen-events` + `print-agent`) enters as one project card with an internal case-study page — never a dedicated restaurant section.
+5. **Combined SaaS** (`management-saas` + `tishreen-events` + `print-agent`) enters as one project card with an internal case-study page — never a dedicated restaurant section. That page carries a **public installer download** (owner request: the .exe must not live only in the admin panel). No backend work is needed — `app/api/installer/route.js` is already public and unauthenticated by design, and `middleware.js` gates only `/admin*`, so the task is a link. **It cannot ship until the installer is Authenticode-signed, or the SmartScreen "unknown publisher" warning is disclosed in the button's copy** — `print-agent/electron-builder.yml:35` currently disables signature verification and the build is unsigned.
 6. **Real interface screenshots** replace logos.
 7. **Localize project tags**, then render them.
 8. Owner revives KeysMatch, Stella, BrokerAffiliate; flip `featured` back on once each returns 200.
