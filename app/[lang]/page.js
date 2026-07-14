@@ -1,90 +1,195 @@
-import Hero from '@/components/Hero'
-import ServicesShowcase from '@/components/ServicesShowcase'
-import FeaturesSection from '@/components/FeaturesSection'
-import CTASection from '@/components/CTASection'
-import Script from 'next/script'
-import Link from 'next/link'
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Container, Section, Eyebrow, Heading, Lede, Button, Card } from '@/components/system';
+import Hero from '@/components/home/Hero';
+import { getHomeContent } from '@/lib/content/home';
+import { getFeaturedProjects } from '@/lib/content/projects';
+import { normaliseLocale, alternatesFor } from '@/lib/i18n';
 
 export async function generateMetadata({ params }) {
-  const { lang } = await params
-  const base = 'https://www.fikranova.com'
-
-  const titles = {
-    en: 'AI Automation Agency | AI-powered Web Development, Custom AI Agents',
-    ar: 'وكالة الأتمتة بالذكاء الاصطناعي | تطوير مواقع الذكاء الاصطناعي ووكلاء مخصصون',
-    he: 'סוכנות אוטומציית AI | פיתוח אתרים מבוססי בינה מלאכותית וסוכני AI'
-  }
-  const descriptions = {
-    en: 'Scale your business with AI-powered web development, custom AI agents, and business process automation. Next.js AI integration and professional AI video production.',
-    ar: 'طوّر عملك عبر تطوير مواقع بالذكاء الاصطناعي، وكلاء ذكاء اصطناعي مخصصين، وأتمتة عمليات الأعمال. تكامل Next.js مع الذكاء الاصطناعي وإنتاج فيديو احترافي بالذكاء الاصطناعي.',
-    he: 'קדם את העסק עם פיתוח אתרים מבוססי AI, סוכני AI מותאמים ואוטומציה לעסקים. אינטגרציית Next.js עם AI והפקת וידאו מקצועית ב-AI.'
-  }
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const c = getHomeContent(locale);
 
   return {
-    title: titles[lang] || titles.en,
-    description: descriptions[lang] || descriptions.en,
-    alternates: {
-      canonical: `${base}/${lang}`,
-      languages: {
-        'x-default': `${base}/en`,
-        en: `${base}/en`,
-        ar: `${base}/ar`,
-        he: `${base}/he`,
-      },
-    },
-    openGraph: {
-      title: titles[lang] || titles.en,
-      description: descriptions[lang] || descriptions.en,
-      url: `${base}/${lang}`,
-    },
-  }
+    title: c.meta.title,
+    description: c.meta.description,
+    alternates: alternatesFor('', locale),
+    openGraph: { title: c.meta.title, description: c.meta.description },
+  };
 }
 
-export default function Home() {
+export default async function HomePage({ params }) {
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const c = getHomeContent(locale);
+  const featured = getFeaturedProjects(locale);
+
+  // Structured data. Google reads it; visitors never see it. It is the difference
+  // between a blue link and a rich result.
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'FikraNova',
+    url: `https://www.fikranova.com/${locale}`,
+    description: c.meta.description,
+    areaServed: 'IL',
+    availableLanguage: ['ar', 'he', 'en'],
+    knowsAbout: c.hero.capabilities,
+  };
+
   return (
-    <main className="bg-black">
-      <Script id="org-jsonld" type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'FikraNova',
-            url: 'https://www.fikranova.com',
-            logo: 'https://www.fikranova.com/logo-11.png',
-            sameAs: [
-              'https://www.linkedin.com/company/fikranova',
-              'https://www.instagram.com/fikra.nova'
-            ]
-          })
-        }}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Script id="website-jsonld" type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'FikraNova',
-            url: 'https://www.fikranova.com',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: 'https://www.fikranova.com/search?q={search_term_string}',
-              'query-input': 'required name=search_term_string'
-            }
-          })
-        }}
-      />
-      <Hero />
-      <ServicesShowcase />
-      <FeaturesSection />
-      <CTASection />
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-          <Link href="services" className="text-blue-400 hover:text-blue-300 underline">Explore our Services</Link>
-          <Link href="projects" className="text-blue-400 hover:text-blue-300 underline">See recent Projects</Link>
-          <Link href="blog" className="text-blue-400 hover:text-blue-300 underline">Read AI Insights</Link>
-          <Link href="contact" className="text-blue-400 hover:text-blue-300 underline">Get a Free Audit</Link>
-        </div>
-      </section>
-    </main>
-  )
+
+      <Hero lang={locale} c={c} />
+
+      {/* ============================== WHAT WE DO ======================
+          Outcomes, not a technology list. The old site led with "Next.js,
+          TensorFlow.js, Power BI" — a stack nobody buying this is qualified
+          to evaluate, and nobody buying this cares about.
+          ================================================================ */}
+      <Section className="relative">
+        <Container>
+          <Eyebrow>{c.services.eyebrow}</Eyebrow>
+          <Heading className="mt-6">{c.services.heading}</Heading>
+          <Lede className="mt-5">{c.services.lede}</Lede>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {c.services.items.map((item) => (
+              <Card key={item.title}>
+                <h3 className="text-lg font-semibold text-chalk">{item.title}</h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-steel">{item.body}</p>
+              </Card>
+            ))}
+          </div>
+
+          <p className="mt-10 text-[15px] leading-relaxed text-steel">
+            {c.services.afterLaunch}{' '}
+            <Link href={`/${locale}/support`} className="text-gold underline-offset-4 hover:underline">
+              {c.services.afterLaunchLink}
+            </Link>
+          </p>
+        </Container>
+      </Section>
+
+      {/* ============================ SELECTED WORK =====================
+          The proof. Real brands, real live links — every URL here was
+          verified to return 200. Projects whose sites are down are listed
+          on /projects but are NOT featured (see lib/content/projects.js).
+
+          These images are LOGOS, not screenshots — some have a white
+          background baked in, others are dark — so they are contained and
+          padded on one neutral surface rather than cropped, exactly as
+          /projects frames them. Do not describe them as screenshots.
+          ================================================================ */}
+      <Section>
+        <Container>
+          <Eyebrow>{c.work.eyebrow}</Eyebrow>
+          <Heading className="mt-6">{c.work.heading}</Heading>
+          <Lede className="mt-5">{c.work.lede}</Lede>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((project) => (
+              <a
+                key={project.id}
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card group flex flex-col overflow-hidden !p-0"
+              >
+                <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-hairline bg-surface-2 p-10">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-contain p-8 transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-chalk">{project.title}</h3>
+                  <p className="mt-2 text-sm text-steel">{project.industry}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-10">
+            <Button href={`/${locale}/projects`} variant="ghost">
+              {c.work.cta}
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================== INDUSTRIES ====================== */}
+      <Section className="border-y border-hairline bg-surface/30">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+            <div>
+              <Eyebrow>{c.industries.eyebrow}</Eyebrow>
+              <Heading className="mt-6">{c.industries.heading}</Heading>
+              <Lede className="mt-5">{c.industries.lede}</Lede>
+            </div>
+
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-4 self-center">
+              {c.industries.items.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-3 border-b border-hairline pb-4 text-[15px] text-chalk"
+                >
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
+                    aria-hidden="true"
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================== LANGUAGES =======================
+          What replaced the proof grid. The old grid claimed "17 systems
+          delivered" and "8 industries" — numbers nobody could check, which
+          makes them a liability, not a proof. This claim a visitor verifies
+          by switching locale and watching the layout flip to RTL.
+          ================================================================ */}
+      <Section className="border-y border-hairline bg-surface/30">
+        <Container>
+          <div className="text-center">
+            <Heading size="md">{c.languages.heading}</Heading>
+            <Lede className="mx-auto mt-5 max-w-prose text-center">{c.languages.body}</Lede>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ================================= CTA ========================== */}
+      <Section>
+        <Container>
+          <div className="ambient relative isolate overflow-hidden rounded-xl border border-hairline px-6 py-14 text-center sm:px-14 sm:py-20">
+            <Heading size="md" className="mx-auto max-w-[22ch]">
+              {c.cta.heading}
+            </Heading>
+
+            <Lede className="mx-auto mt-5 text-center">{c.cta.lede}</Lede>
+
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <Button href={`/${locale}/contact`}>{c.cta.primary}</Button>
+              <Button href={`/${locale}/projects`} variant="ghost">
+                {c.cta.secondary}
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
+  );
 }
