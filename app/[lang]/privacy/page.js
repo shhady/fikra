@@ -1,124 +1,60 @@
-'use client'
-import { motion } from 'framer-motion'
-import { useLanguage } from '@/context/LanguageContext'
-import { ar } from '@/translations/ar'
-import { he } from '@/translations/he'
-import { en } from '@/translations/en'
+import { Container, Section, PageHero } from '@/components/system';
+import { getDictionary, normaliseLocale, alternatesFor } from '@/lib/i18n';
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const t = await getDictionary(locale);
+
+  return {
+    title: t.privacy.title,
+    description: t.privacy.intro,
+    alternates: alternatesFor('/privacy', locale),
+    // Legal pages should not compete with real pages in search results.
+    robots: { index: false, follow: true },
+  };
 }
 
-export default function PrivacyPage() {
-  const { language, isRTL } = useLanguage()
-  
-  const getTranslations = () => {
-    switch (language) {
-      case 'he':
-        return he;
-      case 'en':
-        return en;
-      default:
-        return ar;
-    }
-  };
+export default async function PrivacyPage({ params }) {
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const t = await getDictionary(locale);
 
-  const translations = getTranslations();
+  const sections = [t.privacy.collection, t.privacy.usage, t.privacy.protection];
 
   return (
-    <main className="min-h-screen bg-black py-24">
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.h1 
-          className={`text-4xl font-bold text-white mb-8 ${isRTL ? 'text-right' : 'text-left'}`}
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-        >
-          {translations.privacy.title}
-        </motion.h1>
-        <div className={`prose prose-invert max-w-none ${isRTL ? 'text-right' : 'text-left'}`}>
-          <motion.p 
-            className="text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.intro}
-          </motion.p>
+    <>
+      <PageHero title={t.privacy.title} lede={t.privacy.intro} />
 
-          <motion.h2 
-            className="text-2xl font-bold text-white mt-8 mb-4"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.collection.title}
-          </motion.h2>
-          <motion.p 
-            className="text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.collection.description}
-          </motion.p>
-          <motion.ul 
-            className="list-disc list-inside text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.collection.items.map((item, index) => (
-              <li key={index}>{item}</li>
+      <Section>
+        <Container>
+          <div className="max-w-prose space-y-12">
+            {sections.map((section) => (
+              <section key={section.title}>
+                <h2 className="text-xl font-semibold text-chalk">{section.title}</h2>
+
+                <p className="mt-4 text-[16px] leading-relaxed text-steel">
+                  {section.description}
+                </p>
+
+                {section.items ? (
+                  <ul className="mt-5 space-y-2.5">
+                    {section.items.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-[16px] text-steel">
+                        <span
+                          className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-gold"
+                          aria-hidden="true"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </section>
             ))}
-          </motion.ul>
-
-          <motion.h2 
-            className="text-2xl font-bold text-white mt-8 mb-4"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.usage.title}
-          </motion.h2>
-          <motion.p 
-            className="text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.usage.description}
-          </motion.p>
-          <motion.ul 
-            className="list-disc list-inside text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.usage.items.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </motion.ul>
-
-          <motion.h2 
-            className="text-2xl font-bold text-white mt-8 mb-4"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.protection.title}
-          </motion.h2>
-          <motion.p 
-            className="text-gray-300 mb-6"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.privacy.protection.description}
-          </motion.p>
-        </div>
-      </div>
-    </main>
-  )
-} 
+          </div>
+        </Container>
+      </Section>
+    </>
+  );
+}

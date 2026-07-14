@@ -1,39 +1,49 @@
-'use client'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
+import Link from 'next/link';
 
+/**
+ * 404.
+ *
+ * Was hardcoded Arabic ("عذراً، الصفحة التي تبحث عنها غير موجودة") for every
+ * language, with a "back to home" link that dropped the locale entirely.
+ *
+ * Next renders not-found outside the dynamic segment, so this file has no
+ * reliable way to know the reader's language. Rather than guess — which is what
+ * the old one did, always guessing Arabic — it offers the way back in all three.
+ * An empty screen is an invitation to act, so every line here is an exit.
+ */
 export default function NotFound() {
+  const routes = [
+    { lang: 'ar', label: 'العودة إلى الصفحة الرئيسية', dir: 'rtl' },
+    { lang: 'he', label: 'חזרה לעמוד הבית', dir: 'rtl' },
+    { lang: 'en', label: 'Back to the homepage', dir: 'ltr' },
+  ];
+
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="text-center">
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-6xl font-bold text-white mb-4"
-        >
-          404
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-xl text-gray-400 mb-8"
-        >
-          عذراً، الصفحة التي تبحث عنها غير موجودة
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Link 
-            href="/"
-            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-3 rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
-          >
-            العودة للرئيسية
-          </Link>
-        </motion.div>
+    <div className="flex min-h-[80vh] items-center justify-center px-5">
+      <div className="w-full max-w-md">
+        <p className="eyebrow">Not found</p>
+
+        <p className="mt-6 font-mono text-6xl font-semibold tabular-nums text-chalk">404</p>
+
+        <div className="perf my-8" />
+
+        <ul className="space-y-2.5">
+          {routes.map((route) => (
+            <li key={route.lang}>
+              <Link
+                href={`/${route.lang}`}
+                dir={route.dir}
+                className="flex items-center justify-between gap-4 rounded border border-hairline bg-surface px-4 py-3.5 text-sm text-steel transition-colors hover:border-steel hover:text-chalk"
+              >
+                <span>{route.label}</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-slate">
+                  {route.lang}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
-    </main>
-  )
-} 
+    </div>
+  );
+}

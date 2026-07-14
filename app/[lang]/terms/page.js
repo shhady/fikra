@@ -1,80 +1,56 @@
-'use client'
-import { motion } from 'framer-motion'
-import { useLanguage } from '@/context/LanguageContext'
-import { ar } from '@/translations/ar'
-import { he } from '@/translations/he'
-import { en } from '@/translations/en'
+import { Container, Section, PageHero } from '@/components/system';
+import { getDictionary, normaliseLocale, alternatesFor } from '@/lib/i18n';
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const t = await getDictionary(locale);
+
+  return {
+    title: t.terms.title,
+    description: t.terms.intro,
+    alternates: alternatesFor('/terms', locale),
+    robots: { index: false, follow: true },
+  };
 }
 
-export default function TermsPage() {
-  const { language, isRTL } = useLanguage()
-  
-  const getTranslations = () => {
-    switch (language) {
-      case 'he':
-        return he;
-      case 'en':
-        return en;
-      default:
-        return ar;
-    }
-  };
-
-  const translations = getTranslations();
+export default async function TermsPage({ params }) {
+  const { lang } = await params;
+  const locale = normaliseLocale(lang);
+  const t = await getDictionary(locale);
 
   return (
-    <main className="min-h-screen bg-black py-24">
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.h1 
-          className={`text-4xl font-bold text-white mb-8 ${isRTL ? 'text-right' : 'text-left'}`}
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-        >
-          {translations.terms.title}
-        </motion.h1>
-        <div className={`prose prose-invert max-w-none ${isRTL ? 'text-right' : 'text-left'}`}>
-          <motion.p 
-            className="text-gray-300 mb-8 text-lg"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.terms.intro}
-          </motion.p>
+    <>
+      <PageHero title={t.terms.title} lede={t.terms.intro} />
 
-          {translations.terms.sections.map((section, index) => (
-            <motion.div
-              key={index}
-              variants={fadeInUp}
-              initial="initial"
-              animate="animate"
-              transition={{ delay: index * 0.1 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl font-bold text-white mb-4">
-                {section.title}
-              </h2>
-              <p className="text-gray-300">
-                {section.content}
-              </p>
-            </motion.div>
-          ))}
+      <Section>
+        <Container>
+          <div className="max-w-prose">
+            <ol className="space-y-12">
+              {t.terms.sections.map((section, index) => (
+                <li key={section.title}>
+                  <div className="flex items-baseline gap-4">
+                    {/* The numbering is real here: these are numbered clauses in a
+                        legal document, and people cite them by number. */}
+                    <span className="text-sm tabular-nums text-gold">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <h2 className="text-xl font-semibold text-chalk">{section.title}</h2>
+                  </div>
 
-          <motion.p 
-            className="text-sm text-gray-400 mt-12 pt-8 border-t border-gray-800"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-          >
-            {translations.terms.lastUpdated}
-          </motion.p>
-        </div>
-      </div>
-    </main>
-  )
-} 
+                  <p className="mt-4 ps-9 text-[16px] leading-relaxed text-steel">
+                    {section.content}
+                  </p>
+                </li>
+              ))}
+            </ol>
+
+            <p className="mt-16 border-t border-hairline pt-6 text-sm text-slate">
+              {t.terms.lastUpdated}
+            </p>
+          </div>
+        </Container>
+      </Section>
+    </>
+  );
+}

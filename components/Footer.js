@@ -1,159 +1,114 @@
-'use client'
-import Image from 'next/image'
-import Link from 'next/link'
-import { FaTwitter, FaLinkedinIn, FaInstagram, FaWhatsapp } from 'react-icons/fa'
-import { useLanguage } from '../context/LanguageContext'
-import { ar } from '../translations/ar'
-import { he } from '../translations/he'
-import { en } from '../translations/en'
-import { usePathname } from 'next/navigation'
+'use client';
 
-const Footer = () => {
-  const { language, isRTL } = useLanguage()
-  const pathname = usePathname()
-  
-  const getTranslations = () => {
-    switch (language) {
-      case 'he':
-        return he;
-      case 'en':
-        return en;
-      default:
-        return ar;
-    }
-  };
+import Link from 'next/link';
+import { FaWhatsapp, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 
-  const translations = getTranslations();
-  const isChatPage = pathname === '/chat';
+/**
+ * Footer.
+ *
+ * Fixes two things that were quietly costing credibility:
+ *
+ *  1. It listed FOUR services while the services page listed SIX — AI agents and
+ *     AI automation, the two things the company most wants to sell, were missing
+ *     from the footer entirely.
+ *
+ *  2. Its service links pointed at anchors (#web, #ai, #marketing, #data) that
+ *     exist on no page. Every one of them was a dead link.
+ *
+ * @param {{ lang: string, t: object }} props
+ */
+export default function Footer({ lang, t }) {
+  const year = new Date().getFullYear();
 
-  if (isChatPage) return null;
+  // All six, keyed off the same dictionary the services page reads, so the two
+  // can never drift apart again.
+  const serviceKeys = ['webDev', 'business', 'marketing', 'content', 'aiAgents', 'aiAutomation'];
 
-  const currentLang = (() => {
-    const first = (pathname || '').split('/')[1] || 'en'
-    return ['en', 'ar', 'he'].includes(first) ? first : 'en'
-  })()
-
-  const getFooterLinks = (translations) => [
+  const social = [
+    { Icon: FaWhatsapp, href: 'https://wa.me/972543113297', label: t.footer.social.whatsapp },
     {
-      title: translations.footer.quickLinks.title,
-      links: [
-        { name: translations.nav.home, href: `/${currentLang}` },
-        { name: translations.nav.about, href: `/${currentLang}/about` },
-        { name: translations.nav.services, href: `/${currentLang}/services` },
-        { name: translations.nav.blog, href: `/${currentLang}/blog` },
-      ],
+      Icon: FaLinkedinIn,
+      href: 'https://www.linkedin.com/in/shhady-serhan-a11403124',
+      label: t.footer.social.linkedin,
     },
-    {
-      title: translations.footer.services.title,
-      links: [
-        { name: translations.home.services.items.webDev.title, href: `/${currentLang}/services#web` },
-        { name: translations.home.services.items.business.title, href: `/${currentLang}/services#ai` },
-        { name: translations.home.services.items.marketing.title, href: `/${currentLang}/services#marketing` },
-        { name: translations.home.services.items.content.title, href: `/${currentLang}/services#data` },
-      ],
-    },
-    {
-      title: translations.footer.contact.title,
-      links: [
-        { name: translations.footer.contact.faq, href: `/${currentLang}/faq` },
-        { name: translations.footer.contact.support, href: `/${currentLang}/support` },
-        { name: translations.footer.contact.contactUs, href: `/${currentLang}/contact` },
-      ],
-    },
-  ]
-
-  const socialLinks = [
-    { icon: FaWhatsapp, href: 'https://wa.me/972543113297', label: translations.footer.social.whatsapp },
-    { icon: FaLinkedinIn, href: 'https://www.linkedin.com/in/shhady-serhan-a11403124', label: translations.footer.social.linkedin },
-    { icon: FaInstagram, href: 'https://www.instagram.com/fikranova_/', label: translations.footer.social.instagram },
-  ]
-
-  const footerLinks = getFooterLinks(translations)
+    { Icon: FaInstagram, href: 'https://www.instagram.com/fikranova_/', label: t.footer.social.instagram },
+  ];
 
   return (
-    <footer className="bg-gradient-to-b from-black to-blue-950 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand Section */}
-          <div className={`lg:col-span-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-            <Link href="/" className="text-2xl font-bold text-white">
-              <Image
-                src="/logo-4.png"
-                alt="Logo"
-                width={100}
-                height={100}
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 768px) 64px, 100px"
-              />
-            </Link>
-            <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-              {translations.footer.description}
+    <footer className="border-t border-hairline bg-ink">
+      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p className="font-mono text-sm font-semibold tracking-[0.08em] text-chalk">FIKRANOVA</p>
+
+            <p className="mt-4 max-w-[32ch] text-sm leading-relaxed text-slate">
+              {t.footer.description}
             </p>
-            {/* Social Links */}
-            <div className={`mt-6 flex gap-6 ${isRTL ? 'justify-start' : 'justify-start'}`}>
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="text-gray-400 hover:text-white transition-colors duration-300"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                >
-                  <social.icon className="h-6 w-6" />
-                </a>
+
+            <ul className="mt-6 flex gap-3">
+              {social.map(({ Icon, href, label }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex h-9 w-9 items-center justify-center rounded border border-hairline text-steel transition-colors hover:border-steel hover:text-chalk"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* Footer Links */}
-          {footerLinks.map((section) => (
-            <div key={section.title} className={isRTL ? 'text-right' : 'text-left'}>
-              <h3 className="text-white font-bold mb-4">{section.title}</h3>
-              <ul className="space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-300 text-sm block"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <FooterColumn title={t.footer.services.title}>
+            {serviceKeys.map((key) => (
+              <FooterLink key={key} href={`/${lang}/services`}>
+                {t.home.services.items[key].title}
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title={t.footer.quickLinks.title}>
+            <FooterLink href={`/${lang}`}>{t.nav.home}</FooterLink>
+            <FooterLink href={`/${lang}/about`}>{t.nav.about}</FooterLink>
+            <FooterLink href={`/${lang}/projects`}>{t.nav.projects}</FooterLink>
+            <FooterLink href={`/${lang}/blog`}>{t.nav.blog}</FooterLink>
+          </FooterColumn>
+
+          <FooterColumn title={t.footer.contact.title}>
+            <FooterLink href={`/${lang}/contact`}>{t.footer.contact.contactUs}</FooterLink>
+            <FooterLink href={`/${lang}/faq`}>{t.footer.contact.faq}</FooterLink>
+            <FooterLink href={`/${lang}/support`}>{t.footer.contact.support}</FooterLink>
+            <FooterLink href={`/${lang}/privacy`}>{t.privacy.title}</FooterLink>
+            <FooterLink href={`/${lang}/terms`}>{t.terms.title}</FooterLink>
+          </FooterColumn>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 py-6">
-          <div className={`flex flex-col md:flex-row justify-between items-center gap-4 ${isRTL ? 'text-right' : 'text-left'}`}>
-            <p className="text-gray-400 text-sm">
-              {translations.footer.copyright.text}{' '}
-              <span className="text-white mx-1">FIKRANOVA</span>
-            </p>
-            <div className={`flex gap-6 text-sm ${isRTL ? 'md:justify-start' : 'md:justify-end'}`}>
-              <Link
-                href={`/${currentLang}/privacy`}
-                className="text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                {translations.footer.links.privacy}
-              </Link>
-              <Link
-                href={`/${currentLang}/terms`}
-                className="text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                {translations.footer.links.terms}
-              </Link>
-            </div>
-          </div>
-        </div>
+        <div className="perf my-12" />
+
+        <p className="font-mono text-xs text-slate">© {year} FikraNova</p>
       </div>
     </footer>
-  )
+  );
 }
 
-export default Footer 
+function FooterColumn({ title, children }) {
+  return (
+    <div>
+      <p className="eyebrow">{title}</p>
+      <ul className="mt-5 space-y-2.5">{children}</ul>
+    </div>
+  );
+}
+
+function FooterLink({ href, children }) {
+  return (
+    <li>
+      <Link href={href} className="text-sm text-steel transition-colors hover:text-chalk">
+        {children}
+      </Link>
+    </li>
+  );
+}

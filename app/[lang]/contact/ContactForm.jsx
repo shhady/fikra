@@ -36,8 +36,12 @@ export default function ContactForm({ t, services }) {
     // The field list lives in lib/contactFields.mjs, shared with the server
     // mailer. Duplicating it here is what caused `service` to be required by
     // the backend but never asked for by the form.
+    //
+    // Note `form.errors[field]`, not `form[field]`: the latter is the field's
+    // LABEL, so an invalid email would surface an error reading "Email Address",
+    // which tells the visitor nothing.
     for (const field of validateContactValues(values)) {
-      next[field] = t.contact.form[field];
+      next[field] = t.contact.form.errors[field];
     }
 
     setErrors(next);

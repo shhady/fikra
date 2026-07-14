@@ -226,7 +226,7 @@ export const en = {
     description: 'We provide comprehensive AI solutions to develop your business and improve your performance. We combine advanced technology and practical experience to achieve exceptional results.',
     copyright: {
       text: `© ${new Date().getFullYear()} All rights reserved by`,
-      company: 'Fikra AI',
+      company: 'FikraNova',
     },
     links: {
       privacy: 'Privacy Policy',
@@ -335,6 +335,15 @@ export const en = {
       submitting: 'Sending...',
       success: 'Your message has been sent successfully',
       error: 'An error occurred while sending your message',
+      // Per-field validation messages. These must NOT be the field labels: an
+      // error that reads "Email Address" tells the visitor nothing about what
+      // is wrong with it.
+      errors: {
+        name: 'Please enter your name',
+        email: 'Please enter a valid email address',
+        service: 'Please choose a service',
+        message: 'Please tell us what you need',
+      },
     },
     info: {
       title: 'Contact Information',
@@ -384,7 +393,7 @@ export const en = {
   },
   terms: {
     title: 'Terms & Conditions',
-    intro: 'Welcome to Fikra. Your use of our website and services is subject to the following terms and conditions.',
+    intro: 'Welcome to FikraNova. Your use of our website and services is subject to the following terms and conditions.',
     sections: [
       {
         title: 'Acceptance of Terms',
@@ -407,6 +416,6 @@ export const en = {
         content: 'We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting to the website. Continued use of the services after such changes constitutes acceptance of the updated terms.'
       }
     ],
-    lastUpdated: 'These terms were last updated on January 1, 2024'
+    lastUpdated: 'These terms were last updated on 13 July 2026'
   },
 };
