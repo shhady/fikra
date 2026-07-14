@@ -157,16 +157,23 @@ export default async function HomePage({ params }) {
       </Section>
 
       {/* ============================== LANGUAGES =======================
-          What replaced the proof grid. The old grid claimed "17 systems
-          delivered" and "8 industries" — numbers nobody could check, which
-          makes them a liability, not a proof. This claim a visitor verifies
-          by switching locale and watching the layout flip to RTL.
+          The signature. What replaced the proof grid — the old grid claimed
+          "17 systems delivered", a number nobody could check. This claim a
+          visitor verifies by switching locale and watching the layout flip.
+
+          It is the one full-colour moment on the page, and it gets the
+          display face at full size: the three scripts ARE the studio's
+          identity, so they are set as the identity, not as a footnote.
+          Deliberately not a <Heading>: that primitive hard-codes the primary
+          text colour, and this band inverts.
           ================================================================ */}
-      <Section className="border-y border-hairline bg-surface/30">
+      <Section className="bg-accent">
         <Container>
           <div className="text-center">
-            <Heading size="md">{c.languages.heading}</Heading>
-            <Lede className="mx-auto mt-5 max-w-prose text-center">{c.languages.body}</Lede>
+            <h2 className="text-display-lg font-display text-white">{c.languages.heading}</h2>
+            <p className="mx-auto mt-6 max-w-prose text-[17px] leading-relaxed text-white/75 sm:text-lg">
+              {c.languages.body}
+            </p>
           </div>
         </Container>
       </Section>

@@ -1,5 +1,11 @@
 import Script from 'next/script';
-import { IBM_Plex_Sans, IBM_Plex_Mono, IBM_Plex_Sans_Arabic, IBM_Plex_Sans_Hebrew } from 'next/font/google';
+import {
+  IBM_Plex_Sans,
+  IBM_Plex_Mono,
+  IBM_Plex_Sans_Arabic,
+  IBM_Plex_Sans_Hebrew,
+  Rubik,
+} from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleTagManager } from '@next/third-parties/google';
 
@@ -47,6 +53,19 @@ const hebrew = IBM_Plex_Sans_Hebrew({
   subsets: ['hebrew'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-sans-hebrew',
+  display: 'swap',
+});
+
+/**
+ * Display face. Rubik began life as a Hebrew typeface and grew real Arabic and
+ * Latin — one family, all three scripts, so headlines need no per-locale
+ * indirection the way the body face does. Plex stays on body text, where its
+ * small-size rendering is better.
+ */
+const displayFace = Rubik({
+  subsets: ['latin', 'arabic', 'hebrew'],
+  weight: ['500', '600', '700'],
+  variable: '--font-display',
   display: 'swap',
 });
 
@@ -103,7 +122,7 @@ export default async function LangLayout({ children, params }) {
     <html
       lang={locale}
       dir={rtl ? 'rtl' : 'ltr'}
-      className={`${sans.variable} ${mono.variable} ${arabic.variable} ${hebrew.variable}`}
+      className={`${sans.variable} ${mono.variable} ${arabic.variable} ${hebrew.variable} ${displayFace.variable}`}
       suppressHydrationWarning
     >
       <head>

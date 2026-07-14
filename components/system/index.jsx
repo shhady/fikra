@@ -38,7 +38,9 @@ export function Eyebrow({ children, dot = true }) {
 export function Heading({ children, as: Tag = 'h2', size = 'lg', className = '' }) {
   const scale = { xl: 'text-display-xl', lg: 'text-display-lg', md: 'text-display-md' }[size];
 
-  return <Tag className={`${scale} text-balance text-chalk ${className}`}>{children}</Tag>;
+  return (
+    <Tag className={`${scale} font-display text-balance text-chalk ${className}`}>{children}</Tag>
+  );
 }
 
 export function Lede({ children, className = '' }) {
@@ -55,8 +57,8 @@ export function Lede({ children, className = '' }) {
 export function Button({ href, children, variant = 'primary', className = '' }) {
   const styles =
     variant === 'primary'
-      ? 'bg-chalk text-ink hover:bg-white'
-      : 'border border-hairline text-chalk hover:border-gold/50 hover:bg-surface';
+      ? 'bg-accent text-white hover:bg-accent-soft'
+      : 'border border-hairline bg-surface/60 text-chalk hover:border-accent/50 hover:bg-surface';
 
   return (
     <Link

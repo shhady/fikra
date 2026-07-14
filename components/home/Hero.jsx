@@ -17,12 +17,13 @@ import { Container, Eyebrow, Heading, Lede, Button } from '@/components/system';
 export default function Hero({ lang, c }) {
   return (
     <section className="ambient grain relative isolate overflow-hidden pb-20 pt-32 sm:pb-28 sm:pt-44">
-      {/* The warm source, breathing. Almost subliminal — you register that the page
-          is alive without being able to say why. */}
+      {/* A breath of ultramarine air, drifting. On stone it has to stay close to
+          subliminal — you register that the page is alive without being able to
+          say why; any stronger and it becomes a gradient template. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 end-[-10%] -z-10 h-[38rem] w-[38rem] animate-drift rounded-full opacity-60 blur-[110px]"
-        style={{ background: 'radial-gradient(circle, rgb(var(--gold) / 0.30), transparent 65%)' }}
+        style={{ background: 'radial-gradient(circle, rgb(var(--gold) / 0.12), transparent 65%)' }}
       />
 
       <Container>
