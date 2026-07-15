@@ -27,25 +27,28 @@
 
 @layer base {
   :root {
-    /* Ground — cool stone, not pure white; pure white glares and flattens */
-    --ink: 245 245 240; /* #F5F5F0  page */
+    /* Ground — off-white tinted toward the BRAND hue (ultramarine), not toward
+       generic warmth. A warm stone/cream ground is the saturated AI default;
+       a ground that leans toward its own accent is a choice. */
+    --ink: 244 245 248; /* #F4F5F8  page */
     --surface: 255 255 255; /* #FFFFFF  raised card */
-    --surface-2: 236 237 229; /* #ECEDE5  hover / logo frames */
-    --hairline: 224 224 215; /* #E0E0D7  1px rules */
+    --surface-2: 233 235 241; /* #E9EBF1  hover / frames */
+    --hairline: 222 224 232; /* #DEE0E8  1px rules */
 
-    /* Text — ink with a cool cast, matching the stone */
-    --chalk: 18 19 24; /* #121318  primary */
-    --steel: 84 89 99; /* #545963  secondary */
-    --slate: 110 116 128; /* #6E7480  captions */
+    /* Text — ink with the same cool cast as the ground */
+    --chalk: 20 22 29; /* #14161D  primary */
+    --steel: 82 87 100; /* #525764  secondary */
+    --slate: 108 113 127; /* #6C717F  captions */
 
     /* The one accent: electric ultramarine. Every "premium" agency site is
        black-and-gold; every safe one is a soft blue. This is neither — it is
        the blue of ink stamps and street signage, saturated enough to carry a
        full-bleed band on its own. */
     --gold: 38 56 233; /* #2638E9 */
-    --gold-soft: 91 106 242; /* #5B6AF2  hover states, gradient ends */
+    --gold-soft: 91 106 242; /* #5B6AF2  hover states */
 
     --radius: 12px;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   html {
@@ -146,28 +149,34 @@
     color: rgb(var(--gold));
   }
 
-  /* Cards sit ON the light ground rather than dissolving into a dark one, so
-     depth comes from shadow, not gradient. Two shadows: a tight contact line
-     and a soft ambient falloff — one alone looks like a sticker. */
+  /* Cards: border OR shadow, never both — a 1px border paired with a wide soft
+     shadow is the "ghost card" tell. Here: a committed border, and only the
+     hairline of a contact shadow so the card sits on the ground instead of
+     floating over it. */
   .card {
     border: 1px solid rgb(var(--hairline));
     border-radius: var(--radius);
     background: rgb(var(--surface));
-    box-shadow:
-      0 1px 2px rgb(18 19 24 / 0.04),
-      0 10px 30px -12px rgb(18 19 24 / 0.08);
+    box-shadow: 0 1px 2px rgb(20 22 29 / 0.04);
     transition:
       border-color 0.25s ease,
-      box-shadow 0.25s ease,
       transform 0.25s ease;
   }
 
   .card:hover {
     border-color: rgb(var(--gold) / 0.4);
-    box-shadow:
-      0 1px 2px rgb(18 19 24 / 0.04),
-      0 16px 40px -12px rgb(18 19 24 / 0.14);
     transform: translateY(-2px);
+  }
+
+  /* The borderless sibling: shadow does the work. For elements that should
+     read as objects lying on the ground (the hero artifacts, the project
+     browser frames). */
+  .lifted {
+    border-radius: var(--radius);
+    background: rgb(var(--surface));
+    box-shadow:
+      0 1px 2px rgb(20 22 29 / 0.06),
+      0 14px 36px -18px rgb(20 22 29 / 0.22);
   }
 
   /* A perforation line — the tear-off edge of a receipt. Used as a section
@@ -233,6 +242,30 @@
   text-align: left;
 }
 
+/* Scroll reveals.
+
+   Gated on `scripting: enabled` so the un-animated state is never a blank
+   page: without JavaScript (crawlers, readers, old browsers) the content is
+   simply visible. With it, .in is added by an IntersectionObserver the first
+   time the element scrolls into view, staggered per sibling via --i.
+   Reserved for LISTS (project rows, the capability ledger) — whole-section
+   fade-on-scroll is the saturated default and is deliberately absent. */
+@media (scripting: enabled) {
+  .reveal {
+    opacity: 0;
+    translate: 0 18px;
+    transition:
+      opacity 0.7s var(--ease-out-expo),
+      translate 0.7s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  .reveal.in {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
 /* Deliberately after the Tailwind layers (which are injected at the top of
    this file), so these win against the animate-* utilities on equal
    specificity. Motion is seasoning here, never information — nothing on the
@@ -247,5 +280,11 @@
   .card,
   .card:hover {
     transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
   }
 }
