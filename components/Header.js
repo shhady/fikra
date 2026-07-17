@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
 /**
@@ -38,15 +37,19 @@ export default function Header({ lang, t }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-hairline bg-ink/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8">
-        <Link href={`/${lang}`} className="flex shrink-0 items-center" aria-label="FikraNova">
-          <Image
-            src="/logo-11.png"
-            alt="FikraNova"
-            width={120}
-            height={40}
-            priority
-            className="h-9 w-auto object-contain"
-          />
+        {/* A typographic wordmark, not the image logo: every logo export in
+            /public is white artwork drawn for the old dark theme and vanishes
+            on a light header. The mark is the accent square — the ink stamp
+            the whole palette is named after. */}
+        <Link
+          href={`/${lang}`}
+          className="flex shrink-0 items-center gap-2.5"
+          aria-label="FikraNova"
+        >
+          <span aria-hidden="true" className="h-3 w-3 rounded-[3px] bg-accent" />
+          <span className="font-display text-[17px] font-semibold tracking-tight text-chalk">
+            FikraNova
+          </span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">

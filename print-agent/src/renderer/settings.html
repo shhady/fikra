@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:;"
+    />
+    <title>FikraNova Print Agent — Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="brand">
+      <div class="logo">F</div>
+      <h1>FikraNova Print Agent</h1>
+    </div>
+    <p class="subtitle" id="restaurant">—</p>
+
+    <div id="message" class="message"></div>
+
+    <!-- Status -------------------------------------------------------- -->
+    <div class="card">
+      <h2>Status</h2>
+
+      <div class="status">
+        <span class="key">Cloud connection</span>
+        <span class="val" id="connection"><span class="dot bad"></span>Checking…</span>
+      </div>
+
+      <div class="status">
+        <span class="key">Printer</span>
+        <span class="val" id="printer-status"><span class="dot warn"></span>Unknown</span>
+      </div>
+
+      <div class="status">
+        <span class="key">Jobs waiting</span>
+        <span class="val" id="queue">0</span>
+      </div>
+
+      <div class="status">
+        <span class="key">Last print</span>
+        <span class="val" id="last-print">Never</span>
+      </div>
+    </div>
+
+    <!-- Printer ------------------------------------------------------- -->
+    <div class="card">
+      <h2>Printer</h2>
+
+      <div class="field">
+        <label for="printer">Windows printer</label>
+        <div class="row tight">
+          <select id="printer"></select>
+          <button id="refresh" type="button" style="flex: 0 0 auto">Refresh</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="width">Paper width</label>
+          <select id="width">
+            <option value="80">80 mm</option>
+            <option value="58">58 mm</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="transport">Connection</label>
+          <select id="transport">
+            <option value="auto">Automatic</option>
+            <option value="spooler">Windows printer</option>
+            <option value="network">Network (IP)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2" id="network-fields">
+        <div class="field">
+          <label for="host">Printer IP address</label>
+          <input id="host" type="text" placeholder="192.168.1.50" spellcheck="false" />
+        </div>
+
+        <div class="field">
+          <label for="port">Port</label>
+          <input id="port" type="number" value="9100" min="1" max="65535" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="checkbox">
+          <input id="drawer" type="checkbox" />
+          Open the cash drawer after printing a receipt
+        </label>
+      </div>
+
+      <div class="field" style="margin-bottom: 0">
+        <label class="checkbox">
+          <input id="autolaunch" type="checkbox" />
+          Start automatically with Windows
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions ------------------------------------------------------- -->
+    <div class="card">
+      <div class="row" style="margin-bottom: 8px">
+        <button id="save" class="primary" type="button">Save</button>
+      </div>
+
+      <div class="row" style="margin-bottom: 8px">
+        <button id="test" type="button">Test Print</button>
+        <button id="reconnect" type="button">Reconnect</button>
+      </div>
+
+      <div class="row">
+        <button id="logs" type="button">Open Logs</button>
+        <button id="updates" type="button">Check for Updates</button>
+      </div>
+    </div>
+
+    <p class="footer" id="about">FikraNova Print Agent</p>
+
+    <script src="settings.js"></script>
+  </body>
+</html>

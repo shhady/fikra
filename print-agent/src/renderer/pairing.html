@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!--
+      Content-Security-Policy is set here, in the document, rather than only in
+      the main process. The pairing window renders a restaurant name that came
+      from the network, so we lock it down: no inline script, no remote anything.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:;"
+    />
+    <title>FikraNova Print Agent — Pairing</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="brand">
+      <div class="logo">F</div>
+      <h1>FikraNova</h1>
+    </div>
+    <p class="subtitle">Connect this till to your restaurant.</p>
+
+    <div id="message" class="message"></div>
+
+    <div class="card">
+      <div class="field">
+        <label for="code">Pairing code</label>
+        <input
+          id="code"
+          type="text"
+          placeholder="FKN-XXXX-XXXX-XXXX"
+          maxlength="19"
+          autocomplete="off"
+          spellcheck="false"
+          autofocus
+        />
+        <p class="hint">
+          Find this in your FikraNova dashboard, under <strong>Printers → Add device</strong>.
+          Codes can only be used once and expire after about 10 minutes.
+        </p>
+      </div>
+
+      <button id="pair" class="primary" type="button">Pair this device</button>
+    </div>
+
+    <p class="footer">
+      This agent only makes outbound connections. It never opens a port on your network.
+    </p>
+
+    <script src="pairing.js"></script>
+  </body>
+</html>

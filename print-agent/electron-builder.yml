@@ -1,0 +1,119 @@
+appId: com.fikranova.printagent
+productName: FikraNova Print Agent
+copyright: Copyright © FikraNova
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - src/**/*
+  - assets/**/*
+  - package.json
+  - '!**/*.map'
+  - '!**/test/**'
+
+# node-sqlite3-wasm loads its .wasm binary from disk at runtime. Reading it from
+# inside an asar archive works, but unpacking is the supported, faster path and
+# avoids any surprise with the WASM streaming loader.
+asar: true
+asarUnpack:
+  - node_modules/node-sqlite3-wasm/**
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: assets/icon.ico
+  artifactName: FikraNovaPrinterSetup.exe
+  # Ask for no elevation: a per-machine install needs admin, but we install
+  # per-user by default so the agent can be deployed by non-admin staff.
+  requestedExecutionLevel: asInvoker
+
+  # ===========================================================================
+  # UNSIGNED BUILD — this line is why auto-update works.
+  # ---------------------------------------------------------------------------
+  # electron-updater verifies the Authenticode signature of every update it
+  # downloads, comparing it against `publisherName` from app-update.yml. If a
+  # publisherName is present and the downloaded installer is NOT signed by it,
+  # the update is thrown away with ERR_UPDATER_INVALID_SIGNATURE.
+  #
+  # That failure is silent: the agent downloads the update, refuses to install
+  # it, logs an error nobody is reading, and stays on the old version forever.
+  # You would only find out the first time you tried to push a fix to the fleet.
+  #
+  # So while we ship unsigned, verification MUST be off. Setting this to false
+  # also omits publisherName from app-update.yml, which is what makes
+  # electron-updater skip the check entirely.
+  #
+  # >>> THE DAY YOU GET A CODE-SIGNING CERTIFICATE:
+  # >>>   1. delete this line (or set it to true)
+  # >>>   2. uncomment the signtoolOptions block below
+  # >>>   3. rebuild — signature verification comes back on
+  #
+  # What we give up until then: an attacker who compromised the update host
+  # could serve a malicious installer. We still verify the SHA-512 from
+  # latest.yml over HTTPS, but that hash comes from the same host — so the
+  # signature is the only thing that would have caught a compromised host. This
+  # is an accepted, temporary risk of launching unsigned, not a design choice.
+  # ===========================================================================
+  verifyUpdateCodeSignature: false
+
+  # --- Enable ALL of this once the certificate arrives ---
+  #
+  # signtoolOptions:
+  #   # Shown as the Publisher in SmartScreen/UAC and in Add/Remove Programs.
+  #   # MUST match the CN on the certificate, or Windows reports a mismatch.
+  #   publisherName: FikraNova
+  #
+  #   # Key material never lives in the repo. For a .pfx:
+  #   #   set CSC_LINK=C:\path\to\certificate.pfx
+  #   #   set CSC_KEY_PASSWORD=...
+  #   # For an EV token / cloud HSM the key cannot leave the hardware, so point
+  #   # `sign` at a script that shells out to signtool.
+  #   # See README -> Code signing.
+  #   sign: ./scripts/sign.js
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: FikraNova Print Agent
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false
+  # Silent install for fleet deployment:
+  #   FikraNovaPrinterSetup.exe /S
+  # Pairing still happens on first launch, so one installer serves every customer.
+  include: build/installer.nsh
+  uninstallDisplayName: FikraNova Print Agent
+
+publish:
+  - provider: generic
+    # ---------------------------------------------------------------------------
+    # Tigris (S3-compatible object storage) — the same service already used by
+    # kingclean, sandwich-bar and tishreen-events.
+    #
+    # This URL serves BOTH jobs:
+    #   - the installer customers download  (linked from /admin/printers)
+    #   - the update feed agents poll       (latest.yml + the .exe)
+    #
+    # Upload with:  npm run ship     (builds, then uploads)
+    #
+    # The binary does NOT live in git: it is ~96 MB, GitHub hard-blocks files over
+    # 100 MB, and git history is forever — every release would add another 96 MB
+    # blob that can never be removed.
+    #
+    # IMPORTANT: latest.yml must be served with a SHORT cache TTL. scripts/release.mjs
+    # sets `no-cache` on it for exactly this reason — if a CDN holds it for an hour,
+    # your staged rollout is an hour late and, far worse, so is your ROLLBACK.
+    #
+    # This must stay in sync with PUBLIC_ACCESS_URL in the site's .env. It is
+    # compiled into every installed agent, so changing it later only affects tills
+    # installed AFTER the change — the fleet keeps polling the old URL forever.
+    # ---------------------------------------------------------------------------
+    url: https://print-agent.t3.tigrisfiles.io/
+    channel: latest

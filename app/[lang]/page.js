@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
-import { Container, Section, Eyebrow, Heading, Lede, Button, Card } from '@/components/system';
+import { Container, Section, Heading, Lede, Button } from '@/components/system';
 import Hero from '@/components/home/Hero';
+import Reveal from '@/components/home/Reveal';
 import { getHomeContent } from '@/lib/content/home';
 import { getFeaturedProjects } from '@/lib/content/projects';
 import { normaliseLocale, alternatesFor } from '@/lib/i18n';
@@ -18,6 +18,15 @@ export async function generateMetadata({ params }) {
     alternates: alternatesFor('', locale),
     openGraph: { title: c.meta.title, description: c.meta.description },
   };
+}
+
+/** "https://www.eventy.vip" → "eventy.vip" — what a person would type. */
+function domainOf(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
 }
 
 export default async function HomePage({ params }) {
@@ -49,28 +58,37 @@ export default async function HomePage({ params }) {
       <Hero lang={locale} c={c} />
 
       {/* ============================== WHAT WE DO ======================
-          Outcomes, not a technology list. The old site led with "Next.js,
-          TensorFlow.js, Power BI" — a stack nobody buying this is qualified
-          to evaluate, and nobody buying this cares about.
+          A ledger, not a card grid. Six identical icon-heading-text cards is
+          the pattern every generated page ships; a ruled list forces real
+          hierarchy — the offering's NAME does the work, set in the display
+          face, with the body reading like a commitment rather than a caption.
           ================================================================ */}
-      <Section className="relative">
+      <Section className="pt-8 sm:pt-12">
         <Container>
-          <Eyebrow>{c.services.eyebrow}</Eyebrow>
-          <Heading className="mt-6">{c.services.heading}</Heading>
-          <Lede className="mt-5">{c.services.lede}</Lede>
+          <div className="max-w-2xl">
+            <Heading>{c.services.heading}</Heading>
+            <Lede className="mt-5">{c.services.lede}</Lede>
+          </div>
 
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {c.services.items.map((item) => (
-              <Card key={item.title}>
-                <h3 className="text-lg font-semibold text-chalk">{item.title}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-steel">{item.body}</p>
-              </Card>
+          <div className="mt-14 border-b border-hairline">
+            {c.services.items.map((item, i) => (
+              <Reveal key={item.title} i={i % 3}>
+                <div className="grid gap-2 border-t border-hairline py-7 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-10">
+                  <h3 className="font-display text-xl font-semibold text-chalk sm:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="max-w-prose text-[15px] leading-relaxed text-steel">{item.body}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
 
-          <p className="mt-10 text-[15px] leading-relaxed text-steel">
+          <p className="mt-8 text-[15px] leading-relaxed text-steel">
             {c.services.afterLaunch}{' '}
-            <Link href={`/${locale}/support`} className="text-gold underline-offset-4 hover:underline">
+            <Link
+              href={`/${locale}/support`}
+              className="text-accent underline-offset-4 hover:underline"
+            >
               {c.services.afterLaunchLink}
             </Link>
           </p>
@@ -78,49 +96,81 @@ export default async function HomePage({ params }) {
       </Section>
 
       {/* ============================ SELECTED WORK =====================
-          The proof. Real brands, real live links — every URL here was
-          verified to return 200. Projects whose sites are down are listed
-          on /projects but are NOT featured (see lib/content/projects.js).
+          The proof, given the space proof deserves: one project per row, its
+          real domain in a browser frame, the localized description doing the
+          selling, and the live link as the verification. Every URL here was
+          checked to resolve; projects whose sites are down are listed on
+          /projects but not featured (see lib/content/projects.js).
 
-          These images are LOGOS, not screenshots — some have a white
-          background baked in, others are dark — so they are contained and
-          padded on one neutral surface rather than cropped, exactly as
-          /projects frames them. Do not describe them as screenshots.
+          No screenshots are faked and no logo wall: the cover is typographic
+          — the project's own name, set large — because the honest evidence is
+          the running site one click away, not a picture of it.
           ================================================================ */}
-      <Section>
+      <Section className="border-y border-hairline bg-surface/50 py-24 sm:py-32">
         <Container>
-          <Eyebrow>{c.work.eyebrow}</Eyebrow>
-          <Heading className="mt-6">{c.work.heading}</Heading>
-          <Lede className="mt-5">{c.work.lede}</Lede>
+          <div className="max-w-2xl">
+            <Heading>{c.work.heading}</Heading>
+            <Lede className="mt-5">{c.work.lede}</Lede>
+          </div>
 
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((project) => (
-              <a
-                key={project.id}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card group flex flex-col overflow-hidden !p-0"
-              >
-                <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-hairline bg-surface-2 p-10">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-8 transition-transform duration-700 group-hover:scale-[1.04]"
-                  />
-                </div>
+          <div className="mt-16 space-y-16 sm:space-y-20">
+            {featured.map((project, i) => (
+              <Reveal key={project.id}>
+                <article className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+                  {/* The browser frame — a real domain behind real chrome. */}
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${project.title} — ${c.work.visit}`}
+                    className={`lifted group block overflow-hidden transition-transform duration-300 hover:-translate-y-1 ${
+                      i % 2 ? 'lg:order-2' : ''
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 border-b border-hairline bg-surface-2/60 px-4 py-2.5" dir="ltr">
+                      <span className="flex gap-1.5" aria-hidden="true">
+                        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-hairline" />
+                      </span>
+                      <span className="rounded-md bg-ink px-3 py-1 font-mono text-xs text-steel">
+                        {domainOf(project.url)}
+                      </span>
+                    </div>
 
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-chalk">{project.title}</h3>
-                  <p className="mt-2 text-sm text-steel">{project.industry}</p>
-                </div>
-              </a>
+                    <div className="flex aspect-[16/9] items-center justify-center bg-gradient-to-b from-surface to-surface-2/40 px-8">
+                      <span className="break-words text-center font-display text-3xl font-semibold tracking-tight text-chalk transition-colors duration-300 group-hover:text-accent sm:text-4xl">
+                        {project.title}
+                      </span>
+                    </div>
+                  </a>
+
+                  <div className={i % 2 ? 'lg:order-1' : ''}>
+                    <p className="text-sm font-medium text-accent">{project.industry}</p>
+                    <h3 className="mt-2 font-display text-2xl font-semibold text-chalk sm:text-3xl">
+                      {project.title}
+                    </h3>
+                    <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-steel">
+                      {project.description}
+                    </p>
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-5 inline-flex items-center gap-2 text-[15px] font-medium text-accent underline-offset-4 hover:underline"
+                    >
+                      {c.work.visit}
+                      <span aria-hidden="true" className="rtl:-scale-x-100">
+                        ↗
+                      </span>
+                    </a>
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
 
-          <div className="mt-10">
+          <div className="mt-16">
             <Button href={`/${locale}/projects`} variant="ghost">
               {c.work.cta}
             </Button>
@@ -128,25 +178,43 @@ export default async function HomePage({ params }) {
         </Container>
       </Section>
 
-      {/* ============================== INDUSTRIES ====================== */}
-      <Section className="border-y border-hairline bg-surface/30">
+      {/* ============================== LANGUAGES =======================
+          The signature. The one full-colour moment on the page: the three
+          scripts ARE the studio's identity, so they are set as the identity,
+          not as a footnote. The claim is also the page's only self-verifying
+          one — switch locale and watch the layout flip.
+          ================================================================ */}
+      <Section className="bg-accent py-20 sm:py-24">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+          <div className="text-center">
+            <h2 className="text-display-lg font-display text-white">{c.languages.heading}</h2>
+            <p className="mx-auto mt-6 max-w-prose text-[17px] leading-relaxed text-white/75 sm:text-lg">
+              {c.languages.body}
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================== INDUSTRIES ======================
+          Quiet on purpose, after the colour. minmax(0,…) columns and a
+          wrapping list: nothing here is allowed to be wider than the
+          viewport — the earlier inline-flow version created a horizontal
+          scrollbar, which is a design failure, not a quirk.
+          ================================================================ */}
+      <Section className="py-20">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
             <div>
-              <Eyebrow>{c.industries.eyebrow}</Eyebrow>
-              <Heading className="mt-6">{c.industries.heading}</Heading>
+              <Heading size="md">{c.industries.heading}</Heading>
               <Lede className="mt-5">{c.industries.lede}</Lede>
             </div>
 
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-4 self-center">
+            <ul className="grid grid-cols-2 content-center gap-x-8 gap-y-3.5 self-center">
               {c.industries.items.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-3 border-b border-hairline pb-4 text-[15px] text-chalk"
-                >
+                <li key={item} className="flex min-w-0 items-baseline gap-2.5 text-[15px] text-chalk sm:text-base">
                   <span
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
                     aria-hidden="true"
+                    className="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-accent"
                   />
                   {item}
                 </li>
@@ -156,40 +224,29 @@ export default async function HomePage({ params }) {
         </Container>
       </Section>
 
-      {/* ============================== LANGUAGES =======================
-          What replaced the proof grid. The old grid claimed "17 systems
-          delivered" and "8 industries" — numbers nobody could check, which
-          makes them a liability, not a proof. This claim a visitor verifies
-          by switching locale and watching the layout flip to RTL.
+      {/* ================================= CTA ==========================
+          The close inverts to ink — the page's only dark surface, book-ending
+          the ultramarine band above. `bg-chalk`/`text-ink` is the documented
+          role inversion (see the naming note in globals.css).
           ================================================================ */}
-      <Section className="border-y border-hairline bg-surface/30">
+      <section className="bg-chalk py-24 sm:py-28">
         <Container>
-          <div className="text-center">
-            <Heading size="md">{c.languages.heading}</Heading>
-            <Lede className="mx-auto mt-5 max-w-prose text-center">{c.languages.body}</Lede>
-          </div>
-        </Container>
-      </Section>
-
-      {/* ================================= CTA ========================== */}
-      <Section>
-        <Container>
-          <div className="ambient relative isolate overflow-hidden rounded-xl border border-hairline px-6 py-14 text-center sm:px-14 sm:py-20">
-            <Heading size="md" className="mx-auto max-w-[22ch]">
-              {c.cta.heading}
-            </Heading>
-
-            <Lede className="mx-auto mt-5 text-center">{c.cta.lede}</Lede>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-display-md font-display text-balance text-ink">{c.cta.heading}</h2>
+            <p className="mt-5 text-[17px] leading-relaxed text-ink/70 sm:text-lg">{c.cta.lede}</p>
 
             <div className="mt-9 flex flex-wrap justify-center gap-3">
               <Button href={`/${locale}/contact`}>{c.cta.primary}</Button>
-              <Button href={`/${locale}/projects`} variant="ghost">
+              <Link
+                href={`/${locale}/projects`}
+                className="inline-flex items-center justify-center rounded-full border border-ink/25 px-6 py-3 text-[15px] font-medium text-ink transition-colors hover:border-ink/60"
+              >
                 {c.cta.secondary}
-              </Button>
+              </Link>
             </div>
           </div>
         </Container>
-      </Section>
+      </section>
     </>
   );
 }

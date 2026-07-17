@@ -97,7 +97,9 @@ export default function Footer({ lang, t }) {
 function FooterColumn({ title, children }) {
   return (
     <div>
-      <p className="eyebrow">{title}</p>
+      {/* A plain label, not the .eyebrow pill — a bordered chip as a column
+          header reads as decoration doing a label's job. */}
+      <p className="text-sm font-semibold text-chalk">{title}</p>
       <ul className="mt-5 space-y-2.5">{children}</ul>
     </div>
   );

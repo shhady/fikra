@@ -5,34 +5,50 @@
 /* ==========================================================================
    FikraNova — design tokens
 
-   Modern, premium, dark. Deep charcoal rather than flat black (flat black is
-   what every template does, and it kills depth). Large, confident typography.
-   Generous space. ONE accent.
+   Bright studio. Cool stone-white ground, near-black ink, ONE electric
+   ultramarine accent. Large, confident typography set in Rubik — a display
+   face born from Hebrew with real Arabic and Latin coverage, so the type
+   itself is trilingual, like the studio.
 
-   The accent is a warm gold. Every AI agency on the internet is blue, violet or
-   acid green; gold is rare in tech, it reads premium rather than "startup", and
-   it carries warmth in the Arabic and Hebrew markets this studio actually serves.
-   It is used sparingly — an accent that appears everywhere stops being one.
+   NAMING NOTE — read before touching these.
+   The token names date from the earlier dark theme and describe ROLES, not
+   colours. Every component in the site uses them by role, which is why the
+   whole site could be re-themed by reassigning values here:
+
+     --ink      the page GROUND        (was near-black, now stone white)
+     --chalk    the primary TEXT       (was near-white, now near-black)
+     --gold     the ACCENT             (was gold, now ultramarine; `accent`
+                                        is an honest alias in tailwind.config
+                                        — prefer it in new code)
+
+   Renaming them would mean editing every class in every page for zero visual
+   change; the lie is contained here instead, in one loud comment.
    ========================================================================== */
 
 @layer base {
   :root {
-    /* Surfaces — charcoal, with a cool cast so the gold reads warm against it */
-    --ink: 11 12 15; /* #0B0C0F  page */
-    --surface: 20 22 27; /* #14161B  raised card */
-    --surface-2: 28 31 37; /* #1C1F25  hover */
-    --hairline: 39 43 51; /* #272B33  1px rules */
+    /* Ground — off-white tinted toward the BRAND hue (ultramarine), not toward
+       generic warmth. A warm stone/cream ground is the saturated AI default;
+       a ground that leans toward its own accent is a choice. */
+    --ink: 244 245 248; /* #F4F5F8  page */
+    --surface: 255 255 255; /* #FFFFFF  raised card */
+    --surface-2: 233 235 241; /* #E9EBF1  hover / frames */
+    --hairline: 222 224 232; /* #DEE0E8  1px rules */
 
-    /* Text */
-    --chalk: 244 245 247; /* #F4F5F7  primary */
-    --steel: 148 155 166; /* #949BA6  secondary */
-    --slate: 106 113 124; /* #6A717C  captions */
+    /* Text — ink with the same cool cast as the ground */
+    --chalk: 20 22 29; /* #14161D  primary */
+    --steel: 82 87 100; /* #525764  secondary */
+    --slate: 108 113 127; /* #6C717F  captions */
 
-    /* The one accent */
-    --gold: 232 178 74; /* #E8B24A */
-    --gold-soft: 245 214 152; /* #F5D698  for text on dark, where gold is too hot */
+    /* The one accent: electric ultramarine. Every "premium" agency site is
+       black-and-gold; every safe one is a soft blue. This is neither — it is
+       the blue of ink stamps and street signage, saturated enough to carry a
+       full-bleed band on its own. */
+    --gold: 38 56 233; /* #2638E9 */
+    --gold-soft: 91 106 242; /* #5B6AF2  hover states */
 
     --radius: 12px;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   html {
@@ -85,10 +101,10 @@
   /* ------------------------------------------------------------------
      Ambient light.
 
-     A single warm source, low and wide, plus a cool counter-light. This is what
-     gives the page depth instead of the flat charcoal rectangle you get by
-     default. It is CSS, not an image, so it costs nothing and scales to any
-     viewport.
+     On stone, the wash has to be far quieter than it was on charcoal — a hint
+     of ultramarine air at the top of the page, not a spotlight. Doubling these
+     alphas is the fastest way to make the light theme look like a gradient
+     template again.
      ------------------------------------------------------------------ */
   .ambient::before {
     content: '';
@@ -97,19 +113,19 @@
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(50rem 32rem at 82% -8%, rgb(var(--gold) / 0.13), transparent 62%),
-      radial-gradient(44rem 30rem at 8% 4%, rgb(90 120 200 / 0.07), transparent 60%);
+      radial-gradient(50rem 32rem at 82% -8%, rgb(var(--gold) / 0.07), transparent 62%),
+      radial-gradient(44rem 30rem at 8% 4%, rgb(var(--gold) / 0.04), transparent 60%);
   }
 
-  /* A very fine grain. Stops large dark gradients from banding on cheap screens,
-     and adds the texture that separates "premium" from "flat". */
+  /* A very fine grain — paper tooth. On a light ground it needs half the
+     opacity it needed on charcoal, or it reads as dirt rather than texture. */
   .grain::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.02;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -126,26 +142,41 @@
     backdrop-filter: blur(8px);
   }
 
-  /* A gold wash on one phrase of the headline. Restraint: one phrase, one page. */
+  /* The accent phrase of the headline. Solid ultramarine — a gradient wash on
+     light ground reads like a 2019 SaaS template; a flat, committed colour
+     reads like a decision. Restraint: one phrase, one page. */
   .accent-text {
-    background: linear-gradient(100deg, rgb(var(--gold)) 10%, rgb(var(--gold-soft)) 90%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: rgb(var(--gold));
   }
 
+  /* Cards: border OR shadow, never both — a 1px border paired with a wide soft
+     shadow is the "ghost card" tell. Here: a committed border, and only the
+     hairline of a contact shadow so the card sits on the ground instead of
+     floating over it. */
   .card {
     border: 1px solid rgb(var(--hairline));
     border-radius: var(--radius);
-    background: linear-gradient(180deg, rgb(var(--surface)) 0%, rgb(var(--ink)) 140%);
+    background: rgb(var(--surface));
+    box-shadow: 0 1px 2px rgb(20 22 29 / 0.04);
     transition:
       border-color 0.25s ease,
       transform 0.25s ease;
   }
 
   .card:hover {
-    border-color: rgb(var(--gold) / 0.35);
+    border-color: rgb(var(--gold) / 0.4);
     transform: translateY(-2px);
+  }
+
+  /* The borderless sibling: shadow does the work. For elements that should
+     read as objects lying on the ground (the hero artifacts, the project
+     browser frames). */
+  .lifted {
+    border-radius: var(--radius);
+    background: rgb(var(--surface));
+    box-shadow:
+      0 1px 2px rgb(20 22 29 / 0.06),
+      0 14px 36px -18px rgb(20 22 29 / 0.22);
   }
 
   /* A perforation line — the tear-off edge of a receipt. Used as a section
@@ -209,4 +240,51 @@
 .ltr input[type='password'],
 .ltr textarea {
   text-align: left;
+}
+
+/* Scroll reveals.
+
+   Gated on `scripting: enabled` so the un-animated state is never a blank
+   page: without JavaScript (crawlers, readers, old browsers) the content is
+   simply visible. With it, .in is added by an IntersectionObserver the first
+   time the element scrolls into view, staggered per sibling via --i.
+   Reserved for LISTS (project rows, the capability ledger) — whole-section
+   fade-on-scroll is the saturated default and is deliberately absent. */
+@media (scripting: enabled) {
+  .reveal {
+    opacity: 0;
+    translate: 0 18px;
+    transition:
+      opacity 0.7s var(--ease-out-expo),
+      translate 0.7s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  .reveal.in {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Deliberately after the Tailwind layers (which are injected at the top of
+   this file), so these win against the animate-* utilities on equal
+   specificity. Motion is seasoning here, never information — nothing on the
+   site becomes unreadable or unreachable when it stops. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-drift,
+  .animate-marquee {
+    animation: none;
+  }
+
+  .card,
+  .card:hover {
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
 }

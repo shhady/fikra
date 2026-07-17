@@ -1,0 +1,310 @@
+/* FikraNova Print Agent — renderer styles.
+ *
+ * Designed for the person who will actually see it: a restaurant owner or a
+ * cashier, once, at install time, on a cheap 1366x768 monitor. So: large hit
+ * targets, high contrast, no ambiguity about whether things are working.
+ */
+
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --panel-2: #1e222b;
+  --border: #2a2f3a;
+  --text: #e8eaf0;
+  --muted: #9aa2b1;
+  --brand: #5b6cff;
+  --brand-hover: #6f7dff;
+  --ok: #2fbf71;
+  --warn: #f0a132;
+  --error: #ef4d4d;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 24px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--brand), #9b5bff);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+input:disabled,
+select:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The pairing code is the one thing a human types. Make it unmistakable. */
+#code {
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 14px 12px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand);
+}
+
+button {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+button:hover:not(:disabled) {
+  background: #262b36;
+  border-color: #39404e;
+}
+
+button.primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row > * {
+  flex: 1;
+}
+
+.row.tight {
+  gap: 8px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Status ---------------------------------------------------------------- */
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.status:last-child {
+  border-bottom: 0;
+}
+
+.status .key {
+  color: var(--muted);
+}
+
+.status .val {
+  font-weight: 550;
+  text-align: right;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
+.dot.ok {
+  background: var(--ok);
+  box-shadow: 0 0 8px var(--ok);
+}
+.dot.bad {
+  background: var(--error);
+  box-shadow: 0 0 8px var(--error);
+}
+.dot.warn {
+  background: var(--warn);
+  box-shadow: 0 0 8px var(--warn);
+}
+
+/* Messages -------------------------------------------------------------- */
+
+.message {
+  border-radius: 8px;
+  padding: 11px 13px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  display: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.message.show {
+  display: block;
+}
+
+.message.error {
+  background: rgba(239, 77, 77, 0.12);
+  border: 1px solid rgba(239, 77, 77, 0.4);
+  color: #ffb3b3;
+}
+
+.message.success {
+  background: rgba(47, 191, 113, 0.12);
+  border: 1px solid rgba(47, 191, 113, 0.4);
+  color: #a6f0c8;
+}
+
+.message.info {
+  background: rgba(91, 108, 255, 0.12);
+  border: 1px solid rgba(91, 108, 255, 0.4);
+  color: #c2c9ff;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.footer {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 18px;
+}
+
+.spin {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: -2px;
+  margin-right: 7px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
