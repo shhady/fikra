@@ -1,0 +1,24 @@
+# Build output
+dist/
+release/
+out/
+
+# Dependencies
+node_modules/
+
+# Generated binary assets (recreate with: npm run assets)
+assets/*.png
+assets/*.ico
+
+# Logs
+*.log
+logs/
+
+# Code-signing material — must NEVER be committed
+*.pfx
+*.p12
+*.pem
+*.key
+certificate*
+.env
+.env.*
