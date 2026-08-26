@@ -5,6 +5,13 @@ import { PROJECTS } from '../lib/content/projects.js';
 import { CASE_STUDIES } from '../lib/content/caseStudies.js';
 
 const LOCALES = ['en', 'ar', 'he'];
+const CURRENT_ADDITIONS = new Map([
+  ['andlee-energy', 'https://andlee-energy.com/'],
+  ['badran-engineers', 'https://www.badran.co.il/'],
+  ['landmap', 'https://www.landmap-ltd.com/'],
+  ['level-up-elevators', 'https://www.luelevator.com/'],
+]);
+const REMOVED_PROJECTS = ['keysmatch', 'stella', 'brokers'];
 
 /**
  * The link contract (lib/content/projects.js): a project has either a live
@@ -18,6 +25,18 @@ test('every project has a url or a slug — never neither', () => {
       project.url || project.slug,
       `${project.id} has neither url nor slug — it would render a dead card`
     );
+  }
+});
+
+test('the projects roster contains the four current additions and omits retired entries', () => {
+  const byId = new Map(PROJECTS.map((project) => [project.id, project]));
+
+  for (const [id, url] of CURRENT_ADDITIONS) {
+    assert.equal(byId.get(id)?.url, url, `${id} is missing or points to the wrong site`);
+  }
+
+  for (const id of REMOVED_PROJECTS) {
+    assert.ok(!byId.has(id), `${id} should no longer appear in the projects roster`);
   }
 });
 

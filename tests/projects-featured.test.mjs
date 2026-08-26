@@ -3,20 +3,7 @@ import assert from 'node:assert/strict';
 
 import { PROJECTS, getFeaturedProjects } from '../lib/content/projects.js';
 
-// Verified 2026-07-14 by fetching each URL with redirects followed:
-//   KeysMatch       504 on three consecutive attempts (not a cold start)
-//   Stella          404
-//   BrokerAffiliate TLS handshake failure — connection refused
-const BROKEN = ['keysmatch', 'stella', 'brokers'];
-
-test('no project with a known-broken URL is featured', () => {
-  const featuredIds = PROJECTS.filter((p) => p.featured).map((p) => p.id);
-  for (const id of BROKEN) {
-    assert.ok(!featuredIds.includes(id), `${id} has a broken URL and must not be featured`);
-  }
-});
-
-test('exactly the five healthy projects are featured', () => {
+test('the selected five launched projects are featured', () => {
   const featuredIds = PROJECTS.filter((p) => p.featured).map((p) => p.id).sort();
   assert.deepEqual(featuredIds, ['bclick', 'cicilia', 'eventy', 'rojeh', 'watermelon'].sort());
 });

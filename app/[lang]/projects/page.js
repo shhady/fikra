@@ -94,11 +94,10 @@ export default async function ProjectsPage({ params }) {
                   rel="noopener noreferrer"
                   className="card group flex flex-col overflow-hidden !p-0"
                 >
-                  {/* These files are LOGOS, not product screenshots — and some
-                      have a white background baked in (eventy.jpg) while others
-                      are dark (keysmatch.png). Framing them as logos — contained,
-                      padded, on one neutral surface — makes the inconsistency
-                      read as intentional. */}
+                  {/* These files are LOGOS, not product screenshots. Some have
+                      a white background baked in while others are transparent.
+                      Framing them as logos — contained, padded, on one neutral
+                      surface — makes the inconsistency read as intentional. */}
                   <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden border-b border-hairline bg-surface-2 p-10">
                     <Image
                       src={project.image}
